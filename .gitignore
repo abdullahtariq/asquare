@@ -1,8 +1,2 @@
-
-*.md
-
-node_modules/accepts/index.js
-
-node_modules/accepts/LICENSE
-
-*.json
+node_modules
+.sass-cache
