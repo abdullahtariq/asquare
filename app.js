@@ -73,12 +73,11 @@ MongoClient.connect(url, function (err, db) {
 	
 	
 	app.post("/signup",function(req,res){
-		var Ide= req.body.ide;
 		var user= req.body.first_name;
 		var last= req.body.last_name;
 		var password= req.body.password;
 		var repassword= req.body.repassword;
-		var user1 = {_id:Ide, Name: user, Lname: last,Password: password};
+		var user1 = {Name: user, Lname: last,Password: password};
 		var collection = db.collection('users');
 		//-----Insert Into Users
 		collection.insert(user1, function (err, result) {
