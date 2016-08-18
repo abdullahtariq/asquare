@@ -15,11 +15,11 @@ router.post("/register",function(req,res){
     var last= req.body.last_name;
     var password= req.body.password;
     var repassword= req.body.repassword;
-    
+
 
 
     var user1 = new userCollection(
-      {Name: user, 
+      {Name: user,
         Lname: last,
         Password: password});
     console.log(userCollection);
@@ -28,7 +28,7 @@ router.post("/register",function(req,res){
       if (err) {
         console.log(err);
       } else {
-        res.send({"status" : true, "message" : "Successfully created" , "Userid" : result._id});
+        res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
       }
     });
 
@@ -36,6 +36,6 @@ router.post("/register",function(req,res){
 /// to find
     /*userCollection.find(function (err, articles) {
     if (err) return next(err);
-    console.log(articles); 
+    console.log(articles);
   });*/
 });
