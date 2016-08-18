@@ -9,7 +9,7 @@ var config = {
       name: 'facing-app'
     },
     port: process.env.PORT || 3000,
-    db: 'mongodb://localhost/facing-app-development'
+    db: 'mongodb://localhost:27017/facing'
   },
 
   test: {
@@ -18,7 +18,7 @@ var config = {
       name: 'facing-app'
     },
     port: process.env.PORT || 3000,
-    db: 'mongodb://localhost/facing-app-test'
+    db: 'mongodb://localhost:27017/facing'
   },
 
   production: {
