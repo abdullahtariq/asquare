@@ -28,9 +28,12 @@ router.post("/register",function(req,res){
       if (err) {
         console.log(err);
       } else {
-        res.send("Inserted");
+        res.send({"status" : true, "message" : "Successfully created" , "Userid" : result._id});
       }
     });
+
+
+/// to find
     /*userCollection.find(function (err, articles) {
     if (err) return next(err);
     console.log(articles); 
