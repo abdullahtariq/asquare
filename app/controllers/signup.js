@@ -16,7 +16,8 @@ router.post("/register",function(req,res){
     var password= req.body.password;
     var repassword= req.body.repassword;
     
-
+    if(password!=repassword)
+      res.send("password not matched.");
 
     var user1 = new userCollection(
       {Name: user, 
@@ -31,11 +32,4 @@ router.post("/register",function(req,res){
         res.send({"status" : true, "message" : "Successfully created" , "Userid" : result._id});
       }
     });
-
-
-/// to find
-    /*userCollection.find(function (err, articles) {
-    if (err) return next(err);
-    console.log(articles); 
-  });*/
 });
