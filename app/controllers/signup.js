@@ -10,6 +10,22 @@ module.exports = function (app) {
 router.get('/signup', function (req, res, next) {
     res.render('signup');
 });
+
+/**
+ * @api {get} app/signup Request to create User
+ * @apiName Create
+ * @apiGroup User
+ *
+ * @apiParam {String} first_name User First Name.
+ * @apiParam {String} last_name User Last Name.
+ * @apiParam {String} password User Password.
+ *
+ *
+ * @apiSuccess {Boolean} status True/false.
+ * @apiSuccess {String} message  Response message.
+ * @apiSuccess {ID} ID  Response ID of created user.
+ */
+
 router.post("/register",function(req,res){
     var user= req.body.first_name;
     var last= req.body.last_name;
