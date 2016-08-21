@@ -12,7 +12,7 @@ router.get('/signup', function (req, res, next) {
 });
 
 /**
- * @api {get} app/signup Request to create User
+ * @api {Post} app/signup Request to create User
  * @apiName Create
  * @apiGroup User
  *
