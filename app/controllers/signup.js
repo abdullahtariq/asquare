@@ -62,6 +62,7 @@ router.post("/register",function(req,res){
       {Name: user,
         Lname: last,
         Password: password});
+      
         if (password.length < 8) {
         res.send({"status" : false , "message" : "password should contain 8 characters"});
         return;
@@ -78,15 +79,16 @@ router.post("/register",function(req,res){
         res.send({"status" : false , "message" : "password should contain atleast a number"});
         return;
     }
-
-
-    user1.save(function (err, result) {
+    else
+    {
+        user1.save(function (err, result) {
         if (err) {
         console.log(err);
         } else {
         res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
         }
       });
+    }
     }
   });
 
