@@ -1,0 +1,10 @@
+        <% var str=id %>
+        <% var res = str.split("=")%>
+        <%-res[1]%>
+<form method="post" action="/api/follows/id=<%-res[1]%>">
+        <select name="foll">
+		<option value="1">follow</option>
+		<option value="2">followers</option>
+		</select>
+		<input type="submit" name="submit" Value="GO"/>
+    </form>

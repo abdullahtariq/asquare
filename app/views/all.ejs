@@ -1,0 +1,10 @@
+<form method="post" action="/api/all">
+        <select name="follow">
+<% for(var attributename in result){%>
+		<option value="<%-result[attributename]._id%>"> <%-result[attributename].Name%></option>
+<% } %>
+		</select>
+		<input type="submit" name="submit" Value="GO"/>
+
+</form>
+
