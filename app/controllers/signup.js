@@ -62,20 +62,20 @@ router.post("/register",function(req,res){
       {Name: user,
         Lname: last,
         Password: password});
-      
+
         if (password.length < 8) {
         res.send({"status" : false , "message" : "password should contain 8 characters"});
         return;
     }
-    if (password.search(/[A-Z]/i) < 0) {
+    else if (password.search(/[A-Z]/i) < 0) {
         res.send({"status" : false , "message" : "password should contain upper case letter"});
         return;
     }
-    if (password.search(/[a-z]/) < 0) {
+    else if (password.search(/[a-z]/) < 0) {
         res.send({"status" : false , "message" : "password should contain atleast one lower case letter"});
         return;
     }
-    if (password.search(/[0-9]/) < 0) {
+    else if (password.search(/[0-9]/) < 0) {
         res.send({"status" : false , "message" : "password should contain atleast a number"});
         return;
     }
