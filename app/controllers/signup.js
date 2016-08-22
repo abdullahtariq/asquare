@@ -10,11 +10,26 @@ module.exports = function (app) {
 router.get('/signup', function (req, res, next) {
     res.render('signup');
 });
+
+/**
+ * @api {Post} app/signup Request to create User
+ * @apiName Create
+ * @apiGroup User
+ *
+ * @apiParam {String} first_name User First Name.
+ * @apiParam {String} last_name User Last Name.
+ * @apiParam {String} password User Password.
+ *
+ *
+ * @apiSuccess {Boolean} status True/false.
+ * @apiSuccess {String} message  Response message.
+ * @apiSuccess {ID} ID  Response ID of created user.
+ */
+
 router.post("/register",function(req,res){
     var user= req.body.first_name;
     var last= req.body.last_name;
     var password= req.body.password;
-    
     if(user=="")
     {
         res.send({"status" : false , "message" : "First Name field is empty."});
@@ -39,12 +54,12 @@ router.post("/register",function(req,res){
     if (result)
     {
       res.send({"status" : false , "message" : "User Already exits"});
-        return;      
+        return;
     }
     else
     {
       var user1 = new userCollection(
-      {Name: user, 
+      {Name: user,
         Lname: last,
         Password: password});
         if (password.length < 8) {
@@ -63,17 +78,15 @@ router.post("/register",function(req,res){
         res.send({"status" : false , "message" : "password should contain atleast a number"});
         return;
     }
-    
+
 
     user1.save(function (err, result) {
-      if (err) {
+        if (err) {
         console.log(err);
-      } else {
-        res.send({"status" : true, "message" : "Successfully created" , "Userid" : result._id});
-        return;
-      }
-    });
-    
+        } else {
+        res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
+        }
+      });
     }
   });
 });
