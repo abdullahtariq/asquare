@@ -44,6 +44,19 @@ router.get('/all/:id', function (req, res, next) {
 router.post("/login",function(req,res){
     var user= req.body.first_name;
     var password= req.body.password;
+    
+    if(user=="")
+    {
+        res.send({"status" : false , "message" : "Name field is empty."});
+        return;
+    }
+    else if(password == "")
+    {
+        res.send({"status" : false , "message" : "Password field is empty."});
+        return;
+    }
+
+
     userCollection.findOne({Name: user,Password:password},function(err, result) {
     if(err)
     {
@@ -53,16 +66,16 @@ router.post("/login",function(req,res){
     {
       
       //user_id=result._id;
-      res.redirect('profile/id='+result._id);
+      //res.redirect('profile/id='+result._id);
       
       //  send JSon
-      //res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id});
+      res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id});
       
     }
     else
     {
       res.send({"status":false,
-      "message":"invalid user name and password"});
+      "message":"invalid user name or password"});
     }
   });
 });
@@ -77,10 +90,12 @@ router.post("/login",function(req,res){
 
 router.post("/main/:id",function(req,res){
     var comment= req.body.comment;
-    var user2 = {userid: user_id, status: comment};
+    var milliseconds = (new Date).getTime();
     var user1 = new userPosts(
       { user_id:user_id,
-        post: comment});
+        post: comment,
+        time:milliseconds
+      });
     user1.save(function (err, result) {
       if (err) {
         console.log(err);

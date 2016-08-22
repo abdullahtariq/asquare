@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
 var posts = new Schema({
   user_id: String,
   post: String,
+  time:String
 });
 
 posts.virtual('date')
