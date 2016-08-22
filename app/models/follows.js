@@ -1,17 +1,15 @@
-
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-var users = new Schema({
-  Name: String,
-  Lname: String,
-  Password: String
+var follows = new Schema({
+  follower_id: String,
+  follow_id: String,
 });
 
-users.virtual('date')
+follows.virtual('date')
   .get(function(){
     return this._id.getTimestamp();
   });
 
-mongoose.model('users',users);
+mongoose.model('follows',follows);
 
