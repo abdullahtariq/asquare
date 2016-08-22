@@ -90,9 +90,13 @@ router.post("/login",function(req,res){
 
 router.post("/main/:id",function(req,res){
     var comment= req.body.comment;
+    var str = req.params.id;
+    var answer = str.split("=");
+    userid = answer[1];
+    console.log(userid);
     var milliseconds = (new Date).getTime();
     var user1 = new userPosts(
-      { user_id:user_id,
+      { user_id:userid,
         post: comment,
         time:milliseconds
       });
@@ -100,7 +104,7 @@ router.post("/main/:id",function(req,res){
       if (err) {
         console.log(err);
       } else {
-        res.send({"status" : true, "message" : "Successfully Posted" , "Userid" : result._id});
+        res.send({"status" : true, "message" : "Successfully Posted" , "Userid" : userid});
       }
     });    
 });
@@ -184,7 +188,8 @@ router.post("/profile/:id",function(req,res){
     }
     if (result)
     {
-      var answer = result;
+      //  Array of follows
+      /*var answer = result;
       var arr;
       userfollow.find({follower_id: userid},{"follow_id" : true}, function(err, result) {
           if(err)
@@ -199,8 +204,8 @@ router.post("/profile/:id",function(req,res){
             res.send(arr);
           }
       });
-      return;
-      //res.render('news',{result:result});
+      return;*/
+      res.render('news',{result:result});
     }
     else
     {
