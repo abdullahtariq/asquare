@@ -66,10 +66,10 @@ router.post("/login",function(req,res){
     {
       
       //user_id=result._id;
-      //res.redirect('profile/id='+result._id);
+      res.redirect('profile/id='+result._id);
       
       //  send JSon
-      res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id});
+      //res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id});
       
     }
     else
@@ -171,7 +171,6 @@ router.post("/follows/:id",function(req,res){
 
 router.post("/profile/:id",function(req,res){
     var option = req.body.profile;
-    console.log(option);
     var str = req.params.id;
     var answer = str.split("=");
     userid = answer[1];
@@ -185,7 +184,23 @@ router.post("/profile/:id",function(req,res){
     }
     if (result)
     {
-      res.render('news',{result:result});
+      var answer = result;
+      var arr;
+      userfollow.find({follower_id: userid},{"follow_id" : true}, function(err, result) {
+          if(err)
+          {
+            res.send(err);
+          }
+          else
+          {
+            arr= result.map(function(item) {
+                return item.id;
+            });
+            res.send(arr);
+          }
+      });
+      return;
+      //res.render('news',{result:result});
     }
     else
     {
@@ -239,7 +254,10 @@ router.post("/all",function(req,res){
 
 router.post("/search/:id",function(req,res){
     var data = req.body.data;
-    userCollection.find({Name: new RegExp(data, "i")},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
+    var str = req.params.id;
+    var answer = str.split("=");
+    console.log(userid);
+    userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
       res.send(doc);
 });
 });
