@@ -7,30 +7,35 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
-router.get('/signup', function (req, res, next) {
-    res.render('signup');
+router.get('/update_profile', function (req, res, next) {
+    res.render('update_profile');
 });
-
 /**
- * @api {Post} api/register Request to register User
- * @apiName Create
+ * @api {Post} api/update_profile Request to update profile 
+ * @apiName Update Profile 
  * @apiGroup User
  *
+ * @apiParam {ID} userid Login user id.
  * @apiParam {String} first_name User First Name.
  * @apiParam {String} last_name User Last Name.
  * @apiParam {String} password User Password.
  *
  *
- * @apiSuccess {Boolean} status True/false.
- * @apiSuccess {String} message  Response message.
- * @apiSuccess {ID} userid  Response ID of created user.
+ * @apiSuccess {Boolean} status  Response status of result.
+  * @apiSuccess {String} message  Response message.
  */
 
-router.post("/register",function(req,res){
+router.post("/update_profile",function(req,res){
+    var id= req.body.userid;
     var user= req.body.first_name;
     var last= req.body.last_name;
     var password= req.body.password;
-    if(user=="")
+    if(id=="")
+    {
+    	res.send({"status" : false , "message" : "Id is not given."});
+        return;
+    }
+    else if(user=="")
     {
         res.send({"status" : false , "message" : "First Name field is empty."});
         return;
@@ -46,18 +51,6 @@ router.post("/register",function(req,res){
         return;
     }
 
-    userCollection.findOne({Name: user,Lname:last},function(err, result) {
-    if(err)
-    {
-      console.log("Not found");
-    }
-    if (result)
-    {
-      res.send({"status" : false , "message" : "User Already exits"});
-        return;
-    }
-    else
-    {
       var user1 = new userCollection(
       {Name: user,
         Lname: last,
@@ -81,15 +74,11 @@ router.post("/register",function(req,res){
     }
     else
     {
-        user1.save(function (err, result) {
-        if (err) {
-        console.log(err);
-        } else {
-        res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
-        }
-      });
-    }
+        userCollection.findByIdAndUpdate(id, { $set: { Name: user, Lname:last, Password:password }}, function (err, tank) {
+		  if (err) 
+		  	{res.send({"status":false, "message" : "not successfully updated"});}
+		  else
+		  res.send({"status":true, "message" : "successfully updated"});
+		});
     }
   });
-
-});
