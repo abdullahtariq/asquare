@@ -105,15 +105,15 @@ router.post("/login",function(req,res){
 /**
  * @api {Post} api/post Request to Add Post 
  * @apiName Post
- * @apiGroup User
+ * @apiGroup User_POST
  *
  * @apiParam {String} post User Post.
- * @apiParam {ID} id User Id .
+ * @apiParam {ID} userid User Id .
  *
  *
  * @apiSuccess {Boolean} status True/false.
  * @apiSuccess {String} message  Response message.
- * @apiSuccess {ID} userid  Response ID of login user.
+ * @apiSuccess {ID} userid Response ID of login user.
  */
 
 
@@ -122,7 +122,7 @@ router.post("/login",function(req,res){
 
 router.post("/post",function(req,res){
     var comment= req.body.post;
-    var str = req.params.id;
+    var str = req.params.userid;
     var answer = str.split("=");
     userid = answer[1];
     console.log(userid);
@@ -151,17 +151,16 @@ router.post("/post",function(req,res){
 /**
  * @api {Post} api/default_follows Request to Default follows 
  * @apiName Default Follow User
- * @apiGroup User
+ * @apiGroup Follow
  *
- * @apiParam {_id} id login user.
+ * @apiParam {ID} userid login user.
  *
  *
- * @apiSuccess {_id} id  Response id of default user.
  * @apiSuccess {String} result(_id,Name)  Response result(default user id,first Name).
  */
 
 router.post("/default_follows",function(req,res){
-    userid = req.body.id;
+    userid = req.body.userid;
       userCollection.find({_id: {'$ne':userid }},{"Name": true, "_id": true},{"limit": 5}, function(err, result) {
           if(err)
           {
@@ -169,7 +168,7 @@ router.post("/default_follows",function(req,res){
           }
           else
           {
-            res.send(result);
+            res.send({"status" : true, "result" : result});
           }
       });
   });
@@ -177,11 +176,11 @@ router.post("/default_follows",function(req,res){
 
 
 /**
- * @api {Post} api/see_follower Request to Default follows 
- * @apiName Default Follow User
- * @apiGroup User
+ * @api {Post} api/see_follower Request to See followers
+ * @apiName See follower
+ * @apiGroup Follow
  *
- * @apiParam {_id} id login user.
+ * @apiParam {ID} userid login user.
  *
  *
  * @apiSuccess {Boolean} status  Response status.
@@ -191,7 +190,7 @@ router.post("/default_follows",function(req,res){
 
 
 router.post("/see_follower",function(req,res){
-    userid = req.body.id;
+    userid = req.body.userid;
       userfollow.find({following_id: userid }, {"follower_id": true }, function(err, result) 
       {
           if(err)
@@ -212,11 +211,11 @@ router.post("/see_follower",function(req,res){
 
 
 /**
- * @api {Post} api/see_following Request to Default follows 
- * @apiName Default Follow User
- * @apiGroup User
+ * @api {Post} api/see_following Request to See Followings 
+ * @apiName See following
+ * @apiGroup Follow
  *
- * @apiParam {_id} id login user.
+ * @apiParam {ID} userid login user.
  *
  *
   * @apiSuccess {Boolean} status  Response status.
@@ -225,7 +224,7 @@ router.post("/see_follower",function(req,res){
 
 
 router.post("/see_following",function(req,res){
-    userid = req.body.id;
+    userid = req.body.userid;
       userfollow.find({follower_id: userid },{"following_id": true }, function(err, result) 
       {
           if(err)
@@ -247,11 +246,11 @@ router.post("/see_following",function(req,res){
 
 
 /**
- * @api {Post} api/newsfeed Request to Login user profile
+ * @api {Post} api/newsfeed Request to News Feed
  * @apiName News feed 
- * @apiGroup User
+ * @apiGroup User_POST
  *
- * @apiParam {_id} id login User ID.
+ * @apiParam {ID} userid login User ID.
  *
  *
   * @apiSuccess {Boolean} status  Response status.
@@ -261,7 +260,7 @@ router.post("/see_following",function(req,res){
 
 
 router.post("/newsfeed",function(req,res){
-    userid = req.body.id;
+    userid = req.body.userid;
    
     userPosts.find({user_id: userid},{"user_id": true, "post": true, "time":true},function(err, result) {
     if(err)
@@ -297,12 +296,14 @@ router.post("/newsfeed",function(req,res){
   });
  
 });
+
+
 /**
  * @api {Post} api/view_profile Request to Search Profile 
  * @apiName friend profile
  * @apiGroup User
  *
- * @apiParam {_id} search User id.
+ * @apiParam {ID} search User id.
  *
  *
  * @apiSuccess {Boolean} status  Response status.
@@ -344,21 +345,21 @@ router.post("/view_profile", function(req,res){
 /**
  * @api {Post} api/follow_friend Request to Follow a friend 
  * @apiName Follow a friend
- * @apiGroup User
+ * @apiGroup Follow
  *
- * @apiParam {_id} user_id login User Id.
- * @apiParam {_id} friend_id friend User Id.
+ * @apiParam {ID} userid login User Id.
+ * @apiParam {ID} friend_id friend User Id.
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
- * @apiSuccess {string} message  Response succussfully follow.
- * @apiSuccess {string} follower_id  Response follower_id.
- * @apiSuccess {string} following_id Response following_id.
+ * @apiSuccess {String} message  Response succussfully follow.
+ * @apiSuccess {String} follower_id  Response follower_id.
+ * @apiSuccess {String} following_id Response following_id.
  */
 
 
 router.post("/follow_friend",function(req,res){
-    var userid = req.body.user_id;
+    var userid = req.body.userid;
     var option = req.body.friend_id;
     var user1 = new userfollow(
       {
@@ -382,7 +383,7 @@ router.post("/follow_friend",function(req,res){
  * @apiGroup User
  *
  * @apiParam {String} search User Name of friend.
- * @apiParam {Id} id Login user id.
+ * @apiParam {ID} userid Login user id.
  *
  *
  * @apiSuccess {Boolean} status  Response status of result.
@@ -395,7 +396,7 @@ router.post("/follow_friend",function(req,res){
 
 router.post("/search",function(req,res){
     var data = req.body.search;
-    var userid = req.body.id;
+    var userid = req.body.userid;
     userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
       if(doc)
         res.send({"status":true , "result'":doc});
