@@ -535,6 +535,56 @@ define({ "api": [
   },
   {
     "type": "Post",
+    "url": "api/likepost",
+    "title": "Request to like a user post",
+    "name": "Like_post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User Who like post.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/likepost.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
     "url": "api/newsfeed",
     "title": "Request to News Feed",
     "name": "News_feed",
