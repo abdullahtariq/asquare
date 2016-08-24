@@ -122,9 +122,7 @@ router.post("/login",function(req,res){
 
 router.post("/post",function(req,res){
     var comment= req.body.post;
-    var str = req.params.userid;
-    var answer = str.split("=");
-    userid = answer[1];
+    userid = req.body.userid;
     console.log(userid);
     if(comment == "")
     {
@@ -261,13 +259,22 @@ router.post("/see_following",function(req,res){
 
 router.post("/newsfeed",function(req,res){
     userid = req.body.userid;
-   
-    userPosts.find({user_id: userid},{"user_id": true, "post": true, "time":true},function(err, result) {
+    if(typeof req.body.userid == 'undefined')
+    {
+      res.send({"status":false,"result":"user id is not given"}); 
+      return;
+    }
+    else if(userid=="")
+    {
+      res.send({"status":false,"result":"user id is not given"}); 
+      return;   
+    }
+    userPosts.find({user_id:userid},{"user_id": true, "post": true, "time":true},function(err, result) {
     if(err)
     {
       res.send({"status":false,"result":err});
     }
-    if (result)
+    if (Object.keys(result).length != 0)
     {
       //  Array of follows
    /*   var answer = result;
@@ -299,11 +306,11 @@ router.post("/newsfeed",function(req,res){
 
 
 /**
- * @api {Post} api/view_profile Request to Search Profile 
- * @apiName friend profile
+ * @api {Post} api/view_profile Request to View Profile 
+ * @apiName view profile
  * @apiGroup User
  *
- * @apiParam {ID} search User id.
+ * @apiParam {ID} userid User id.
  *
  *
  * @apiSuccess {Boolean} status  Response status.
@@ -315,7 +322,7 @@ router.post("/newsfeed",function(req,res){
 //  Friends Profile
 
 router.post("/view_profile", function(req,res){
-    var search = req.body.search;
+    var search = req.body.userid;
     if(search=="")
     {
       res.send({"status":false,

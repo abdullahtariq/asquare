@@ -5,7 +5,9 @@ var mongoose = require('mongoose'),
 var users = new Schema({
   Name: String,
   Lname: String,
-  Password: String
+  Password: String,
+  Pic_name: String,
+  Pic_path: String
 });
 
 users.virtual('date')

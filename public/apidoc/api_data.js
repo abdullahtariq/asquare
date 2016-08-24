@@ -551,8 +551,8 @@ define({ "api": [
   {
     "type": "Post",
     "url": "api/view_profile",
-    "title": "Request to Search Profile",
-    "name": "friend_profile",
+    "title": "Request to View Profile",
+    "name": "view_profile",
     "group": "User",
     "parameter": {
       "fields": {
@@ -561,7 +561,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "ID",
             "optional": false,
-            "field": "search",
+            "field": "userid",
             "description": "<p>User id.</p>"
           }
         ]
