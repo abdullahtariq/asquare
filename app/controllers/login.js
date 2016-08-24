@@ -128,6 +128,10 @@ router.post("/post",function(req,res){
     {
         res.send({"status" : false, "message" : "empty post"});
     }
+    else if(typeof req.body.userid=='undefined')
+    {
+        res.send({"status" : false, "message" : "user id undefined"});
+    }
     else
     {    var milliseconds = (new Date).getTime();
       var user1 = new userPosts(
@@ -415,3 +419,9 @@ router.post("/search",function(req,res){
         res.send({"status":false ,"message":"no result found", "result":doc});
 });
 });
+
+
+
+
+
+
