@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 var follows = new Schema({
   follower_id: String,
-  follow_id: String,
+  following_id: String,
 });
 
 follows.virtual('date')

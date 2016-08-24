@@ -31,14 +31,33 @@ router.get('/profile/:id', function (req, res, next) {
     res.render('profile',{id:req.params.id});
 });
 
+router.get('/view_profile/:id', function (req, res, next) {
+    userid = req.params.id;
+    res.render('view_profile',{id:req.params.id});
+});
 
-router.get('/main/:id', function (req, res, next) {
-    res.render('main',{id:req.params.id});
+router.get('/post/:id', function (req, res, next) {
+    res.render('post',{id:req.params.id});
 });
 
 router.get('/all/:id', function (req, res, next) {
     userid= req.params.id;
 });
+
+
+/**
+ * @api {Post} api/login Request to login User
+ * @apiName Login
+ * @apiGroup User
+ *
+ * @apiParam {String} first_name User First Name.
+ * @apiParam {String} password User Password.
+ *
+ *
+ * @apiSuccess {Boolean} status True/false.
+ * @apiSuccess {String} message  Response message.
+ * @apiSuccess {ID} userid  Response ID of login user.
+ */
 
 
 router.post("/login",function(req,res){
@@ -66,10 +85,10 @@ router.post("/login",function(req,res){
     {
       
       //user_id=result._id;
-      res.redirect('profile/id='+result._id);
+      //res.redirect('profile/id='+result._id);
       
       //  send JSon
-      //res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id});
+      res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id});
       
     }
     else
@@ -83,113 +102,186 @@ router.post("/login",function(req,res){
 
 
 
+/**
+ * @api {Post} api/post Request to Add Post 
+ * @apiName Post
+ * @apiGroup User_POST
+ *
+ * @apiParam {String} post User Post.
+ * @apiParam {ID} userid User Id .
+ *
+ *
+ * @apiSuccess {Boolean} status True/false.
+ * @apiSuccess {String} message  Response message.
+ * @apiSuccess {ID} userid Response ID of login user.
+ */
 
 
 
 //  USER POSTS
 
-router.post("/main/:id",function(req,res){
-    var comment= req.body.comment;
-    var str = req.params.id;
-    var answer = str.split("=");
-    userid = answer[1];
+router.post("/post",function(req,res){
+    var comment= req.body.post;
+    userid = req.body.userid;
     console.log(userid);
-    var milliseconds = (new Date).getTime();
-    var user1 = new userPosts(
-      { user_id:userid,
-        post: comment,
-        time:milliseconds
+    if(comment == "")
+    {
+        res.send({"status" : false, "message" : "empty post"});
+    }
+    else
+    {    var milliseconds = (new Date).getTime();
+      var user1 = new userPosts(
+        { user_id:userid,
+          post: comment,
+          time:milliseconds
+        });
+      user1.save(function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
+        }
       });
-    user1.save(function (err, result) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send({"status" : true, "message" : "Successfully Posted" , "Userid" : userid});
-      }
-    });    
+    }    
 });
 
 
+/**
+ * @api {Post} api/suggestions Request to Default follows 
+ * @apiName Default Follow User
+ * @apiGroup Follow
+ *
+ * @apiParam {ID} userid login user.
+ *
+ * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} result(_id,Name)  Response result(default user id,first Name).
+ */
 
-
-
-//  USER FOLLOW/FOLLOWERS
-
-router.post("/follows/:id",function(req,res){
-    var fol= req.body.foll;
-    var count;
-    var str = req.params.id;
-    var answer = str.split("=");
-    userid = answer[1];
-    if(fol==1)
-    {
-      userfollow.findOne({follower_id: userid},function(err, result) {
-    if(err)
-    {
-      console.log('not')
-      
-    }
-    if (result)
-    {
-      res.redirect('../search/id='+userid);
-    }
-    else
-    {
-      userCollection.find({_id: {'$ne':userid }},{"Name": true, "_id": true},{"limit": 3}, function(err, result) {
+router.post("/suggestions",function(req,res){
+    userid = req.body.userid;
+      userCollection.find({_id: {'$ne':userid }},{"Name": true, "_id": true},{"limit": 5}, function(err, result) {
           if(err)
           {
-            res.send(err);
+            res.send({"status" : false , "message" : "No suggestions", "result" : err});
           }
           else
           {
-            res.render('all',{result:result});
-            //res.render('../all/id='+userid);
-            //res.send(result);
+            res.send({"status" : true, "message" : "succussfully", "result" : result});
           }
       });
-    }
   });
-    }
-    else
-    {
-      userfollow.find({follower_id: userid }, function(err, result) 
+
+
+
+/**
+ * @api {Post} api/see_follower Request to See followers
+ * @apiName See follower
+ * @apiGroup Follow
+ *
+ * @apiParam {ID} userid login user.
+ *
+ *
+ * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} result(follower_id)  Response result(follower_id).
+ */
+
+
+
+router.post("/see_follower",function(req,res){
+    userid = req.body.userid;
+      userfollow.find({following_id: userid }, {"follower_id": true }, function(err, result) 
       {
           if(err)
           {
-            res.send(err);
+            res.send({"status" : false , "message" : "Error", "result" : err});
+          }
+          else if(result)
+          {
+            res.send({"status" : true , "message" : "succussfully found", "result" : result});
           }
           else
           {
-            res.send(result);
+            res.send({"status" : false , "message" : "No followers", "result" : "Not found"});
           }
       }); 
-    }
+});
 
+
+
+/**
+ * @api {Post} api/see_following Request to See Followings 
+ * @apiName See following
+ * @apiGroup Follow
+ *
+ * @apiParam {ID} userid login user.
+ *
+ *
+  * @apiSuccess {Boolean} status  Response status.
+  * @apiSuccess {String} message  Response message.
+  * @apiSuccess {String} result(following_id)  Response result(following_id).
+ */
+
+
+router.post("/see_following",function(req,res){
+    userid = req.body.userid;
+      userfollow.find({follower_id: userid },{"following_id": true }, function(err, result) 
+      {
+          if(err)
+          {
+            res.send({"status" : false , "result" : err});
+          }
+          else if(result)
+          {
+            res.send({"status" : true , "message" : "succussfully found following", "result" : result});
+          }
+          else
+          {
+            res.send({"status" : true , "message" : "No Following", "result" : "Not found"}); 
+          }
+      }); 
 });
 
 
 
 
-//  News FEED
-//  SO far just own news feeed
+/**
+ * @api {Post} api/newsfeed Request to News Feed
+ * @apiName News feed 
+ * @apiGroup User_POST
+ *
+ * @apiParam {ID} userid login User ID.
+ *
+ *
+  * @apiSuccess {Boolean} status  Response status.
+  * @apiSuccess {String} message  Response message.
+  * @apiSuccess {String} result(user_id,post,time)  Response result(user id,post ,time).
+ */
 
-router.post("/profile/:id",function(req,res){
-    var option = req.body.profile;
-    var str = req.params.id;
-    var answer = str.split("=");
-    userid = answer[1];
-    if(option==1)
+
+
+router.post("/newsfeed",function(req,res){
+    userid = req.body.userid;
+    if(typeof req.body.userid == 'undefined')
     {
-      //send file to html page for posts
-    userPosts.find({user_id: userid},function(err, result) {
+      res.send({"status":false, "message":"user id is not given", "result":"user id is not given"}); 
+      return;
+    }
+    else if(userid=="")
+    {
+      res.send({"status":false,"result":"user id is not given"}); 
+      return;   
+    }
+    userPosts.find({user_id:userid},{"user_id": true, "post": true, "time":true},function(err, result) {
     if(err)
     {
-      console.log("Not found");
+      res.send({"status":false,"message":"Error",  "result":err});
     }
-    if (result)
+    if (Object.keys(result).length != 0)
     {
       //  Array of follows
-      /*var answer = result;
+   /*   var answer = result;
       var arr;
       userfollow.find({follower_id: userid},{"follow_id" : true}, function(err, result) {
           if(err)
@@ -204,65 +296,122 @@ router.post("/profile/:id",function(req,res){
             res.send(arr);
           }
       });
-      return;*/
-      res.render('news',{result:result});
+      return;
+     */ //res.render('news',{result:result});
+     res.send({"status":true,"message" : "Post found",  "result":result});
     }
     else
     {
-      res.send({"status":false,
-      "message":"no post so far"});
+      res.send({"status":false,"message":"No post so far",  "result":"no post so far"});
     }
   });
-      
-    }
-    else if( option==2)
+ 
+});
+
+
+/**
+ * @api {Post} api/view_profile Request to View Profile 
+ * @apiName view profile
+ * @apiGroup User
+ *
+ * @apiParam {ID} userid User id.
+ *
+ *
+ * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response message.
+  * @apiSuccess {String} result(_id,Name,Lname)  Response result(_id,first Name,Last name).
+ */
+
+
+
+//  Friends Profile
+
+router.post("/view_profile", function(req,res){
+    var search = req.body.userid;
+    if(search=="")
     {
-      //console.log(userid);
-      //send file to html page for posts
-     res.redirect('../main/id='+userid);
+      res.send({"status":false,"message":"userid is not given",  "result":"search bar is empty"});
     }
     else
     {
-      //  send file to follow un_follow page
-      res.redirect('../follows/id='+userid);
+      userCollection.findOne({_id: search},{"_id":true,"Name": true, "Lname":true},function(err, result) {
+      if(err)
+      {
+        console.log("Not found");
+      }
+      if (result)
+      {
+        res.send({"status":true ,"message":"succussfully found", "result" : result});
+      }
+      else
+      {
+        res.send({"status":false,"message":"invalid userid",  "result":"invalid user name"});
+      }
+      });
     }
 });
 
 
+/**
+ * @api {Post} api/follow_friend Request to Follow a friend 
+ * @apiName Follow a friend
+ * @apiGroup Follow
+ *
+ * @apiParam {ID} userid login User Id.
+ * @apiParam {ID} friend_id friend User Id.
+ *
+ *
+ * @apiSuccess {Boolean} stauts  Response stauts.
+ * @apiSuccess {String} message  Response succussfully follow.
+ * @apiSuccess {String} follower_id  Response follower_id.
+ * @apiSuccess {String} following_id Response following_id.
+ */
 
 
-
-//  Follows add
-
-router.post("/all",function(req,res){
-    var option = req.body.follow;
-    console.log(option);
+router.post("/follow_friend",function(req,res){
+    var userid = req.body.userid;
+    var option = req.body.friend_id;
     var user1 = new userfollow(
       {
-       follower_id: userid, 
-        follow_id: option
+       follower_id: option, 
+        following_id: userid
         });
     //-----Insert Into Users
     user1.save(function (err, result) {
       if (err) {
-        console.log(err);
+        res.send({"status" : false, "message":"Error", "result" : err });
       } else {
-        res.send({"status" : true, "message" : "successfully follow" , "userid" : result._id});
+        res.send({"status" : true,"message" : "successfully follow" , "follower_id" : option, "following_id" : userid});
       }
     });
 });
 
 
+/**
+ * @api {Post} api/search Request to seacrh friends 
+ * @apiName Search friend 
+ * @apiGroup User
+ *
+ * @apiParam {String} search User Name of friend.
+ * @apiParam {ID} userid Login user id.
+ *
+ *
+ * @apiSuccess {Boolean} status  Response status of result.
+  * @apiSuccess {String} message  Response message.
+  * @apiSuccess {String} result(_id,Name,Lname)  Response result(_id,first Name,Last name).
+ */
+
 
 
 //  SEARCH FOLLOW
 
-router.post("/search/:id",function(req,res){
-    var data = req.body.data;
-    var str = req.params.id;
-    var answer = str.split("=");
-    console.log(userid);
+router.post("/search",function(req,res){
+    var data = req.body.search;
+    var userid = req.body.userid;
     userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
-      res.send(doc);
+      if(doc)
+        res.send({"status":true ,"message":"found", "result'":doc});
+      else
+        res.send({"status":false ,"message":"no result found", "result":doc});
 });
 });

@@ -1,6 +1,6 @@
 <% var str=id %>
         <% var res = str.split("=")%>
-<form method="post" action="/api/main/id=<%-res[1]%>">
-        <input type="text" name="comment" placeholder="POST"/>
+<form method="post" action="/api/post/id=<%-res[1]%>">
+        <input type="text" name="post" placeholder="POST"/>
         <input type="submit" name="submit" Value="POST"/>
     </form>
