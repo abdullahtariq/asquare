@@ -1,20 +1,8 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users');
-
-var multer  =   require('multer');
-
-var storage =   multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './uploads');
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.fieldname + '-' + Date.now());
-  }
-});
-var upload = multer({ storage : storage}).single('picture');
-
+  userCollection = mongoose.model('users'); 
+ 
 module.exports = function (app) {
   app.use('/api', router);
 };
@@ -38,19 +26,11 @@ router.get('/signup', function (req, res, next) {
  * @apiSuccess {ID} userid  Response ID of created user.
  */
 
+
 router.post("/register", function(req,res){
-    upload(req,res,function(err) {
-        if(err) {
-            return res.end("Error uploading file.");
-        }
-        res.end("File is uploaded");
-    });
-/*    var user= req.body.first_name;
+    var user= req.body.first_name;
     var last= req.body.last_name;
     var password= req.body.password;
-    var file= req.files;
-    var name;
-    var path;
     if(user=="")
     {
         res.send({"status" : false , "message" : "First Name field is empty."});
@@ -66,13 +46,8 @@ router.post("/register", function(req,res){
         res.send({"status" : false , "message" : "Password field is empty."});
         return;
     }
-    else if(file=="")
-    {
-        res.send({"status" : false , "message" : "Upload file pic."});
-        return;
-    }
-    var name = file[0].originalname;
-    var path = file[0].path;
+    var name = file.originalname;
+    var path = file.path;
     userCollection.findOne({Name: user,Lname:last},function(err, result) {
     if(err)
     {
@@ -89,8 +64,6 @@ router.post("/register", function(req,res){
       {Name: user,
         Lname: last,
         Password: password,
-        Pic_name: String,
-         Pic_path: String
     });
 
     if (password.length < 8) {
@@ -115,12 +88,12 @@ router.post("/register", function(req,res){
         if (err) {
         console.log(err);
         } else {
-        res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
+             res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
         }
       });
     }
     }
-  });*/
+  });
 });
 
 

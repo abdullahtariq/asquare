@@ -147,26 +147,27 @@ router.post("/post",function(req,res){
 
 
 /**
- * @api {Post} api/default_follows Request to Default follows 
+ * @api {Post} api/suggestions Request to Default follows 
  * @apiName Default Follow User
  * @apiGroup Follow
  *
  * @apiParam {ID} userid login user.
  *
- *
+ * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response message.
  * @apiSuccess {String} result(_id,Name)  Response result(default user id,first Name).
  */
 
-router.post("/default_follows",function(req,res){
+router.post("/suggestions",function(req,res){
     userid = req.body.userid;
       userCollection.find({_id: {'$ne':userid }},{"Name": true, "_id": true},{"limit": 5}, function(err, result) {
           if(err)
           {
-            res.send(err);
+            res.send({"status" : false , "message" : "No suggestions", "result" : err});
           }
           else
           {
-            res.send({"status" : true, "result" : result});
+            res.send({"status" : true, "message" : "succussfully", "result" : result});
           }
       });
   });
@@ -182,6 +183,7 @@ router.post("/default_follows",function(req,res){
  *
  *
  * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response message.
  * @apiSuccess {String} result(follower_id)  Response result(follower_id).
  */
 
@@ -193,15 +195,15 @@ router.post("/see_follower",function(req,res){
       {
           if(err)
           {
-            res.send({"status" : false , "result" : err});
+            res.send({"status" : false , "message" : "Error", "result" : err});
           }
           else if(result)
           {
-            res.send({"status" : true , "result" : result});
+            res.send({"status" : true , "message" : "succussfully found", "result" : result});
           }
           else
           {
-            res.send({"status" : false , "result" : "Not found"});
+            res.send({"status" : false , "message" : "No followers", "result" : "Not found"});
           }
       }); 
 });
@@ -217,7 +219,8 @@ router.post("/see_follower",function(req,res){
  *
  *
   * @apiSuccess {Boolean} status  Response status.
-  * @apiSuccess {String} message(following_id)  Response result(following_id).
+  * @apiSuccess {String} message  Response message.
+  * @apiSuccess {String} result(following_id)  Response result(following_id).
  */
 
 
@@ -227,15 +230,15 @@ router.post("/see_following",function(req,res){
       {
           if(err)
           {
-            res.send({"status" : false , "message" : err});
+            res.send({"status" : false , "result" : err});
           }
           else if(result)
           {
-            res.send({"status" : true , "message" : result});
+            res.send({"status" : true , "message" : "succussfully found following", "result" : result});
           }
           else
           {
-            res.send({"status" : true , "message" : "Not found"}); 
+            res.send({"status" : true , "message" : "No Following", "result" : "Not found"}); 
           }
       }); 
 });
@@ -252,6 +255,7 @@ router.post("/see_following",function(req,res){
  *
  *
   * @apiSuccess {Boolean} status  Response status.
+  * @apiSuccess {String} message  Response message.
   * @apiSuccess {String} result(user_id,post,time)  Response result(user id,post ,time).
  */
 
@@ -261,7 +265,7 @@ router.post("/newsfeed",function(req,res){
     userid = req.body.userid;
     if(typeof req.body.userid == 'undefined')
     {
-      res.send({"status":false,"result":"user id is not given"}); 
+      res.send({"status":false, "message":"user id is not given", "result":"user id is not given"}); 
       return;
     }
     else if(userid=="")
@@ -272,7 +276,7 @@ router.post("/newsfeed",function(req,res){
     userPosts.find({user_id:userid},{"user_id": true, "post": true, "time":true},function(err, result) {
     if(err)
     {
-      res.send({"status":false,"result":err});
+      res.send({"status":false,"message":"Error",  "result":err});
     }
     if (Object.keys(result).length != 0)
     {
@@ -294,11 +298,11 @@ router.post("/newsfeed",function(req,res){
       });
       return;
      */ //res.render('news',{result:result});
-     res.send({"status":true,"result":result});
+     res.send({"status":true,"message" : "Post found",  "result":result});
     }
     else
     {
-      res.send({"status":false,"result":"no post so far"});
+      res.send({"status":false,"message":"No post so far",  "result":"no post so far"});
     }
   });
  
@@ -314,6 +318,7 @@ router.post("/newsfeed",function(req,res){
  *
  *
  * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response message.
   * @apiSuccess {String} result(_id,Name,Lname)  Response result(_id,first Name,Last name).
  */
 
@@ -325,8 +330,7 @@ router.post("/view_profile", function(req,res){
     var search = req.body.userid;
     if(search=="")
     {
-      res.send({"status":false,
-        "result":"search bar is empty"});
+      res.send({"status":false,"message":"userid is not given",  "result":"search bar is empty"});
     }
     else
     {
@@ -337,12 +341,11 @@ router.post("/view_profile", function(req,res){
       }
       if (result)
       {
-        res.send({"status":true , "result" : result});
+        res.send({"status":true ,"message":"succussfully found", "result" : result});
       }
       else
       {
-        res.send({"status":false,
-        "result":"invalid user name"});
+        res.send({"status":false,"message":"invalid userid",  "result":"invalid user name"});
       }
       });
     }
@@ -376,9 +379,9 @@ router.post("/follow_friend",function(req,res){
     //-----Insert Into Users
     user1.save(function (err, result) {
       if (err) {
-        res.send({"status" : false, "result" : err });
+        res.send({"status" : false, "message":"Error", "result" : err });
       } else {
-        res.send({"status" : true, "result" : "successfully follow" , "follower_id" : option, "following_id" : userid});
+        res.send({"status" : true,"message" : "successfully follow" , "follower_id" : option, "following_id" : userid});
       }
     });
 });
@@ -394,6 +397,7 @@ router.post("/follow_friend",function(req,res){
  *
  *
  * @apiSuccess {Boolean} status  Response status of result.
+  * @apiSuccess {String} message  Response message.
   * @apiSuccess {String} result(_id,Name,Lname)  Response result(_id,first Name,Last name).
  */
 
@@ -406,8 +410,8 @@ router.post("/search",function(req,res){
     var userid = req.body.userid;
     userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
       if(doc)
-        res.send({"status":true , "result'":doc});
+        res.send({"status":true ,"message":"found", "result'":doc});
       else
-        res.send({"status":false , "result":doc});
+        res.send({"status":false ,"message":"no result found", "result":doc});
 });
 });

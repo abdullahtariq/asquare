@@ -29,7 +29,7 @@ define({ "api": [
   },
   {
     "type": "Post",
-    "url": "api/default_follows",
+    "url": "api/suggestions",
     "title": "Request to Default follows",
     "name": "Default_Follow_User",
     "group": "Follow",
@@ -49,6 +49,20 @@ define({ "api": [
     "success": {
       "fields": {
         "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          },
           {
             "group": "Success 200",
             "type": "String",
@@ -160,6 +174,13 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "result",
             "description": "<p>(follower_id)  Response result(follower_id).</p>"
           }
@@ -204,6 +225,13 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
             "description": "<p>(following_id)  Response result(following_id).</p>"
           }
         ]
@@ -374,6 +402,13 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "result",
             "description": "<p>(_id,Name,Lname)  Response result(_id,first Name,Last name).</p>"
           }
@@ -382,6 +417,56 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./app/controllers/login.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "Post",
+    "url": "api/setprofile",
+    "title": "Request to Set User Profile",
+    "name": "Set_profile",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User login id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "picture",
+            "description": "<p>User Profile picture.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/setprofile.js",
     "groupTitle": "User"
   },
   {
@@ -476,6 +561,13 @@ define({ "api": [
             "optional": false,
             "field": "status",
             "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
           },
           {
             "group": "Success 200",
@@ -576,6 +668,13 @@ define({ "api": [
             "optional": false,
             "field": "status",
             "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
           },
           {
             "group": "Success 200",
