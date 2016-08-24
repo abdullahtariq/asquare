@@ -1,17 +1,16 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-var posts = new Schema({
+var userlikes = new Schema({
+  post_id: String,
   user_id: String,
-  post: String,
-  time:String,
-  likes:String
+  time:String
 });
 
-posts.virtual('date')
+userlikes.virtual('date')
   .get(function(){
     return this._id.getTimestamp();
   });
 
-mongoose.model('posts',posts);
+mongoose.model('userlikes',userlikes);
 

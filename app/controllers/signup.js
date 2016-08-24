@@ -28,6 +28,21 @@ router.get('/signup', function (req, res, next) {
 
 
 router.post("/register", function(req,res){
+    if(typeof req.body.first_name=='undefined')
+    {
+        res.send({"status" : false , "message" : "First Name field is not given."});
+        return;
+    }
+    else if(typeof req.body.last_name=='undefined')
+    {
+        res.send({"status" : false , "message" : "Last name is not given."});
+        return;
+    }
+    else if(typeof req.body.password=='undefined')
+    {
+        res.send({"status" : false , "message" : "password is not given."});
+        return;
+    }
     var user= req.body.first_name;
     var last= req.body.last_name;
     var password= req.body.password;
@@ -46,8 +61,6 @@ router.post("/register", function(req,res){
         res.send({"status" : false , "message" : "Password field is empty."});
         return;
     }
-    var name = file.originalname;
-    var path = file.path;
     userCollection.findOne({Name: user,Lname:last},function(err, result) {
     if(err)
     {
