@@ -1,8 +1,8 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users');
-
+  userCollection = mongoose.model('users'); 
+ 
 module.exports = function (app) {
   app.use('/api', router);
 };
@@ -26,7 +26,8 @@ router.get('/signup', function (req, res, next) {
  * @apiSuccess {ID} userid  Response ID of created user.
  */
 
-router.post("/register",function(req,res){
+
+router.post("/register", function(req,res){
     var user= req.body.first_name;
     var last= req.body.last_name;
     var password= req.body.password;
@@ -45,7 +46,8 @@ router.post("/register",function(req,res){
         res.send({"status" : false , "message" : "Password field is empty."});
         return;
     }
-
+    var name = file.originalname;
+    var path = file.path;
     userCollection.findOne({Name: user,Lname:last},function(err, result) {
     if(err)
     {
@@ -61,7 +63,8 @@ router.post("/register",function(req,res){
       var user1 = new userCollection(
       {Name: user,
         Lname: last,
-        Password: password});
+        Password: password,
+    });
 
     if (password.length < 8) {
         res.send({"status" : false , "message" : "password should contain 8 characters"});
@@ -85,11 +88,12 @@ router.post("/register",function(req,res){
         if (err) {
         console.log(err);
         } else {
-        res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
+             res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
         }
       });
     }
     }
   });
-
 });
+
+
