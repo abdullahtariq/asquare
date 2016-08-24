@@ -1,8 +1,218 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+*{ 
+margin:0;
+padding:0;
+}
+body{  font-family: 'Montserrat', sans-serif;
+font-size:13px;
+    }
+	a {font-family: 'Montserrat', sans-serif;
+	
+	color:#00CED1;
+	text-decoration:none;}
+	header{
+		padding:20px;
+		text-align:center;
+		
+	}
+	
+	
+	
+	.ft{
+		
+		padding:1%;
+		margin:90px;
+		
+	}
+	
+	.left-container{
+		width:50%;
+		float:left;
+		
+		
+		
+		
+	}
+	
+	.right-container{
+		width:50%;
+		float:left;
+		height:
+		
+	}
+
+.lo{
+position:relative;
+top:10px;
+left:580px;
 }
 
-a {
-  color: #00B7FF;
+.txt{  position:relative;
+       top:220px;
+	   left:260px;
+	   color:white;
+	   font-size:34;
+	   font-weight:bold;
+	   font-family:'Montserrat',sans-serif;
+}
+.txt2{ font-size:1;
+	   font-weight:normal;
+}
+.hr {
+	
+    display: block;
+    border: 0;
+   height:2px;
+    width:60px;
+	background-color:white;
+	margin-left:0px;
+	clear:both;
+	margin-top:30px;
+	
+}
+
+h1{
+	font-size:40px;
+
+	display: block;
+	padding-bottom:20px;
+}
+
+.text1{
+	
+	padding:80px;
+	
+}
+
+
+
+
+
+.btn {
+    position: relative;
+    color: white;
+    background: #813F65;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    font-size: 21;
+    border-radius: 40px;
+    margin: 40px 0 0;
+    padding: 15px 30px;
+    float:left;
+	
+}
+
+.bottom-image{ position: relative;
+               top:550px;
+			   left:580px;
+}
+.bottom-image2{ position: relative;
+               top:527px;
+			   left:615px;
+}
+.bottom-image3{ position: relative;
+               top:502px;
+			   left:650px;
+}
+.bottom-image4{ position: relative;
+               top:480px;
+			   left:687px;
+			  
+}
+.stng{
+position:relative;
+top:585px;
+left:220px;
+color:#00CED1;
+font-size:12px;
+
+}
+
+.ne{
+position:relative;
+top:570px;
+left:160px;
+color:#00CED1;
+font-size:12px;
+
+}
+
+.copy{
+position:relative;
+top:312px;
+left:1000px;
+font-size:13px;
+ font-family:'Montserrat',sans-serif;
+}
+#mainContainer{
+	
+	
+	width:1330px;
+	margin:0 auto;
+	
+}
+.red-bg{
+color:white;
+
+height:500px;
+
+margin:0 auto;
+
+font-family:'Montserrat',sans-serif;
+ background-image:url(../images/bg.jpg);
+       background-repeat:no-repeat;
+	   background-position:center center;
+	 
+}
+.mob{
+    width: 48%;
+    float: right;
+    position: relative;
+    right: 24%;
+	    top: -33px;
+}
+
+
+.cop
+{
+	width:70%;
+	float:left;
+	
+	
+}
+
+.text{
+font-size:20px;
+padding-top:25px;
+display:block;
+}
+.footer div {
+	
+	float:left;
+	width:33.333%
+}
+.img{
+	
+	width:56%;
+	float:left;
+	padding-top:10px;
+	text-align:center;
+	
+}
+.footer{
+	
+	margin:80px;
+	
+}
+
+.img a{
+	
+	margin:5px;
+	
+}
+
+.pln img{
+	
+	float:right;
+	
 }
