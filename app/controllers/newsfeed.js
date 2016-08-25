@@ -39,7 +39,7 @@ router.post("/newsfeed",function(req,res){
       res.send({"status":false,"result":"user id is not given"}); 
       return;   
     }
-
+    var data=[];
     var arr=[];
     //arr.push(userid);
     userfollow.find({follower_id: userid },{"following_id": true }, function(err, result) 
@@ -50,45 +50,27 @@ router.post("/newsfeed",function(req,res){
           }
           else if(result)
           {
-            for (var name in result) {
-              if (result.hasOwnProperty(name)) {
-                arr.push(name);
-              }
-            }
+             for (var i = 0; i < Object.keys(result).length; i++) {
+               arr[i]=result[i].following_id;
+             }
           }
-      }); 
-    res.send(arr);
-    /*userPosts.find({user_id:userid},{"user_id": true, "post": true, "time":true},function(err, result) {
-    if(err)
-    {
-      res.send({"status":false,"message":"Error",  "result":err});
-    }
-    if (Object.keys(result).length != 0)
-    {
-      //  Array of follows
-   /*   var answer = result;
-      var arr;
-      userfollow.find({follower_id: userid},{"follow_id" : true}, function(err, result) {
+          arr[i]=userid;
+          //res.send(arr);
+     for (var v = 0; v <= i; v++) {
+      userPosts.find({user_id:arr[v]}, function(err, result) {
           if(err)
           {
-            res.send(err);
+            res.send({"status":false,"message":"Error",  "result":err});
           }
-          else
+          if (result)
           {
-            arr= result.map(function(item) {
-                return item.id;
-            });
-            res.send(arr);
+            if(result.length>0)
+            for (var j = 0; j < result.length; j++) {
+              data.push(result[j]);
+            }
           }
-      });
-      return;
-      
-     //res.send({"status":true,"message" : "Post found",  "result":result});
-    }
-    else
-    {
-      res.send({"status":false,"message":"No post so far",  "result":"no post so far"});
-    }
-  });*/
- 
+        });  
+    } 
+    res.send(data);
 });
+  });
