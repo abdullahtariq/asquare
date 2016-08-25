@@ -47,19 +47,36 @@ router.post("/unfollow",function(req,res){
     {
       res.send({"status" : false , "message" : "friend_id is empty"});
     }
-    userfollow.remove({follower_id: userid, following_id:option }, function(err, result) 
+
+
+    userfollow.findOne({follower_id:option, following_id:userid}, function(err, result) 
       {
           if(err)
           {
             res.send({"status" : false , "message" : "Error", "result" : err});
+            return;
           }
           else if(result)
           {
-            res.send({"status" : true , "message" : "succussfully UnFollow"});
+            userfollow.remove({follower_id: option, following_id:userid }, function(err, result) 
+              {
+                  if(err)
+                  {
+                    res.send({"status" : false , "message" : "Error", "result" : err});
+                  }
+                  else if(result)
+                  {
+                    res.send({"status" : true , "message" : "succussfully UnFollow"});
+                  }
+                  else
+                  {
+                    res.send({"status" : false , "message" : "You are not following this id"});
+                  }
+              });
           }
           else
           {
-            res.send({"status" : false , "message" : "You are not following this id"});
+              res.send({"status" : false , "message" : "You are not following this id"});
           }
       });
 });

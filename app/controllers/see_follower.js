@@ -40,7 +40,7 @@ router.post("/see_follower",function(req,res){
     }
     userid = req.body.userid;
 
-      userfollow.find({following_id: userid }, {"follower_id": true }, function(err, result) 
+      userfollow.find({follower_id: userid }, {"following_id": true }, function(err, result) 
       {
           if(err)
           {

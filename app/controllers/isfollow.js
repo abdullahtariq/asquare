@@ -47,7 +47,7 @@ router.post("/isfollow",function(req,res){
     {
       res.send({"status" : false , "message" : "friend_id is empty"});
     }
-    userfollow.findOne({follower_id:userid, following_id:option}, function(err, result) 
+    userfollow.findOne({follower_id:option, following_id:userid}, function(err, result) 
       {
           if(err)
           {

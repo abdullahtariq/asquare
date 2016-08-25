@@ -23,8 +23,6 @@ module.exports = function (app) {
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
  * @apiSuccess {String} message  Response succussfully follow.
- * @apiSuccess {String} follower_id  Response follower_id.
- * @apiSuccess {String} following_id Response following_id.
  */
 
 
@@ -46,11 +44,27 @@ router.post("/follow_friend",function(req,res){
        follower_id: option, 
         following_id: userid
         });
-    user1.save(function (err, result) {
-      if (err) {
-        res.send({"status" : false, "message":"Error", "result" : err });
-      } else {
-        res.send({"status" : true,"message" : "successfully follow" , "follower_id" : option, "following_id" : userid});
-      }
-    });
+    userfollow.findOne({follower_id: option, following_id:userid}, function(err, result) 
+      {
+          if(err)
+          {
+            res.send({"status" : false , "message" : "Error", "result" : err});
+            return;
+          }
+          else if(result)
+          {
+            res.send({"status" : false , "message" : "you are already follower of this friend"});
+            return;
+          }
+          else
+          {
+              user1.save(function (err, result) {
+                if (err) {
+                  res.send({"status" : false, "message":"Error", "result" : err });
+                } else {
+                  res.send({"status" : true,"message" : "successfully follow" });
+                }
+              });
+          }
+      });
 });

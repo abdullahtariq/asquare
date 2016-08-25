@@ -1,7 +1,7 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('posts');
+  userPosts= mongoose.model('posts');
 
 module.exports = function (app) {
   app.use('/api', router);
