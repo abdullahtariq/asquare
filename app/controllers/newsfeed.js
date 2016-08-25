@@ -4,7 +4,7 @@
   userCollection = mongoose.model('users'),
   userPosts = mongoose.model('posts'),
   userfollow = mongoose.model('follows');
-
+var dataobj= new Array();;
 var user_id=0;
 var userid=0;
 module.exports = function (app) {
@@ -39,7 +39,6 @@ router.post("/newsfeed",function(req,res){
       res.send({"status":false,"result":"user id is not given"}); 
       return;   
     }
-    var data=[];
     var arr=[];
     //arr.push(userid);
     userfollow.find({follower_id: userid },{"following_id": true }, function(err, result) 
@@ -64,13 +63,12 @@ router.post("/newsfeed",function(req,res){
           }
           if (result)
           {
-            if(result.length>0)
-            for (var j = 0; j < result.length; j++) {
-              data.push(result[j]);
-            }
+              for (var j = 0; j < Object.keys(result).length; j++) {
+                dataobj[j]=result[j].time;
+              }
           }
         });  
     } 
-    res.send(data);
+    res.send(dataobj);
 });
   });

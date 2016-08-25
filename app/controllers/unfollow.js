@@ -49,7 +49,7 @@ router.post("/unfollow",function(req,res){
     }
 
 
-    userfollow.findOne({follower_id:userid, following_id:option}, function(err, result) 
+    userfollow.findOne({follower_id:option, following_id:userid}, function(err, result) 
       {
           if(err)
           {
@@ -58,7 +58,7 @@ router.post("/unfollow",function(req,res){
           }
           else if(result)
           {
-            userfollow.remove({follower_id: userid, following_id:option }, function(err, result) 
+            userfollow.remove({follower_id: option, following_id:userid }, function(err, result) 
               {
                   if(err)
                   {

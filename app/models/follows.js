@@ -2,8 +2,8 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var follows = new Schema({
-  follower_id: String,
   following_id: String,
+  follower_id: String,
 });
 
 follows.virtual('date')
