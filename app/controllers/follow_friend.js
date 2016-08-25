@@ -43,14 +43,30 @@ router.post("/follow_friend",function(req,res){
     var option = req.body.friend_id;
     var user1 = new userfollow(
       {
-       follower_id: option, 
-        following_id: userid
+       follower_id: userid, 
+        following_id: option
         });
-    user1.save(function (err, result) {
-      if (err) {
-        res.send({"status" : false, "message":"Error", "result" : err });
-      } else {
-        res.send({"status" : true,"message" : "successfully follow" , "follower_id" : option, "following_id" : userid});
-      }
-    });
+    userfollow.findOne({follower_id:userid, following_id:option}, function(err, result) 
+      {
+          if(err)
+          {
+            res.send({"status" : false , "message" : "Error", "result" : err});
+            return;
+          }
+          else if(result)
+          {
+            res.send({"status" : true , "message" : "you are already follower of this friend"});
+            return;
+          }
+          else
+          {
+              user1.save(function (err, result) {
+                if (err) {
+                  res.send({"status" : false, "message":"Error", "result" : err });
+                } else {
+                  res.send({"status" : true,"message" : "successfully follow" , "follower_id" : option, "following_id" : userid});
+                }
+              });
+          }
+      });
 });

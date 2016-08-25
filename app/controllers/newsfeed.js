@@ -51,8 +51,8 @@ router.post("/newsfeed",function(req,res){
           else if(result)
           {
             for (var name in result) {
-              if (result.hasOwnProperty(following_id)) {
-                arr.push(following_id);
+              if (result.hasOwnProperty(name)) {
+                arr.push(name);
               }
             }
           }
