@@ -45,6 +45,26 @@ var upload = multer({ storage: storage });
  */
 
 router.post("/update_profile", upload.single('picture'), function(req,res){
+    if(typeof req.body.first_name=='undefined')
+    {
+      res.send({"status" : false , "message" : "first_name is not given."});
+        return;
+    }
+    else if(typeof req.body.password=='undefined')
+    {
+      res.send({"status" : false , "message" : "password is not given."});
+        return;
+    }
+    else if(typeof req.body.userid=='undefined')
+    {
+      res.send({"status" : false , "message" : "userid is not given."});
+        return;
+    }
+    else if(typeof req.body.last_name=='undefined')
+    {
+      res.send({"status" : false , "message" : "last_name is not given."});
+        return;
+    }
     var id= req.body.userid;
     var user= req.body.first_name;
     var last= req.body.last_name;
@@ -54,7 +74,7 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
     var path;
     if(id=="")
     {
-    	res.send({"status" : false , "message" : "Id is not given."});
+    	res.send({"status" : false , "message" : "Id is empty."});
         return;
     }
     else if(user=="")
