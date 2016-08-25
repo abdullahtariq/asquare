@@ -38,23 +38,23 @@ var upload = multer({ storage: storage });
 
 
 router.post("/setprofile",upload.single('picture'), function(req,res){
+    if(typeof req.body.userid=='undefined')
+    {
+      res.send({"status" : false , "message" : "userid is undefined."});
+        return;
+    }
+    else if(typeof req.file=='undefined')
+    {
+      res.send({"status" : false , "message" : "picture is undefined."});
+        return;
+    }
     var userid= req.body.userid;
     var file= req.file;
     var name;
     var path;
-    if(typeof req.file == 'undefined')
-    {
-        res.send({"status" : false , "message" : "userid is empty."});
-        return;
-    }
-    else if(userid=="")
+    if(userid=="")
     {
         res.send({"status" : false , "message" : "userid is not given."});
-        return;
-    }
-    else if(typeof req.file == 'undefined')
-    {
-        res.send({"status" : false , "message" : " profile pic empty."});
         return;
     }
     else if(req.file=="")

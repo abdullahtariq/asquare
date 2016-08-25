@@ -29,6 +29,56 @@ define({ "api": [
   },
   {
     "type": "Post",
+    "url": "api/isfollow",
+    "title": "Request to isfollow a friend",
+    "name": "Check_follow_or_not",
+    "group": "Follow",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "friend_id",
+            "description": "<p>friend User Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully follow.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/isfollow.js",
+    "groupTitle": "Follow"
+  },
+  {
+    "type": "Post",
     "url": "api/suggestions",
     "title": "Request to Default follows",
     "name": "Default_Follow_User",
@@ -74,7 +124,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/suggestions.js",
     "groupTitle": "Follow"
   },
   {
@@ -138,7 +188,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/follow_friend.js",
     "groupTitle": "Follow"
   },
   {
@@ -188,7 +238,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/see_follower.js",
     "groupTitle": "Follow"
   },
   {
@@ -238,7 +288,57 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/see_following.js",
+    "groupTitle": "Follow"
+  },
+  {
+    "type": "Post",
+    "url": "api/unfollow",
+    "title": "Request to Unfollow a friend",
+    "name": "UnFollow_a_friend",
+    "group": "Follow",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "friend_id",
+            "description": "<p>friend User Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully follow.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/unfollow.js",
     "groupTitle": "Follow"
   },
   {
@@ -416,7 +516,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/search.js",
     "groupTitle": "User"
   },
   {
@@ -630,7 +730,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/newsfeed.js",
     "groupTitle": "User_POST"
   },
   {
@@ -687,7 +787,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/posts.js",
     "groupTitle": "User_POST"
   },
   {
@@ -737,7 +837,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/login.js",
+    "filename": "./app/controllers/view_profile.js",
     "groupTitle": "User"
   }
 ] });
