@@ -12,7 +12,7 @@ module.exports = function (app) {
 
 
 /**
- * @api {Post} api/share_post Request to Follow a friend 
+ * @api {Post} api/share_post Request to Share post 
  * @apiName Share a friend Post
  * @apiGroup User_POST
  *
