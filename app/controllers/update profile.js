@@ -65,6 +65,11 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
       res.send({"status" : false , "message" : "last_name is not given."});
         return;
     }
+    else if(typeof req.file == 'undefined')
+    {
+        res.send({"status" : false , "message" : "Upload file pic."});
+        return;
+    }
     var id= req.body.userid;
     var user= req.body.first_name;
     var last= req.body.last_name;
@@ -92,21 +97,13 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
         res.send({"status" : false , "message" : "Password field is empty."});
         return;
     }
-    else if(typeof req.file == 'undefined')
+    else if(file.originalname == "")
     {
-        res.send({"status" : false , "message" : "Upload file pic."});
+        res.send({"status" : false , "message" : "file name is empty."});
         return;
     }
     var name = file.originalname;
     var path = file.path;
-      var user1 = new userCollection(
-      {Name: user,
-        Lname: last,
-        Password: password,
-        Pic_name: id+"_"+name,
-        Pic_path:path
-    });
-
     if (password.length < 8) {
         res.send({"status" : false , "message" : "password should contain 8 characters"});
         return;
@@ -125,11 +122,24 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
     }
     else
     {
-        userCollection.findByIdAndUpdate(id, { $set: { Name: user, Lname:last, Password:password }}, function (err, tank) {
-		  if (err) 
-		  	{res.send({"status":false, "message" : "not successfully updated"});}
-		  else
-		  res.send({"status":true, "message" : "successfully updated"});
-		});
+        userCollection.findOne({_id: id},function(err, result) {
+            if(err)
+            {
+              console.log("Not found");
+            }
+            if (result)
+            {
+                userCollection.findByIdAndUpdate(id, { $set: { Name: user, Lname:last, Password:password, Pic_name: id+"_"+name, Pic_path:path}}, function (err, tank) {
+                      if (err) 
+                        {res.send({"status":false, "message" : "not successfully updated"});}
+                      else
+                      res.send({"status":true, "message" : "successfully updated"});
+                    });  
+            }
+            else
+            {
+              res.send({"status":false, "message":"invalid user "});
+            }
+          });
     }
   });
