@@ -46,7 +46,7 @@ router.post("/see_follower",function(req,res){
           {
             res.send({"status" : false , "message" : "Error", "result" : err});
           }
-          else if(result)
+          else if(result.length>0)
           {
             res.send({"status" : true , "message" : "succussfully found", "result" : result});
           }
