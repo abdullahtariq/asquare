@@ -21,7 +21,7 @@ module.exports = function (app) {
  * @apiParam {ID} friend_id friend User Id.
  *
  *
- * @apiSuccess {Boolean} stauts  Response stauts.
+ * @apiSuccess {Boolean} status  Response stauts.
  * @apiSuccess {String} message  Response succussfully follow.
  */
 
