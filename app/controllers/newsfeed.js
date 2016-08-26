@@ -20,24 +20,48 @@ module.exports = function (app) {
  * @apiParam {ID} userid login User ID.
  *
  *
-  * @apiSuccess {Boolean} status  Response status.
-  * @apiSuccess {String} message  Response message.
-  * @apiSuccess {String} result(user_id,post,time)  Response result(user id,post ,time).
+ * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} offset  Response offset.
  */
 
 
 
 router.post("/newsfeed",function(req,res){
+    var offset;
+    var bucket;
     userid = req.body.userid;
     if(typeof req.body.userid == 'undefined')
     {
-      res.send({"status":false, "message":"user id is not given", "result":"user id is not given"}); 
+      res.send({"status":false, "message":"user id is not given"}); 
+      return;
+    }
+    else if(typeof req.body.offset == 'undefined')
+    {
+      res.send({"status":false, "message":"offset is not given"}); 
+      return;
+    }
+    else if(typeof req.body.bucket == 'undefined')
+    {
+      res.send({"status":false, "message":"bucket is not given"}); 
       return;
     }
     else if(userid=="")
     {
-      res.send({"status":false,"result":"user id is not given"}); 
+      res.send({"status":false,"message":"user id is not given"}); 
       return;   
+    }
+    offset=req.body.offset;
+    bucket=req.body.bucket;
+    if(offset == "")
+    {
+      res.send({"status":false, "message":"offset is empty"}); 
+      return;
+    }
+    else if(bucket == "")
+    {
+      res.send({"status":false, "message":"bucket is empty"}); 
+      return;
     }
     var arr=[];
     var postarr=[];
@@ -55,16 +79,15 @@ router.post("/newsfeed",function(req,res){
              }
           }
           arr[i]=userid;
-    var data=[];
-    var k=0;      
-      userPosts.find({user_id: { $in : arr } },{},{sort: {time: -1 }}, function(err, result) {
+      userPosts.find({user_id: { $in : arr } },{},{skip:parseInt(offset), limit:parseInt(bucket), sort: {time: -1 }}, function(err, result) {
           if(err)
           {
             res.send({"status":false,"message":"Error",  "result":err});
           }
           if (result)
           {
-             res.send(result);
+            offset = parseInt(offset)+parseInt(bucket)+1;
+             res.send({"status" : true, "message" : result, "offset":offset});
           }
         });  
 });
