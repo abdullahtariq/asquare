@@ -60,7 +60,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "Boolean",
             "optional": false,
-            "field": "stauts",
+            "field": "status",
             "description": "<p>Response stauts.</p>"
           },
           {
@@ -169,26 +169,98 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>Response succussfully follow.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "follower_id",
-            "description": "<p>Response follower_id.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "following_id",
-            "description": "<p>Response following_id.</p>"
           }
         ]
       }
     },
     "version": "0.0.0",
     "filename": "./app/controllers/follow_friend.js",
+    "groupTitle": "Follow"
+  },
+  {
+    "type": "Post",
+    "url": "api/total_followers",
+    "title": "Request to See Number of followers",
+    "name": "See_Number_follower",
+    "group": "Follow",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login user.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/total_followers.js",
+    "groupTitle": "Follow"
+  },
+  {
+    "type": "Post",
+    "url": "api/total_following",
+    "title": "Request to See Number of followering",
+    "name": "See_Number_following",
+    "group": "Follow",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login user.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/total_following.js",
     "groupTitle": "Follow"
   },
   {
@@ -788,6 +860,92 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./app/controllers/posts.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/post_liker",
+    "title": "Request to Post liker",
+    "name": "Post_likers",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/post_liker.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/total_likes",
+    "title": "Request to see total number like a user post",
+    "name": "Total_Likes_of_a_post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response total likes .</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/total_likes.js",
     "groupTitle": "User_POST"
   },
   {
