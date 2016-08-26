@@ -593,7 +593,7 @@ define({ "api": [
   },
   {
     "type": "Post",
-    "url": "api/setprofile",
+    "url": "api/set_profilepicture",
     "title": "Request to Set User Profile",
     "name": "Set_profile",
     "group": "User",
@@ -770,6 +770,20 @@ define({ "api": [
             "optional": false,
             "field": "userid",
             "description": "<p>login User ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "offset",
+            "description": "<p>Offset.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "bucket",
+            "description": "<p>Bucket.</p>"
           }
         ]
       }
@@ -795,8 +809,8 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "result",
-            "description": "<p>(user_id,post,time)  Response result(user id,post ,time).</p>"
+            "field": "offset",
+            "description": "<p>Response offset.</p>"
           }
         ]
       }

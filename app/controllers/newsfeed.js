@@ -18,6 +18,8 @@ module.exports = function (app) {
  * @apiGroup User_POST
  *
  * @apiParam {ID} userid login User ID.
+ * @apiParam {Int} offset Offset.
+ * @apiParam {Int} bucket Bucket.
  *
  *
  * @apiSuccess {Boolean} status  Response status.
