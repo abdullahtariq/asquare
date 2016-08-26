@@ -45,13 +45,13 @@ router.post("/see_following",function(req,res){
           {
             res.send({"status" : false , "result" : err});
           }
-          else if(result)
+          else if(result.length>0)
           {
             res.send({"status" : true , "message" : "succussfully found following", "result" : result});
           }
           else
           {
-            res.send({"status" : true , "message" : "No Following", "result" : "Not found"}); 
+            res.send({"status" : false , "message" : "No Following", "result" : "Not found"}); 
           }
       }); 
 });

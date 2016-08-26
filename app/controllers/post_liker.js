@@ -45,7 +45,7 @@ router.post("/post_liker",function(req,res){
             res.send({"status" : false , "message" : err});
             return;
           }
-          else if(result)
+          else if(result.length>0)
           {
             res.send({"status" : true , "message" : result});
             return;

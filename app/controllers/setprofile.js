@@ -24,7 +24,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 /**
- * @api {Post} api/setprofile Request to Set User Profile
+ * @api {Post} api/set_profilepicture Request to Set User Profile
  * @apiName Set profile
  * @apiGroup User
  *
@@ -37,7 +37,7 @@ var upload = multer({ storage: storage });
  */
 
 
-router.post("/setprofile",upload.single('picture'), function(req,res){
+router.post("/set_profilepicture",upload.single('picture'), function(req,res){
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false , "message" : "userid is undefined."});
