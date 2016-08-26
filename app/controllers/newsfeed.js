@@ -1,9 +1,10 @@
   var express = require('express'),
   router = express.Router(),
-  mongoose = require('mongoose'),
+   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
   userPosts = mongoose.model('posts'),
   userfollow = mongoose.model('follows');
+
 var user_id=0;
 var userid=0;
 module.exports = function (app) {
@@ -54,9 +55,9 @@ router.post("/newsfeed",function(req,res){
           }
           arr[i]=userid;
           var k=0;
-          var dataobj=new Array();
-      //    res.send(arr);
-     for (var v = 0; v <=i; v++) {
+          var dataobj=[];
+          res.send(arr);
+     /*for (var v = 0; v <=i; v++) {
       userPosts.find({user_id:arr[v]}, function(err, result) {
           if(err)
           {
@@ -64,14 +65,24 @@ router.post("/newsfeed",function(req,res){
           }
           if (result)
           {
-            console.log(result);
+              var user1 = new userTransactions(
+                {user_id: result.user_id,
+                  post: result.post,
+                  time: result.time,
+              });
+              user1.save(function (err, result) {
+              if (err) {
+              console.log(err);
+              } else {
+               //    res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
+              }
+            });
               for (var j = 0; j < Object.keys(result).length; j++) {
-                dataobj[k]=result[j];k++;
-                dataobj.push(result);
+                dataobj.push({"result":"agshj"});
               }
           }
         });  
     } 
-    res.send(dataobj);
+    res.send(dataobj);*/
 });
   });
