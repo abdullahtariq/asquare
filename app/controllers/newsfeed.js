@@ -40,6 +40,7 @@ router.post("/newsfeed",function(req,res){
       return;   
     }
     var arr=[];
+    var postarr=[];
     var i = 0;
     userfollow.find({following_id: userid },{"follower_id": true }, function(err, result) 
       {
@@ -54,35 +55,17 @@ router.post("/newsfeed",function(req,res){
              }
           }
           arr[i]=userid;
-          var k=0;
-          var dataobj=[];
-          res.send(arr);
-     /*for (var v = 0; v <=i; v++) {
-      userPosts.find({user_id:arr[v]}, function(err, result) {
+    var data=[];
+    var k=0;      
+      userPosts.find({user_id: { $in : arr } },{},{sort: {time: -1 }}, function(err, result) {
           if(err)
           {
             res.send({"status":false,"message":"Error",  "result":err});
           }
           if (result)
           {
-              var user1 = new userTransactions(
-                {user_id: result.user_id,
-                  post: result.post,
-                  time: result.time,
-              });
-              user1.save(function (err, result) {
-              if (err) {
-              console.log(err);
-              } else {
-               //    res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
-              }
-            });
-              for (var j = 0; j < Object.keys(result).length; j++) {
-                dataobj.push({"result":"agshj"});
-              }
+             res.send(result);
           }
         });  
-    } 
-    res.send(dataobj);*/
 });
   });
