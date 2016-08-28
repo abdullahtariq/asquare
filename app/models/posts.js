@@ -6,6 +6,7 @@ var posts = new Schema({
   post: String,
   time:String,
   likes:String,
+  share_userid:String,
   share:String
 });
 

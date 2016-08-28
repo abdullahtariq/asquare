@@ -21,7 +21,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
- * @apiSuccess {String} message  Response succussfully Share a post.
+ * @apiSuccess {String} message  Response succussfully follow.
  */
 
 
@@ -61,7 +61,18 @@ router.post("/share_post",function(req,res){
           }
       });
     var total_share=0;
-    userPosts.findOne({_id: post_id},function(err, result) {
+    postShare.findOne({post_id: post_id,user_id:userid},function(err, result) {
+    if(err)
+    {
+      res.send({"status":false, "message":err});
+    }
+    if (result)
+    {  
+        res.send({"status":false, "message":"already share this post"});
+    }
+    else
+    {
+        userPosts.findOne({_id: post_id},function(err, result) {
         if(err)
         {
           res.send({"status":false, "message":err});
@@ -79,16 +90,24 @@ router.post("/share_post",function(req,res){
                 {res.send({"status":false, "message" : err});}
               else
                 {
+
+                    var milliseconds = (new Date).getTime();
+                     var user1 = new postShare(
+                      {post_id: post_id,
+                        user_id: userid,
+                        time: milliseconds
+                    });
                      var sharepost = new userPosts(
                         { user_id:userid,
                           post: comment,
                           share_userid:result.user_id,
                           time:milliseconds
                         });
-                     sharepost.save(function (err, result) {
+                     user1.save(function (err, result) {
                         if (err) {
                           console.log(err);
                         } else {
+                            sharepost.save();
                              res.send({"status" : true, "message":"sucessfully share"});
                         }
                       });
@@ -100,4 +119,6 @@ router.post("/share_post",function(req,res){
             res.send({"status":false, "message":"no post exits with this id"});   
         }   
         });
+    }
+    });
 });

@@ -23,7 +23,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} status  Response status.
- * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} message  Response  Array of Objects.
  * @apiSuccess {String} offset  Response offset.
  */
 

@@ -803,7 +803,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response message.</p>"
+            "description": "<p>Response  Array of Objects.</p>"
           },
           {
             "group": "Success 200",
@@ -879,7 +879,7 @@ define({ "api": [
   {
     "type": "Post",
     "url": "api/post_liker",
-    "title": "Request to Post liker",
+    "title": "See the id(s) who likes this post",
     "name": "Post_likers",
     "group": "User_POST",
     "parameter": {
@@ -910,7 +910,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response message.</p>"
+            "description": "<p>Array of User id(s).</p>"
           }
         ]
       }
@@ -960,13 +960,63 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response succussfully follow.</p>"
+            "description": "<p>Response succussfully Share a post.</p>"
           }
         ]
       }
     },
     "version": "0.0.0",
     "filename": "./app/controllers/share_post.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/share_post",
+    "title": "Request to Share post",
+    "name": "Share_a_friend_Post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully follow.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/delete_post.js",
     "groupTitle": "User_POST"
   },
   {
@@ -1010,6 +1060,99 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./app/controllers/total_likes.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/total_share",
+    "title": "Request total number share a user post",
+    "name": "Total_share_of_a_post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response total share.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/total_share.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/unlike_post",
+    "title": "Request to Unlike a user post",
+    "name": "Unlike_post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User Who like post.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/unlike_post.js",
     "groupTitle": "User_POST"
   },
   {
