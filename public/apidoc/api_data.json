@@ -714,6 +714,63 @@
   },
   {
     "type": "Post",
+    "url": "api/post_comment",
+    "title": "Request to comment a post",
+    "name": "Comment_a_Post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "comment",
+            "description": "<p>Post comment.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully comment a post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/comment.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
     "url": "api/likepost",
     "title": "Request to like a user post",
     "name": "Like_post",

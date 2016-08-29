@@ -12,7 +12,14 @@ var posts = new Schema({
   share_name: String,
   share_lname:String,
   share_userid:String,
-  share:String
+  share:String,
+  comment:[{
+    user_id: String,
+    first_name: String,
+    last_name: String,
+    comment: String,
+    time:String
+  }]
 });
 
 posts.virtual('date')
