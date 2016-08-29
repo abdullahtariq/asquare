@@ -38,6 +38,7 @@ var upload = multer({ storage: storage });
  * @apiParam {String} first_name User First Name.
  * @apiParam {String} last_name User Last Name.
  * @apiParam {String} password User Password.
+ * @apiParam {File} picture User Picture.
  *
  *
  * @apiSuccess {Boolean} status  Response status of result.

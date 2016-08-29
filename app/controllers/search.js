@@ -43,7 +43,7 @@ router.post("/search",function(req,res){
     var arr=[];
     var data = req.body.search;
     var userid = req.body.userid;
-    userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true } ,function(err, doc) {
+    userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
       if(doc)
         {
           var c=parseInt(0);
@@ -57,22 +57,24 @@ router.post("/search",function(req,res){
                 }
                 else if(result)
                 {
-                  console.log(doc[c]);
                   doc[c].follow=true;
                   //var obj={"_id":doc[c]._id ,"Name" : doc[c].Name , "Lname" :doc[c].Lname , "follow":true};
                   //arr.push(obj);
+                  //console.log(obj);
+                  //arr[c]=obj;
                 }
                 else
                 {
-                  console.log(doc[c]);
                   doc[c].follow=false;
                   //var obj={"_id":doc[c]._id ,"Name" : doc[c].Name , "Lname" :doc[c].Lname , "follow":false};
                   //arr.push(obj);
+                  //arr[c]=obj;
                 }
                 c++;
             });
           }
           res.send({"status":true ,"message":"found", "result":doc});
+          //console.log(arr[1]);
         }
       else
         res.send({"status":false ,"message":"no result found", "result":doc});

@@ -77,6 +77,7 @@ router.post("/register", function(req,res){
       {Name: user,
         Lname: last,
         Password: password,
+        follow:false
     });
 
     if (password.length < 8) {

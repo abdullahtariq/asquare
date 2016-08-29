@@ -49,7 +49,31 @@ router.post("/view_profile", function(req,res){
       }
       if (result)
       {
-        res.send({"status":true ,"message":"succussfully found", "result" : result});
+        var follwer=0;
+        var follwing=0;
+        userfollow.count({follower_id: userid }, function(err, result) 
+          {
+              if(err)
+              {
+                res.send({"status" : false , "message" : err});
+              }
+              else if(result)
+              {
+                follwer=result;
+              }
+          });
+        userfollow.count({following_id: userid }, function(err, result) 
+          {
+              if(err)
+              {
+                res.send({"status" : false , "message" : err});
+              }
+              else if(result)
+              {
+                follwing=result;
+              }
+          });
+        res.send({"status":true ,"message":"succussfully found", "result" : result, "total_follwer":follwer, "total_follwing":follwing});
       }
       else
       {

@@ -677,6 +677,13 @@
             "optional": false,
             "field": "password",
             "description": "<p>User Password.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "picture",
+            "description": "<p>User Picture.</p>"
           }
         ]
       }

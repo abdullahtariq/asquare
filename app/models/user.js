@@ -7,7 +7,8 @@ var users = new Schema({
   Lname: String,
   Password: String,
   Pic_name: String,
-  Pic_path: String
+  Pic_path: String,
+  follow:Boolean
 });
 
 users.virtual('date')
