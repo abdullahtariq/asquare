@@ -878,6 +878,56 @@
   },
   {
     "type": "Post",
+    "url": "api/post_detail",
+    "title": "see detail user post",
+    "name": "Post_detail",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response JSON object.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/post_detail.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
     "url": "api/post_liker",
     "title": "See the id(s) who likes this post",
     "name": "Post_likers",
@@ -967,56 +1017,6 @@
     },
     "version": "0.0.0",
     "filename": "./app/controllers/share_post.js",
-    "groupTitle": "User_POST"
-  },
-  {
-    "type": "Post",
-    "url": "api/share_post",
-    "title": "Request to Share post",
-    "name": "Share_a_friend_Post",
-    "group": "User_POST",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "userid",
-            "description": "<p>login User Id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "post_id",
-            "description": "<p>Post Id.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "stauts",
-            "description": "<p>Response stauts.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Response succussfully follow.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./app/controllers/delete_post.js",
     "groupTitle": "User_POST"
   },
   {
@@ -1153,6 +1153,49 @@
     },
     "version": "0.0.0",
     "filename": "./app/controllers/unlike_post.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/delete_post",
+    "title": "Request to delete post",
+    "name": "delete_Post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully Delete.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/delete_post.js",
     "groupTitle": "User_POST"
   },
   {

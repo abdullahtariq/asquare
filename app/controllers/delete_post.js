@@ -12,113 +12,59 @@ module.exports = function (app) {
 
 
 /**
- * @api {Post} api/share_post Request to Share post 
- * @apiName Share a friend Post
+ * @api {Post} api/delete_post Request to delete post 
+ * @apiName delete Post
  * @apiGroup User_POST
  *
- * @apiParam {ID} userid login User Id.
  * @apiParam {ID} post_id Post Id.
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
- * @apiSuccess {String} message  Response succussfully follow.
+ * @apiSuccess {String} message  Response succussfully Delete.
  */
 
 
-router.post("/share_post",function(req,res){
-    if(typeof req.body.userid=='undefined')
-    {
-      res.send({"status" : false,"message" : "userid is undefined"});
-      return;
-    }
-    else if(typeof req.body.post_id=='undefined')
+router.post("/delete_post",function(req,res){
+    if(typeof req.body.post_id=='undefined')
     {
       res.send({"status" : false,"message" : "post_id is undefined"});
       return;
     }
-    var userid = req.body.userid;
     var post_id = req.body.post_id;
-    if(userid=="")
-    {
-      res.send({"status" : false,"message" : "userid is not given"});
-      return;
-    }
-    else if(post_id=="")
+    if(post_id=="")
     {
       res.send({"status" : false,"message" : "post_id is not given"});
       return;
     }
-    userCollection.findOne({_id: userid}, function(err, result) {
-          if(err)
-          {
-            console.log("Not found");
-            return;
-          }
-          if (Object(result).length<=0)
-          {
-            res.send({"status":false ,"message":"not user exits with this id"});
-            return;
-          }
-      });
-    var total_share=0;
-    postShare.findOne({post_id: post_id,user_id:userid},function(err, result) {
-    if(err)
-    {
-      res.send({"status":false, "message":err});
-    }
-    if (result)
-    {  
-        res.send({"status":false, "message":"already share this post"});
-    }
-    else
-    {
-        userPosts.findOne({_id: post_id},function(err, result) {
+    
+    userPosts.findOne({_id: post_id},function(err, result) {
         if(err)
         {
           res.send({"status":false, "message":err});
         }
         if (result)
         {  
-            if(typeof result.share=='undefined')
-                total_share=0;
-            else
-                total_share=result.share;
-            total_share++;
-            var comment = result.post;
-            userPosts.findByIdAndUpdate(post_id, { $set: { share: total_share}}, function (err, tank) {
-              if (err) 
-                {res.send({"status":false, "message" : err});}
-              else
-                {
-
-                    var milliseconds = (new Date).getTime();
-                     var user1 = new postShare(
-                      {post_id: post_id,
-                        user_id: userid,
-                        time: milliseconds
-                    });
-                     var sharepost = new userPosts(
-                        { user_id:userid,
-                          post: comment,
-                          share_userid:result.user_id,
-                          time:milliseconds
-                        });
-                     user1.save(function (err, result) {
-                        if (err) {
-                          console.log(err);
-                        } else {
-                            sharepost.save();
-                             res.send({"status" : true, "message":"sucessfully share"});
-                        }
-                      });
-                }  
-            });
+          userPosts.remove({_id:post_id}, function(err, result) 
+              {
+                  if(err)
+                  {
+                    res.send({"status" : false , "message" : "Error", "result" : err});
+                  }
+                  else if(result)
+                  {
+                    if(result.share!='undefined')
+                      userPosts.remove({share_postid:post_id});
+                    res.send({"status" : true , "message" : "succussfully deteled"});
+                  }
+                  else
+                  {
+                    res.send({"status" : false , "message" : "cannot delete this post"});
+                  }
+              });
         }
         else
         {
             res.send({"status":false, "message":"no post exits with this id"});   
         }   
         });
-    }
-    });
 });

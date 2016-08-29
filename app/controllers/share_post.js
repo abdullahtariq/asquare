@@ -68,7 +68,7 @@ router.post("/share_post",function(req,res){
         }
         if (result)
         {  
-            if(typeof result.share=='undefined')
+            if(typeof result.share=='undefined' || typeof result.share==null)
                 total_share=0;
             else
                 total_share=result.share;
@@ -79,11 +79,21 @@ router.post("/share_post",function(req,res){
                 {res.send({"status":false, "message" : err});}
               else
                 {
+                  userCollection.findOne({_id:userid}, function(err,ress){
+                    var milliseconds = (new Date).getTime();
                      var sharepost = new userPosts(
                         { user_id:userid,
                           post: comment,
+                          name: ress.Name,
+                          lname:ress.Lname,
+                          time:milliseconds,
+                          likes:null,
+                          share_postid:post_id,
+                          share_name: result.name,
+                          share_lname:result.lname,
                           share_userid:result.user_id,
-                          time:milliseconds
+                          time:milliseconds,
+                          share:null
                         });
                      sharepost.save(function (err, result) {
                         if (err) {
@@ -92,6 +102,7 @@ router.post("/share_post",function(req,res){
                              res.send({"status" : true, "message":"sucessfully share"});
                         }
                       });
+                  });
                 }  
             });
         }

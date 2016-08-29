@@ -79,7 +79,7 @@ router.post("/likepost", function(req,res){
         }
         if (result)
         {  
-            if(typeof result.likes=='undefined')
+            if(typeof result.likes=='undefined' || typeof result.likes==null)
                 total_likes=0;
             else
                 total_likes=result.likes;
