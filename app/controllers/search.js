@@ -40,42 +40,11 @@ router.post("/search",function(req,res){
       res.send({"status" : false , "message" : "search name is not given."});
         return;
     }
-    var arr=[];
     var data = req.body.search;
     var userid = req.body.userid;
     userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
       if(doc)
-        {
-          var c=parseInt(0);
-          for(var v=0;v<Object(doc).length;v++)
-          {
-            userfollow.findOne({follower_id:doc[c]._id, following_id:userid}, function(err, result) 
-            {
-                if(err)
-                {
-                  res.send({"status" : false , "message" : "Error", "result" : err});
-                }
-                else if(result)
-                {
-                  doc[c].follow=true;
-                  //var obj={"_id":doc[c]._id ,"Name" : doc[c].Name , "Lname" :doc[c].Lname , "follow":true};
-                  //arr.push(obj);
-                  //console.log(obj);
-                  //arr[c]=obj;
-                }
-                else
-                {
-                  doc[c].follow=false;
-                  //var obj={"_id":doc[c]._id ,"Name" : doc[c].Name , "Lname" :doc[c].Lname , "follow":false};
-                  //arr.push(obj);
-                  //arr[c]=obj;
-                }
-                c++;
-            });
-          }
-          res.send({"status":true ,"message":"found", "result":doc});
-          //console.log(arr[1]);
-        }
+        res.send({"status":true ,"message":"found", "result":doc});
       else
         res.send({"status":false ,"message":"no result found", "result":doc});
 });

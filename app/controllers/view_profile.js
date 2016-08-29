@@ -22,7 +22,7 @@ module.exports = function (app) {
  *
  * @apiSuccess {Boolean} status  Response status.
  * @apiSuccess {String} message  Response message.
-  * @apiSuccess {String} result(_id,Name,Lname)  Response result(_id,first Name,Last name).
+  * @apiSuccess {String} result(_id,Name,Lname,Pic_path)  Response result(_id,first Name,Last name,pic path and name).
  */
 
 

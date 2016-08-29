@@ -1246,7 +1246,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "result",
-            "description": "<p>(_id,Name,Lname)  Response result(_id,first Name,Last name).</p>"
+            "description": "<p>(_id,Name,Lname,Pic_path)  Response result(_id,first Name,Last name,pic path and name).</p>"
           }
         ]
       }
