@@ -40,11 +40,18 @@ router.post("/total_likes", function(req,res){
       {
         if(err)
         {
-          res.send({"status" : false, "message" : err});
+          res.send({"status" : false, "message" : "post_id not exits"});
         }
         else if(result)
         {
-          res.send({"status" : true, "message" : result.likes});
+          if(typeof result.likes =='undefined' || result.likes==null)
+          {
+              res.send({"status" : true, "message" : total_likes});  
+          }
+          else
+          {
+            res.send({"status" : true, "message" : result.likes});
+          }
         }
         else
         {

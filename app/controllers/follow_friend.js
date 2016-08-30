@@ -39,6 +39,50 @@ router.post("/follow_friend",function(req,res){
     }
     var userid = req.body.userid;
     var option = req.body.friend_id;
+    if(userid=="")
+    {
+      res.send({"status" : false,"message" : "userid is empty"});
+      return;
+    }
+    else if(option=="")
+    {
+      res.send({"status" : false,"message" : "friend_id is empty"});
+      return;
+    }
+
+
+    userCollection.findOne({_id:userid}, function(err,result)
+      {
+        if(err)
+          {
+            res.send({"status" : false,"message" : "userid not exits"});
+          return;
+          }
+        if(!result)
+        {
+          res.send({"status" : false,"message" : "userid not exits"});
+          return;
+        }
+      });
+
+
+
+    userCollection.findOne({_id:option}, function(err,result)
+      {
+        if(err)
+          {
+            res.send({"status" : false,"message" : "friend_id not exits"});
+          return;
+          }
+        if(!result)
+        {
+          res.send({"status" : false,"message" : "friend_id not exits"});
+          return;
+        }
+      });
+
+
+
     var user1 = new userfollow(
       {
        follower_id: option, 
