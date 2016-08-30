@@ -4,7 +4,7 @@ var express = require('express'),
   userCollection = mongoose.model('users');
 
 var multer  = require('multer');
-var upload = multer({ dest: 'uploads/' });
+var upload = multer({ dest: 'public/uploads/' });
  
  
 module.exports = function (app) {
@@ -14,7 +14,7 @@ module.exports = function (app) {
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
     cb(null,file.originalname)

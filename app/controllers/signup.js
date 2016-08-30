@@ -74,9 +74,13 @@ router.post("/register", function(req,res){
     else
     {
       var user1 = new userCollection(
-      {Name: user,
+      {
+        Name: user,
         Lname: last,
         Password: password,
+        Pic_name: "img-v3.jpg",
+        Pic_path: "public\\uploads\\img-v3.jpg",
+        follow:false,
     });
 
     if (password.length < 8) {

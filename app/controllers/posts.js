@@ -1,6 +1,7 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
+  userCollection = mongoose.model('users'),
   userPosts= mongoose.model('posts');
 
 module.exports = function (app) {
@@ -39,7 +40,6 @@ router.post("/post",function(req,res){
     }
     var comment= req.body.post;
     userid = req.body.userid;
-        
     if(comment == "")
     {
         res.send({"status" : false, "message" : "empty post"});
@@ -49,18 +49,42 @@ router.post("/post",function(req,res){
         res.send({"status" : false, "message" : "userid undefined"});
     }
     else
-    {    var milliseconds = (new Date).getTime();
-      var user1 = new userPosts(
-        { user_id:userid,
-          post: comment,
-          time:milliseconds
-        });
-      user1.save(function (err, result) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
+    { 
+      userCollection.findOne({_id:userid},function(err, result) {
+        if(err)
+        {
+          console.log("Not found");
         }
-      });
+        if (result)
+        {
+          
+          var milliseconds = (new Date).getTime();
+          var user1 = new userPosts(
+            { user_id:userid,
+              post: comment,
+              name: result.Name,
+              lname:result.Lname,
+              time:milliseconds,
+              likes:null,
+              share_postid:null,
+              share_name: null,
+              share_lname:null,
+              share_userid:null,
+              share:null
+            });
+          user1.save(function (err, result) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
+            }
+          });
+        }
+        else
+        {
+          res.send({"status":false,
+          "message":"cannot post...."});
+        }
+      });   
     }    
 });

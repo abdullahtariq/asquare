@@ -12,7 +12,7 @@ module.exports = function (app) {
 
 
 /**
- * @api {Post} api/share_post Request to Follow a friend 
+ * @api {Post} api/share_post Request to Share post 
  * @apiName Share a friend Post
  * @apiGroup User_POST
  *
@@ -21,7 +21,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
- * @apiSuccess {String} message  Response succussfully follow.
+ * @apiSuccess {String} message  Response succussfully Share a post.
  */
 
 
@@ -61,25 +61,14 @@ router.post("/share_post",function(req,res){
           }
       });
     var total_share=0;
-    postShare.findOne({post_id: post_id,user_id:userid},function(err, result) {
-    if(err)
-    {
-      res.send({"status":false, "message":err});
-    }
-    if (result)
-    {  
-        res.send({"status":false, "message":"already share this post"});
-    }
-    else
-    {
-        userPosts.findOne({_id: post_id},function(err, result) {
+    userPosts.findOne({_id: post_id},function(err, result) {
         if(err)
         {
           res.send({"status":false, "message":err});
         }
         if (result)
         {  
-            if(typeof result.share=='undefined')
+            if(typeof result.share=='undefined' || typeof result.share==null)
                 total_share=0;
             else
                 total_share=result.share;
@@ -90,26 +79,30 @@ router.post("/share_post",function(req,res){
                 {res.send({"status":false, "message" : err});}
               else
                 {
-
+                  userCollection.findOne({_id:userid}, function(err,ress){
                     var milliseconds = (new Date).getTime();
-                     var user1 = new postShare(
-                      {post_id: post_id,
-                        user_id: userid,
-                        time: milliseconds
-                    });
                      var sharepost = new userPosts(
                         { user_id:userid,
                           post: comment,
-                          time:milliseconds
+                          name: ress.Name,
+                          lname:ress.Lname,
+                          time:milliseconds,
+                          likes:null,
+                          share_postid:post_id,
+                          share_name: result.name,
+                          share_lname:result.lname,
+                          share_userid:result.user_id,
+                          time:milliseconds,
+                          share:null
                         });
-                     user1.save(function (err, result) {
+                     sharepost.save(function (err, result) {
                         if (err) {
                           console.log(err);
                         } else {
-                            sharepost.save();
                              res.send({"status" : true, "message":"sucessfully share"});
                         }
                       });
+                  });
                 }  
             });
         }
@@ -118,6 +111,4 @@ router.post("/share_post",function(req,res){
             res.send({"status":false, "message":"no post exits with this id"});   
         }   
         });
-    }
-    });
 });

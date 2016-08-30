@@ -14,7 +14,7 @@ module.exports = function (app) {
 
 
 /**
- * @api {Post} api/post_liker Request to Post liker 
+ * @api {Post} api/post_liker See the id(s) who likes this post 
  * @apiName Post likers
  * @apiGroup User_POST
  *
@@ -22,7 +22,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
- * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} message  Array of User id(s).
  */
 
 
