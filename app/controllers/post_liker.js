@@ -38,22 +38,36 @@ router.post("/post_liker",function(req,res){
       res.send({"status" : false,"message" : "post_id is empty"});
       return; 
     }
-    userlikes.find({post_id: post_id},{"user_id":true}, function(err, result) 
+    userPosts.findOne({_id:post_id}, function(err, ans){
+      if(err)
+          {
+            res.send({"status" : false , "message" : "no post exits this id"});
+            return;
+          }
+      else if(ans)
       {
-          if(err)
+        userlikes.find({post_id: post_id},{"user_id":true}, function(err, result) 
           {
-            res.send({"status" : false , "message" : err});
-            return;
-          }
-          else if(result.length>0)
-          {
-            res.send({"status" : true , "message" : result});
-            return;
-          }
-          else
-          {
-            res.send({"status" : false , "message" : "no likes for this post"});
-            return;   
-          }
-      });
+              if(err)
+              {
+                res.send({"status" : false , "message" : "no post exits"});
+                return;
+              }
+              else if(result.length>0)
+              {
+                res.send({"status" : true , "message" : result});
+                return;
+              }
+              else
+              {
+                res.send({"status" : false , "message" : "no likes for this post"});
+                return;   
+              }
+          });
+      } 
+      else
+      {
+              res.send({"status" : false , "message" : "no post exits this id"});
+      }
+    });
 });

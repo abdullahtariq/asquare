@@ -44,16 +44,17 @@ router.post("/post",function(req,res){
     {
         res.send({"status" : false, "message" : "empty post"});
     }
-    else if(typeof req.body.userid=='undefined')
+    else if(userid=="")
     {
-        res.send({"status" : false, "message" : "userid undefined"});
+        res.send({"status" : false, "message" : "userid empty"});
     }
     else
     { 
       userCollection.findOne({_id:userid},function(err, result) {
         if(err)
         {
-          console.log("Not found");
+            res.send({"status" : false, "message" : "userid not exits"});
+            return;     
         }
         if (result)
         {
