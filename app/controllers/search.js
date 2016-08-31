@@ -40,40 +40,11 @@ router.post("/search",function(req,res){
       res.send({"status" : false , "message" : "search name is not given."});
         return;
     }
-    var extend = require('util')._extend
-    
-    var arr=[];
     var data = req.body.search;
     var userid = req.body.userid;
     userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
       if(doc)
-        {
-          var c=parseInt(0);
-          for(var v=0;v<Object(doc).length;v++)
-          {
-            userfollow.findOne({follower_id:doc[c]._id, following_id:userid},{"following_id":true}, function(err, result) 
-            {
-                if(err)
-                {
-                  res.send({"status" : false , "message" : "Error", "result" : err});
-                }
-                else if(result)
-                {
-                  var o=extend({},  doc[c]);
-                  extend(o,  {follow:true});
-                  arr.push(o);
-                }
-                else
-                {
-                  extend(doc[c],  {follow:false});
-                  //doc[c]["follow"]=false;
-                }
-                console.log(doc[c]);
-                c++;
-            });
-          }
-          res.send({"status":true ,"message":"found", "result":arr});
-        }
+        res.send({"status":true ,"message":"found", "result":doc});
       else
         res.send({"status":false ,"message":"no result found", "result":doc});
 });
