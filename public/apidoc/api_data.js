@@ -614,6 +614,56 @@ define({ "api": [
   },
   {
     "type": "Post",
+    "url": "api/cover_picture",
+    "title": "Request to Set Profile Cover",
+    "name": "Set_cover_picture",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User login id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "picture",
+            "description": "<p>User Profile picture.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/cover_picture.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "Post",
     "url": "api/set_profilepicture",
     "title": "Request to Set User Profile",
     "name": "Set_profile",
@@ -696,15 +746,29 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "user_name",
+            "description": "<p>User user_name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "password",
             "description": "<p>User Password.</p>"
           },
           {
             "group": "Parameter",
-            "type": "File",
+            "type": "String",
             "optional": false,
-            "field": "picture",
-            "description": "<p>User Picture.</p>"
+            "field": "date_of_birth",
+            "description": "<p>User date_of_birth.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>User description.</p>"
           }
         ]
       }

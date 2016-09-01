@@ -37,12 +37,14 @@ var upload = multer({ storage: storage });
  * @apiParam {ID} userid Login user id.
  * @apiParam {String} first_name User First Name.
  * @apiParam {String} last_name User Last Name.
+ * @apiParam {String} user_name User user_name.
  * @apiParam {String} password User Password.
- * @apiParam {File} picture User Picture.
+ * @apiParam {String} date_of_birth User date_of_birth.
+ * @apiParam {String} description User description.
  *
  *
  * @apiSuccess {Boolean} status  Response status of result.
-  * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} message  Response message.
  */
 
 router.post("/update_profile", upload.single('picture'), function(req,res){
@@ -66,29 +68,43 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
       res.send({"status" : false , "message" : "last_name is not given."});
         return;
     }
-    else if(typeof req.file == 'undefined')
+    else if(typeof req.body.date_of_birth=='undefined')
     {
-        res.send({"status" : false , "message" : "Upload file pic."});
+      res.send({"status" : false , "message" : "date_of_birth is not given."});
         return;
     }
+    else if(typeof req.body.description=='undefined')
+    {
+      res.send({"status" : false , "message" : "description is not given."});
+        return;
+    }
+    else if(typeof req.body.user_name=='undefined')
+    {
+      res.send({"status" : false , "message" : "user_name is not given."});
+        return;
+    }
+
     var id= req.body.userid;
-    var user= req.body.first_name;
-    var last= req.body.last_name;
+    var first_name= req.body.first_name;
+    var last_name= req.body.last_name;
     var password= req.body.password;
-    var file= req.file;
-    var name;
-    var path;
+    var user_name= req.body.user_name;
+    var date_of_birth= req.body.date_of_birth;
+    var description= req.body.description;
+
+
+
     if(id=="")
     {
     	res.send({"status" : false , "message" : "Id is empty."});
         return;
     }
-    else if(user=="")
+    else if(first_name=="")
     {
         res.send({"status" : false , "message" : "First Name field is empty."});
         return;
     }
-    else if( last == "")
+    else if( last_name == "")
     {
         res.send({"status" : false , "message" : "Last Name field is empty."});
         return;
@@ -98,13 +114,8 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
         res.send({"status" : false , "message" : "Password field is empty."});
         return;
     }
-    else if(file.originalname == "")
-    {
-        res.send({"status" : false , "message" : "file name is empty."});
-        return;
-    }
-    var name = file.originalname;
-    var path = file.path;
+    
+    
     if (password.length < 8) {
         res.send({"status" : false , "message" : "password should contain 8 characters"});
         return;
@@ -126,11 +137,11 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
         userCollection.findOne({_id: id},function(err, result) {
             if(err)
             {
-              console.log("Not found");
+                res.send({"status":false, "message":"invalid user "}); 
             }
             if (result)
             {
-                userCollection.findByIdAndUpdate(id, { $set: { Name: user, Lname:last, Password:password, Pic_name: id+"_"+name, Pic_path:path}}, function (err, tank) {
+                userCollection.findByIdAndUpdate(id, { $set: { first_name: first_name, last_name:last_name, password:password, user_name: user_name , date_of_birth:date_of_birth, description:description}}, function (err, tank) {
                       if (err) 
                         {res.send({"status":false, "message" : "not successfully updated"});}
                       else
