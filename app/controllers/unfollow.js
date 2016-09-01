@@ -2,7 +2,6 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
   userfollow = mongoose.model('follows');
 
 var user_id=0;
@@ -49,34 +48,101 @@ router.post("/unfollow",function(req,res){
     }
 
 
-    userfollow.findOne({follower_id:option, following_id:userid}, function(err, result) 
+
+
+
+
+    userCollection.findOne({_id:option}, function(err,friend)
       {
-          if(err)
+        if(err)
           {
-            res.send({"status" : false , "message" : "Error", "result" : err});
-            return;
+            res.send({"status" : false,"message" : "friend_id not exits"});
+          return;
           }
-          else if(result)
+        if(!friend)
+        {
+          res.send({"status" : false,"message" : "friend_id not exits"});
+          return;
+        }
+        else
+        {
+          userCollection.findOne({_id:userid}, function(err,result)
           {
-            userfollow.remove({follower_id: option, following_id:userid }, function(err, result) 
+            if(err)
               {
-                  if(err)
-                  {
-                    res.send({"status" : false , "message" : "Error", "result" : err});
-                  }
-                  else if(result)
-                  {
-                    res.send({"status" : true , "message" : "succussfully UnFollow"});
-                  }
-                  else
-                  {
-                    res.send({"status" : false , "message" : "You are not following this id"});
-                  }
+                res.send({"status" : false,"message" : "userid not exits"});
+              return;
+              }
+            if(!result)
+            {
+              res.send({"status" : false,"message" : "userid not exits"});
+              return;
+            }
+            else
+            {
+
+              userfollow.findOne({follower_id:option, following_id:userid}, function(err, found){
+                if(found)
+                {
+                   var total_follower=friend.total_follower;
+                  var total_following=result.total_following;
+                  if (total_following=="")
+                    total_following=0;
+                  if(total_follower=="")
+                    total_follower=0;
+                  total_follower--;
+                  total_following--;
+                       
+
+                       userCollection.findByIdAndUpdate(option, 
+                        {
+                          $set: { "total_follower": total_following},
+                          $pull: {'follower': 
+                        {
+                          following_id: result._id,
+                        following_first_name: result.first_name,
+                        following_last_name: result.last_name,
+                        following_profile_picture_url: result.profile_picture_url,}}}
+                        , function(err,yes){
+                        if(err)
+                        {
+                            res.send({"status" : false,"message" : err});
+                            return;         
+                        }
+                        else
+                        {
+                            userCollection.findByIdAndUpdate(userid, { $set: { "total_following": total_following},
+                             $pull:
+                                {
+                                  following:
+                                  {
+                                    follower_id:friend._id
+                                  }
+                                }}, function(err,yes){
+                                if(err)
+                                {
+                                    res.send({"status" : false,"message" : err});
+                                    return;         
+                                }
+                                else
+                                {
+                                userfollow.remove({follower_id: option, following_id:userid },function(err,ress)
+                                  {
+                                    if(ress)
+                                       res.send({"status":true, "message":"sucessfully unfollow"});                 
+                                  });
+                                }
+                               });
+                        }
+                       });                    
+                }
+                else
+                {
+                       res.send({"status":false, "message":"you are not follower of this friend"});                  
+                }
               });
-          }
-          else
-          {
-              res.send({"status" : false , "message" : "You are not following this id"});
-          }
+            }
+          });
+        }
       });
 });

@@ -2,9 +2,8 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows'),
-  postShare = mongoose.model('share');
+  userPosts = mongoose.model('posts');
+
 
 module.exports = function (app) {
   app.use('/api', router);
@@ -61,39 +60,59 @@ router.post("/post_comment",function(req,res){
       return;
     }
     var first_name,last_name;
-    userCollection.findOne({_id: userid}, function(err, result) {
+    userCollection.findOne({_id: userid}, function(err, commentuser) {
           if(err)
           {
            res.send({"status":false ,"message":"id is not valid"});
             return;
           }
-          if (Object(result).length<=0 || result.Name==null )
+          if (Object(commentuser).length<=0 || commentuser.email==null )
           {
             res.send({"status":false ,"message":"not user exits with this id"});
             return;
           } 
-          first_name=result.Name;
-          last_name=result.Lname;
+          else
+          {
+            userPosts.findOne({_id: post_id},function(err, result) {
+              if(err)
+              {
+                res.send({"status":false, "message":err});
+              }
+              if (result)
+              {  
+                var total_comment = result.total_comment;
+                if(total_comment=="")
+                  total_comment=0;
+                total_comment++;
+                console.log(total_comment);
+                          var milliseconds = (new Date).getTime();
+                               result.user_comment.push(
+                                {
+                                  comment_user_id: userid,
+                                  comment_first_name: commentuser.first_name,
+                                  comment_last_name: commentuser.last_name,
+                                  comment_profile_pic_url: commentuser.profile_pic_url,
+                                  comment: comment,
+                                  comment_time:milliseconds
+                                });
+                                userPosts.findByIdAndUpdate(post_id,{ $set: { "total_comment": total_comment}},
+                                  function (err, tank) {
+                                  if(tank)
+                                  {
+                                       result.save();
+                                      res.send({"status":true, "message":"sucessfully commented"});                 
+                                  }
+                                  else
+                                  {
+                                      res.send({"status":false, "message":"cannot comment"}); 
+                                  }
+                               });
+              }
+              else
+              {
+                  res.send({"status":false, "message":"no post exits with this id"});   
+              }   
+              });
+          }      
       });
-    userPosts.findOne({_id: post_id},function(err, result) {
-        if(err)
-        {
-          res.send({"status":false, "message":err});
-        }
-        if (result)
-        {  
-                    var milliseconds = (new Date).getTime();
-                         result.comment.push({user_id: userid, comment: comment, first_name: first_name, last_name: last_name, time:milliseconds});
-                         result.save(function (err, tank) {
-                            if(tank)
-                            {
-                                res.send({"status":true, "message":"sucessfully commented"});                 
-                            }
-                         });
-        }
-        else
-        {
-            res.send({"status":false, "message":"no post exits with this id"});   
-        }   
-        });
 });

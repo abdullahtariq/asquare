@@ -1,10 +1,7 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userlikes = mongoose.model('userlikes'),
-  userfollow = mongoose.model('follows'); 
+  userPosts = mongoose.model('posts'); 
  
 module.exports = function (app) {
   app.use('/api', router);
@@ -44,7 +41,14 @@ router.post("/total_share", function(req,res){
         }
         else if(result)
         {
-          res.send({"status" : true, "message" : result.share});
+          if(result.total_share=="")
+          {
+            res.send({"status" : true, "message" : "no post shares", "result":"0"});
+          }
+          else
+          {
+              res.send({"status" : true, "message" : "shares found", "result":result.total_share});
+          }
         }
         else
         {

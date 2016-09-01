@@ -2,10 +2,9 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userlikes = mongoose.model('userlikes'),
-  userfollow = mongoose.model('follows'); 
- 
+  userPosts = mongoose.model('posts');
+
+
 module.exports = function (app) {
   app.use('/api', router);
 };
@@ -49,69 +48,72 @@ router.post("/unlike_post", function(req,res){
         return;
     }
 
-     userCollection.findOne({_id: userid},{"_id":true,"Name": true, "Lname":true},function(err, result) {
+     userCollection.findOne({_id: userid},{"_id":true,"Name": true, "Lname":true},function(err, user) {
           if(err)
           {
             console.log("Not found");
             return;
           }
-          if (!result)
+          if (!user)
           {
             res.send({"status":false ,"message":"not user exits with this id"});
             return;
           }
-      });
-    userlikes.findOne({post_id: post_id,user_id:userid},function(err, result) {
-    if(err)
-    {
-      res.send({"status":false, "message":err});
-    }
-    if (result)
-    {  
-        userPosts.findOne({_id: post_id},function(err, result) {
-        if(err)
-        {
-          res.send({"status":false, "message":err});
-        }
-        if (result)
-        {  
-            if(typeof result.likes=='undefined')
-                total_likes=0;
-            else
-                total_likes=result.likes;
-            total_likes--;
-            userPosts.findByIdAndUpdate(post_id, { $set: { likes: total_likes}}, function (err, tank) {
-              if (err) 
-                {res.send({"status":false, "message" : err});}
-              else
+          else
+          {
+              userPosts.findOne({_id: post_id},function(err, post) {
+                if(err)
                 {
-                    userlikes.remove({post_id: post_id, user_id:userid }, function(err, result) 
-                      {
-                          if(err)
+                  res.send({"status":false, "message":err});
+                }
+                if (post)
+                {  
+                    if(typeof post.total_likes=="")
+                    {
+                        total_likes=0;
+                        res.send({"status":false ,"message":"you have not liked this post"});
+                        return;
+                    }    
+                    else
+                    {
+                      userPosts.findOne({'user_likes.like_user_id':userid}, function(err,found)
+                        {
+                          if(found)
                           {
-                            res.send({"status" : false , "message" : err});
-                          }
-                          else if(result)
-                          {
-                            res.send({"status" : true , "message" : "succussfully unlike"});
+                            total_likes=post.total_likes;
+                            total_likes--;
+                            userPosts.findByIdAndUpdate(post_id, 
+                                {
+                                  $set: { total_likes: total_likes},
+                                  $pop: {'user_likes': 
+                                {
+                                  
+                                  like_user_id: userid,
+                                 like_user_first_name: user.first_name,
+                                 like_user_last_name: user.last_name,
+                                 like_profile_picture_url: user.profile_picture_url
+                              }}}
+                                , function(err,yes){
+                              if (err) 
+                                {res.send({"status":false, "message" : err});}
+                              else
+                                {
+                                          res.send({"status" : true , "message" : "succussfully unlike"});
+                                }  
+                            });
                           }
                           else
                           {
-                            res.send({"status" : false , "message" : "Erroorrrroorrroorrr"});
+                            res.send({"status": false, "message":"you have not like this post"})
                           }
-                      });
-                }  
-            });
-        }
-        else
-        {
-            res.send({"status":false, "message":"no post exits with this id"});   
-        }   
-        });
-    }
-    else
-    {
-        res.send({"status":false, "message":"you have not like this post"});
-    }
-    }); 
+                        });
+                    }
+                }
+                else
+                {
+                    res.send({"status":false, "message":"no post exits with this id"});   
+                }   
+                });
+          }
+      }); 
 });

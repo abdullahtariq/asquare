@@ -2,9 +2,8 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userlikes = mongoose.model('userlikes'),
-  userfollow = mongoose.model('follows'); 
+  userPosts = mongoose.model('posts');
+  
  
 module.exports = function (app) {
   app.use('/api', router);

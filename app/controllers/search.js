@@ -42,9 +42,12 @@ router.post("/search",function(req,res){
     }
     var data = req.body.search;
     var userid = req.body.userid;
-    userCollection.find({Name: new RegExp(data, "i"), _id: {'$ne':userid }},{"_id":true,"Name":true,"Lname":true} ,function(err, doc) {
+    userCollection.find({first_name: new RegExp(data, "i"),last_name: new RegExp(data, "i"), _id: {'$ne':userid }},
+      {"_id":true,"first_name":true,"last_name":true} ,function(err, doc) {
       if(doc)
-        res.send({"status":true ,"message":"found", "result":doc});
+        {
+          res.send({"status":true ,"message":"found", "result":doc});
+        }
       else
         res.send({"status":false ,"message":"no result found", "result":doc});
 });
