@@ -37,30 +37,15 @@ router.post("/delete_post",function(req,res){
       return;
     }
     
-    userPosts.findOne({_id: post_id},function(err, result) {
+    userPosts.remove({_id: post_id},function(err, result) {
         if(err)
         {
           res.send({"status":false, "message":err});
         }
         if (result)
         {  
-          userPosts.remove({_id:post_id}, function(err, result) 
-              {
-                  if(err)
-                  {
-                    res.send({"status" : false , "message" : "Error", "result" : err});
-                  }
-                  else if(result)
-                  {
-                    if(result.share!='undefined')
-                      userPosts.remove({share_postid:post_id});
+          
                     res.send({"status" : true , "message" : "succussfully deteled"});
-                  }
-                  else
-                  {
-                    res.send({"status" : false , "message" : "cannot delete this post"});
-                  }
-              });
         }
         else
         {

@@ -1,9 +1,10 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows');
+  userCollection = mongoose.model('users');
+
+
+
 
 var user_id=0;
 var userid=0;
@@ -27,6 +28,7 @@ router.get('/login', function (req, res, next) {
  *
  * @apiSuccess {Boolean} status  Response status.
  * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} result  Response total_follower.
  */
 
 
@@ -39,7 +41,7 @@ router.post("/total_followers",function(req,res){
     }
     userid = req.body.userid;
 
-      userfollow.count({follower_id: userid }, function(err, result) 
+      userCollection.findOne({_id: userid }, function(err, result) 
       {
           if(err)
           {
@@ -47,7 +49,14 @@ router.post("/total_followers",function(req,res){
           }
           else if(result)
           {
-            res.send({"status" : true , "message" : result});
+            if(result.total_follower =="")
+              {
+                res.send({"status" : false , "message" : "user has no followers", "result":"0"});
+              }
+            else
+            {
+                res.send({"status" : true , "message" : "user has followers", "result":result.total_follower});
+            }
           }
           else
           {

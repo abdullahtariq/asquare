@@ -2,7 +2,6 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
   userfollow = mongoose.model('follows');
 
 var user_id=0;
@@ -22,7 +21,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} status  Response stauts.
- * @apiSuccess {String} message  Response succussfully follow.
+ * @apiSuccess {String} message  Response follow.
  */
 
 

@@ -1,10 +1,9 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userlikes = mongoose.model('userlikes'),
-  userfollow = mongoose.model('follows'); 
+  userPosts = mongoose.model('posts');
+
+
  
 module.exports = function (app) {
   app.use('/api', router);
@@ -20,6 +19,7 @@ module.exports = function (app) {
  *
  * @apiSuccess {Boolean} status True/false.
  * @apiSuccess {String} message  Response total likes .
+ * @apiSuccess {String} result  Response total likes .
  */
 
 
@@ -33,10 +33,10 @@ router.post("/total_likes", function(req,res){
     var total_likes=0;
     if(post_id=="")
     {
-        res.send({"status" : false , "message" : "post id is not given"});
+        res.send({"status" : false , "message" : "post id is empty"});
         return;
     }
-    userPosts.findOne({_id:post_id},{"likes": true }, function(err, result) 
+    userPosts.findOne({_id:post_id}, function(err, result) 
       {
         if(err)
         {
@@ -44,13 +44,13 @@ router.post("/total_likes", function(req,res){
         }
         else if(result)
         {
-          if(typeof result.likes =='undefined' || result.likes==null)
+          if(result.total_likes=="")
           {
-              res.send({"status" : true, "message" : total_likes});  
+              res.send({"status" : true, "message" : "no likes so far" , "result" : "0"});  
           }
           else
           {
-            res.send({"status" : true, "message" : result.likes});
+            res.send({"status" : true, "message" : "post has likes" , "result":result.total_likes});
           }
         }
         else

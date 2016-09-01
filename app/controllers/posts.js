@@ -58,20 +58,21 @@ router.post("/post",function(req,res){
         }
         if (result)
         {
-          
           var milliseconds = (new Date).getTime();
           var user1 = new userPosts(
             { user_id:userid,
               post: comment,
-              name: result.Name,
-              lname:result.Lname,
               time:milliseconds,
-              likes:null,
-              share_postid:null,
-              share_name: null,
-              share_lname:null,
-              share_userid:null,
-              share:null
+              user_first_name: result.first_name,
+              user_last_name:result.last_name,
+              user_profile_picture_url:result.profile_picture_url,
+              total_likes:"",
+              total_share:"",
+              original_postid:null,
+              original_user_first_name: null,
+              original_user_last_name:null,
+              original_user_id:null,
+              total_comment:""
             });
           user1.save(function (err, result) {
             if (err) {

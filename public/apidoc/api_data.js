@@ -68,7 +68,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response succussfully follow.</p>"
+            "description": "<p>Response follow.</p>"
           }
         ]
       }
@@ -212,6 +212,13 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response total_follower.</p>"
           }
         ]
       }
@@ -255,6 +262,13 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response total_following.</p>"
           }
         ]
       }
@@ -304,7 +318,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "result",
-            "description": "<p>(follower_id)  Response result(follower_id).</p>"
+            "description": "<p>(follower)  Response result(follower).</p>"
           }
         ]
       }
@@ -440,6 +454,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "email",
+            "description": "<p>User Email.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "password",
             "description": "<p>User Password.</p>"
           }
@@ -490,8 +511,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "first_name",
-            "description": "<p>User First Name.</p>"
+            "field": "email",
+            "description": "<p>User Email.</p>"
           },
           {
             "group": "Parameter",
@@ -1016,15 +1037,22 @@ define({ "api": [
             "group": "Success 200",
             "type": "Boolean",
             "optional": false,
-            "field": "stauts",
-            "description": "<p>Response stauts.</p>"
+            "field": "status",
+            "description": "<p>Response status.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Array of User id(s).</p>"
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Array of User.</p>"
           }
         ]
       }
@@ -1117,6 +1145,13 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
+            "description": "<p>Response total likes .</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
             "description": "<p>Response total likes .</p>"
           }
         ]
@@ -1303,7 +1338,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "result",
-            "description": "<p>(_id,Name,Lname,Pic_path)  Response result(_id,first Name,Last name,pic path and name).</p>"
+            "description": "<p>Response JSON object.</p>"
           }
         ]
       }
