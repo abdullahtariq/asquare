@@ -78,6 +78,11 @@ router.post("/newsfeed",function(req,res){
       res.send({"status":false, "message":"bucket is -ve"}); 
       return;
     }
+    if(offset<=bucket)
+    {
+      res.send({"status":false, "message":"offset and bucket cannot b change."}); 
+      return; 
+    }
     if(offset == "")
     {
       res.send({"status":false, "message":"offset is empty"}); 

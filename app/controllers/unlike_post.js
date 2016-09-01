@@ -51,7 +51,7 @@ router.post("/unlike_post", function(req,res){
      userCollection.findOne({_id: userid},{"_id":true,"Name": true, "Lname":true},function(err, user) {
           if(err)
           {
-            console.log("Not found");
+            res.send({"status" : false , "message" : "userid not exits"});
             return;
           }
           if (!user)
