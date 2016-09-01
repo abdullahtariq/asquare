@@ -48,7 +48,11 @@ router.post("/follow_friend",function(req,res){
       res.send({"status" : false,"message" : "friend_id is empty"});
       return;
     }
-
+    if(userid==option)
+    {
+        res.send({"status" : false,"message" : "you cannot follow yourself.."});
+      return; 
+    }
 
     userCollection.findOne({_id:option}, function(err,friend)
       {
