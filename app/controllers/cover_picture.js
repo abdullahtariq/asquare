@@ -24,8 +24,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 /**
- * @api {Post} api/set_profilepicture Request to Set User Profile
- * @apiName Set profile
+ * @api {Post} api/cover_picture Request to Set Profile Cover
+ * @apiName Set cover picture
  * @apiGroup User
  *
  * @apiParam {ID} userid User login id.
@@ -37,7 +37,7 @@ var upload = multer({ storage: storage });
  */
 
 
-router.post("/set_profilepicture",upload.single('picture'), function(req,res){
+router.post("/cover_picture",upload.single('picture'), function(req,res){
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false , "message" : "userid is undefined."});
@@ -64,7 +64,7 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
     }
 
     var path = file.path;
-        userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: path+userid}}, function (err, tank) {
+        userCollection.findByIdAndUpdate(userid, { $set: { cover_picture_url: path+userid}}, function (err, tank) {
           if (err) 
             {res.send({"status":false, "message" : "not successfully updated"});}
           else
