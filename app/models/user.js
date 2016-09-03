@@ -38,6 +38,20 @@ var users = new Schema({
 
   total_posts: String,
 
+
+
+  notification:[{
+    userid: String,
+    post_id: String,
+    user_first_name: String,
+    user_last_name: String,
+    notification: String,
+    notification_time:String,
+    notification_seen:Boolean
+  }],
+
+
+
 });
 
 users.virtual('date')

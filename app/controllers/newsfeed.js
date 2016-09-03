@@ -50,7 +50,7 @@ router.post("/newsfeed",function(req,res){
     }
     else if(userid=="")
     {
-      res.send({"status":false,"message":"user id is not given"}); 
+      res.send({"status":false,"message":"user id is empty"}); 
       return;   
     }
     offset=req.body.offset;
@@ -77,11 +77,6 @@ router.post("/newsfeed",function(req,res){
     {
       res.send({"status":false, "message":"bucket is -ve"}); 
       return;
-    }
-    if(offset<=bucket)
-    {
-      res.send({"status":false, "message":"offset and bucket cannot b change."}); 
-      return; 
     }
     if(offset == "")
     {
