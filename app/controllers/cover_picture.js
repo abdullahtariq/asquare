@@ -11,13 +11,14 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
+var i = (Math.random() * 1000000) >>> 0;
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    cb(null,file.originalname)
+    cb(null,i+"_"+file.originalname)
   }
 });
  
@@ -64,7 +65,7 @@ router.post("/cover_picture",upload.single('picture'), function(req,res){
     }
 
     var path = file.path;
-        userCollection.findByIdAndUpdate(userid, { $set: { cover_picture_url: path+userid}}, function (err, tank) {
+        userCollection.findByIdAndUpdate(userid, { $set: { cover_picture_url: i+"_"+path}}, function (err, tank) {
           if (err) 
             {res.send({"status":false, "message" : "not successfully updated"});}
           else
