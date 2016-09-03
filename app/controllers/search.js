@@ -42,7 +42,7 @@ router.post("/search",function(req,res){
     }
     var data = req.body.search;
     var userid = req.body.userid;
-    userCollection.find({first_name: new RegExp(data, "i"),last_name: new RegExp(data, "i"), _id: {'$ne':userid }},
+    userCollection.find({first_name: new RegExp(data, "i"), _id: {'$ne':userid }},
       {"_id":true,"first_name":true,"last_name":true} ,function(err, doc) {
       if(doc)
         {
