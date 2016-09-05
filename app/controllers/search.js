@@ -42,11 +42,38 @@ router.post("/search",function(req,res){
     }
     var data = req.body.search;
     var userid = req.body.userid;
+    arr=[];
     userCollection.find({first_name: new RegExp(data, "i"), _id: {'$ne':userid }},
       {"_id":true,"first_name":true,"last_name":true} ,function(err, doc) {
       if(doc)
         {
-          res.send({"status":true ,"message":"found", "result":doc});
+          for (var i = 0; i < Object(doc).length; i++) {
+            var user = doc[i]._id;
+            var first_name = doc[i].first_name;
+            var last_name = doc[i].last_name;
+            userfollow.findOne({follower_id:user}, function(err,answer){
+                if(err)
+                {
+                  console.log("err");
+                }
+                else if(answer)
+                {
+                  var ans={
+                    "_id":user,
+                    "first_name":first_name,
+                    "last_name":last_name,
+                    "follow":true
+                  };
+                  console.log(ans);
+                  arr.push(ans);
+                }
+                else
+                {
+                  console.log("Not found");
+                }
+            });
+          }
+          res.send({"status":true ,"message":"found", "result":arr});
         }
       else
         res.send({"status":false ,"message":"no result found", "result":doc});
