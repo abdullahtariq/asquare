@@ -17,8 +17,8 @@ router.get('/login', function (req, res, next) {
 
 
 /**
- * @api {Post} api/see_following Request to See Followings 
- * @apiName See following
+ * @api {Post} api/see_follower Request to See Follower 
+ * @apiName See follower
  * @apiGroup Follow
  *
  * @apiParam {ID} userid login user.
@@ -26,11 +26,11 @@ router.get('/login', function (req, res, next) {
  *
   * @apiSuccess {Boolean} status  Response status.
   * @apiSuccess {String} message  Response message.
-  * @apiSuccess {String} result(following_id)  Response result(following_id).
+  * @apiSuccess {String} result(follower)  Response result(follower).
  */
 
 
-router.post("/see_following",function(req,res){
+router.post("/see_follower",function(req,res){
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false , "message" : "userid is not given."});
