@@ -90,7 +90,7 @@ router.post("/likepost", function(req,res){
                     }
                     if (userlike)
                     {  
-                        res.send({"status":false, "message":"already like want to dislike"});
+                        res.send({"status":false, "message":"already like"});
                     }
                     else
                     {

@@ -73,9 +73,9 @@ router.post("/newsfeed",function(req,res){
       res.send({"status":false, "message":"offset is -ve"}); 
       return;
     }
-    if(bucket < 0)
+    if(bucket <= 0)
     {
-      res.send({"status":false, "message":"bucket is -ve"}); 
+      res.send({"status":false, "message":"bucket is undefined"}); 
       return;
     }
     if(offset == "")

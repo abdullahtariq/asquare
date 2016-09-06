@@ -28,17 +28,31 @@ module.exports = function (app) {
  * @apiSuccess {String} message  Response succussfully.
  */
 
+/*
+var express = require('express'),
+  app = express().Router,
+  server = require('http').createServer(app),
+  io = require('socket.io').listen(server);
+
+server.listen(3000);
+*/
+
+router.get("/notification",function(req,res){
+    
+   res.render('send.html')
+});
+
 
 router.post("/notification",function(req,res){
     
-    io.on('connection', function(socket)
-      {
-        
-      });
-
-    io.on('disconnection', function(socket)
-      {
-        
-      });
+   io.sockets.on('connection', function(socket)
+  {
+    socket.on('send', function(data)
+    {
+      io.sockets.emit('mess',data);
+    });
+  });
+     // io.sockets.emit('mess',"data");
+      res.send("send");
     
 });
