@@ -37,22 +37,19 @@ var express = require('express'),
 server.listen(3000);
 */
 
-router.get("/notification",function(req,res){
-    
-   res.render('send.html')
-});
 
 
 router.post("/notification",function(req,res){
     
-   io.sockets.on('connection', function(socket)
-  {
-    socket.on('send', function(data)
-    {
-      io.sockets.emit('mess',data);
-    });
-  });
+    console.log("data");
+  // io.sockets.on('connection', function(socket)
+ // {
+  //  socket.on('send', function(data)
+   // {
+      io.sockets.emit('mess',"data");
+  //  });
+ // });
      // io.sockets.emit('mess',"data");
-      res.send("send");
-    
+ //     res.send("send");
+     
 });
