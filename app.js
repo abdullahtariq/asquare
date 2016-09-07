@@ -1,4 +1,4 @@
-
+/*
 var express = require('express'),
   config = require('./config/config'),
   glob = require('glob'),
@@ -27,6 +27,7 @@ io.sockets.on('connection', function (socket) {
 
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function (data) {
+    console.log(data);
     // we tell the client to execute 'new message'
     socket.broadcast.emit('new message', {
       username: socket.username,
@@ -35,7 +36,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   var numUsers = 0;
-  
+
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
     if (addedUser) return;
@@ -86,3 +87,29 @@ io.sockets.on('connection', function (socket) {
 
 require('./app/controllers/api')(app,io); 
 
+*/
+
+
+
+var express = require('express'),
+  config = require('./config/config'),
+  glob = require('glob'),
+  mongoose = require('mongoose');
+
+mongoose.connect(config.db);
+var db = mongoose.connection;
+db.on('error', function () {
+  throw new Error('unable to connect to database at ' + config.db);
+});
+
+var models = glob.sync(config.root + '/app/models/*.js');
+models.forEach(function (model) {
+  require(model);
+});
+var app = express();
+
+require('./config/express')(app, config);
+
+app.listen(config.port, function () {
+  console.log('Express server listening on port ' + config.port);
+});
