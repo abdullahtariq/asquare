@@ -20,7 +20,8 @@ var io = require('socket.io')(http);
 http.listen(4200);
 //module.exports.sio = io;
 
-console.log('socket.io is : ',io);
+//console.log('socket.io is : ',io);
+console.log('socket.io http : ',http);
 
 var numUsers = 0;
 
