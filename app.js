@@ -1,4 +1,3 @@
-/*
 var express = require('express'),
   config = require('./config/config'),
   glob = require('glob'),
@@ -14,28 +13,28 @@ var models = glob.sync(config.root + '/app/models/*.js');
 models.forEach(function (model) {
   require(model);
 });
+
 var app = express();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+http.listen(4200);
+module.exports.sio = io;
 
-require('./config/express')(app, config);
 
 
-var io = require('socket.io').listen(app.listen(3000));
+var numUsers = 0;
 
-
-io.sockets.on('connection', function (socket) {
-    var addedUser = false;
+io.on('connection', function (socket) {
+  var addedUser = false;
 
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function (data) {
-    console.log(data);
     // we tell the client to execute 'new message'
     socket.broadcast.emit('new message', {
       username: socket.username,
       message: data
     });
   });
-
-  var numUsers = 0;
 
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
@@ -83,30 +82,6 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-
-
-require('./app/controllers/api')(app,io); 
-
-*/
-
-
-
-var express = require('express'),
-  config = require('./config/config'),
-  glob = require('glob'),
-  mongoose = require('mongoose');
-
-mongoose.connect(config.db);
-var db = mongoose.connection;
-db.on('error', function () {
-  throw new Error('unable to connect to database at ' + config.db);
-});
-
-var models = glob.sync(config.root + '/app/models/*.js');
-models.forEach(function (model) {
-  require(model);
-});
-var app = express();
 
 require('./config/express')(app, config);
 
