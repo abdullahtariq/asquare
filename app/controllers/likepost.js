@@ -5,7 +5,11 @@
   userPosts = mongoose.model('posts'),
   userlikes = mongoose.model('userlikes'),
   userfollow = mongoose.model('follows'); 
- 
+
+var http = require('http').Server(router);
+var io = require('socket.io')(http);
+
+
 module.exports = function (app) {
   app.use('/api', router);
 };
@@ -83,7 +87,7 @@ router.post("/likepost", function(req,res){
                   
 
 
-                  userPosts.findOne({"user_likes.like_user_id":userid},  function(err, userlike) {
+                  userPosts.findOne({_id:post_id,"user_likes.like_user_id":userid},  function(err, userlike) {
                     if(err)
                     {
                       res.send({"status":false, "message":err});
@@ -113,6 +117,9 @@ router.post("/likepost", function(req,res){
                             return;         
                         }
                         else{
+                              io.on('connection', function (socket) {
+                                      socket.broadcast.emit('new message', "data");
+                                  });
                             res.send({"status" : true,"message" : "sucessfully like"});
                             return;          
                         }

@@ -1,29 +1,56 @@
-var express = require('express'),
-  config = require('./config/config'),
-  glob = require('glob'),
-  mongoose = require('mongoose');
+  var express = require('express'),
+  router = express.Router(),
+  config = require('../../config/config'),
+  mongoose = require('mongoose'),
+  userCollection = mongoose.model('users'),
+  userPosts = mongoose.model('posts'),
+  userlikes = mongoose.model('userlikes'),
+  userfollow = mongoose.model('follows'); 
 
-mongoose.connect(config.db);
-var db = mongoose.connection;
-db.on('error', function () {
-  throw new Error('unable to connect to database at ' + config.db);
-});
 
-var models = glob.sync(config.root + '/app/models/*.js');
-models.forEach(function (model) {
-  require(model);
-});
 
-var app = express();
-var http = require('http').createServer(app);
+var http = require('http').Server(router);
 var io = require('socket.io')(http);
-http.listen(4200);
-//module.exports.sio = io;
 
-//console.log('socket.io is : ',io);
-console.log('socket.io http : ',http);
+module.exports = function (app) {
+  app.use('/api', router);
+};
 
-var numUsers = 0;
+/**
+ * @api {Post} api/likepost Request to like a user post
+ * @apiName Like post
+ * @apiGroup User_POST
+ *
+ * @apiParam {ID} post_id User Post id.
+ * @apiParam {ID} userid User Who like post.
+ *
+ *
+ * @apiSuccess {Boolean} status True/false.
+ * @apiSuccess {String} message  Response message.
+ */
+
+
+
+/*exports = module.exports = function(io){
+  io.on('connection', function (socket) {
+  var addedUser = false;
+  console.log('yess');
+  // when the client emits 'new message', this listens and executes
+  socket.on('new message', function (data) {
+    // we tell the client to execute 'new message'
+    socket.broadcast.emit('new message', {
+      username: socket.username,
+      message: "data"
+    });
+    console.log(data);
+  });
+
+});
+}*/
+
+
+router.get("/like", function(req,res){
+  var numUsers = 0;
 
 io.on('connection', function (socket) {
   var addedUser = false;
@@ -84,8 +111,10 @@ io.on('connection', function (socket) {
 });
 
 
-require('./config/express')(app, config);
+});
 
-app.listen(config.port, function () {
+require('../../config/express')(router, config);
+
+http.listen(config.port, function () {
   console.log('Express server listening on port ' + config.port);
 });
