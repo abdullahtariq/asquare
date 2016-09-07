@@ -18,9 +18,9 @@ var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 http.listen(4200);
-module.exports.sio = io;
+//module.exports.sio = io;
 
-
+console.log('socket.io is : ',io);
 
 var numUsers = 0;
 
