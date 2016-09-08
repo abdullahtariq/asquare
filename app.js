@@ -15,9 +15,9 @@ models.forEach(function (model) {
 });
 
 var app = express();
-var http = require('http').createServer(app);
+var http = require('http').Server(app);
 var io = require('socket.io')(http);
-http.listen(4200);
+
 //module.exports.sio = io;
 
 //console.log('socket.io is : ',io);
@@ -86,6 +86,10 @@ io.on('connection', function (socket) {
 
 require('./config/express')(app, config);
 
-app.listen(config.port, function () {
+http.listen(config.port, function () {
   console.log('Express server listening on port ' + config.port);
 });
+/*
+app.listen(config.port, function () {
+  console.log('Express server listening on port ' + config.port);
+});*/
