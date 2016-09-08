@@ -2,7 +2,6 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
   userfollow = mongoose.model('follows');
 
 var user_id=0;
@@ -39,32 +38,101 @@ router.post("/follow_friend",function(req,res){
     }
     var userid = req.body.userid;
     var option = req.body.friend_id;
-    var user1 = new userfollow(
+    if(userid=="")
+    {
+      res.send({"status" : false,"message" : "userid is empty"});
+      return;
+    }
+    else if(option=="")
+    {
+      res.send({"status" : false,"message" : "friend_id is empty"});
+      return;
+    }
+    if(userid==option)
+    {
+        res.send({"status" : false,"message" : "you cannot follow yourself.."});
+      return; 
+    }
+
+    userCollection.findOne({_id:option}, function(err,friend)
       {
-       follower_id: option, 
-        following_id: userid
-        });
-    userfollow.findOne({follower_id: option, following_id:userid}, function(err, result) 
-      {
-          if(err)
+        if(err)
           {
-            res.send({"status" : false , "message" : "Error", "result" : err});
-            return;
+            res.send({"status" : false,"message" : "friend_id not exits"});
+          return;
           }
-          else if(result)
+        if(!friend)
+        {
+          res.send({"status" : false,"message" : "friend_id not exits"});
+          return;
+        }
+        else
+        {
+          userCollection.findOne({_id:userid}, function(err,result)
           {
-            res.send({"status" : false , "message" : "you are already follower of this friend"});
-            return;
-          }
-          else
-          {
-              user1.save(function (err, result) {
-                if (err) {
-                  res.send({"status" : false, "message":"Error", "result" : err });
-                } else {
-                  res.send({"status" : true,"message" : "successfully follow" });
+            if(err)
+              {
+                res.send({"status" : false,"message" : "userid not exits"});
+              return;
+              }
+            if(!result)
+            {
+              res.send({"status" : false,"message" : "userid not exits"});
+              return;
+            }
+            else
+            {
+
+              userfollow.findOne({follower_id:option, following_id:userid}, function(err, found){
+                if(found)
+                {
+                    res.send({"status" : false,"message" : "you already follow this friend"});
+                  return;
+                }
+                else
+                {
+                  var total_follower=friend.total_follower;
+                  var total_following=result.total_following;
+                  if (total_following=="")
+                    total_following=0;
+                  if(total_follower=="")
+                    total_follower=0;
+                  total_follower++;
+                  total_following++;
+                  friend.follower.push({following_id: result._id, following_first_name: result.first_name, following_last_name: result.last_name, following_profile_picture_url: result.profile_picture_url});
+                  result.following.push({follower_id: friend._id, follower_first_name: friend.first_name, follower_last_name: friend.last_name, follower_profile_picture_url: friend.profile_picture_url});
+                  result.save(function (err, tank) {
+                    if(tank)
+                    {
+                       user1= new userfollow({
+                        follower_id:option,
+                        following_id: userid
+                       });
+                        
+
+                       userCollection.findByIdAndUpdate(option, { $set: { "total_follower": total_follower}}, function(err,yes){
+                        if(err)
+                        {
+                            res.send({"status" : false,"message" : err});
+                            return;         
+                        }
+                       });
+                       userCollection.findByIdAndUpdate(userid, { $set: { "total_following": total_following}}, function(err,yes){
+                        if(err)
+                        {
+                            res.send({"status" : false,"message" : err});
+                            return;         
+                        }
+                       });                        
+                       user1.save();
+                       friend.save();
+                       res.send({"status":true, "message":"sucessfully follow"});                 
+                    }
+                  }); 
                 }
               });
-          }
+            }
+          });
+        }
       });
 });

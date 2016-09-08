@@ -1,9 +1,8 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows');
+  userCollection = mongoose.model('users');
+
 
 var user_id=0;
 var userid=0;
@@ -22,12 +21,10 @@ module.exports = function (app) {
  *
  * @apiSuccess {Boolean} status  Response status.
  * @apiSuccess {String} message  Response message.
-  * @apiSuccess {String} result(_id,Name,Lname)  Response result(_id,first Name,Last name).
+  * @apiSuccess {String} result  Response JSON object.
  */
 
 
-
-//  Friends Profile
 
 router.post("/view_profile", function(req,res){
     if(typeof req.body.userid=='undefined')
@@ -42,7 +39,13 @@ router.post("/view_profile", function(req,res){
     }
     else
     {
-      userCollection.findOne({_id: search},{"_id":true,"Name": true, "Lname":true},function(err, result) {
+      userCollection.findOne({_id: search},{"_id":true,"first_name": true, "last_name":true,
+          "profile_picture_url": true,
+          "cover_picture_url":true,
+          "user_name":true,
+          "total_follower":true,
+          "total_following":true},
+        function(err, result) {
       if(err)
       {
         console.log("Not found");

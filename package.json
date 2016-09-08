@@ -11,13 +11,15 @@
     "compression": "^1.5.2",
     "cookie-parser": "^1.3.3",
     "ejs": "^2.3.1",
-    "express": "^4.13.3",
+    "express": "^4.14.0",
     "glob": "^6.0.4",
     "method-override": "^2.3.0",
     "mongoose": "^4.1.2",
     "morgan": "^1.6.1",
     "multer": "^1.2.0",
-    "serve-favicon": "^2.3.0"
+    "node.extend": "^1.1.5",
+    "serve-favicon": "^2.3.0",
+    "socket.io": "^1.4.8"
   },
   "devDependencies": {
     "gapidoc": "^0.1.1",

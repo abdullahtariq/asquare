@@ -68,7 +68,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response succussfully follow.</p>"
+            "description": "<p>Response follow.</p>"
           }
         ]
       }
@@ -212,6 +212,13 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response total_follower.</p>"
           }
         ]
       }
@@ -255,6 +262,13 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response total_following.</p>"
           }
         ]
       }
@@ -304,7 +318,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "result",
-            "description": "<p>(follower_id)  Response result(follower_id).</p>"
+            "description": "<p>(follower)  Response result(follower).</p>"
           }
         ]
       }
@@ -440,6 +454,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "email",
+            "description": "<p>User Email.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "password",
             "description": "<p>User Password.</p>"
           }
@@ -490,8 +511,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "first_name",
-            "description": "<p>User First Name.</p>"
+            "field": "email",
+            "description": "<p>User Email.</p>"
           },
           {
             "group": "Parameter",
@@ -593,6 +614,56 @@ define({ "api": [
   },
   {
     "type": "Post",
+    "url": "api/cover_picture",
+    "title": "Request to Set Profile Cover",
+    "name": "Set_cover_picture",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User login id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "picture",
+            "description": "<p>User Profile picture.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/cover_picture.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "Post",
     "url": "api/set_profilepicture",
     "title": "Request to Set User Profile",
     "name": "Set_profile",
@@ -675,8 +746,29 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "user_name",
+            "description": "<p>User user_name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "password",
             "description": "<p>User Password.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "date_of_birth",
+            "description": "<p>User date_of_birth.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>User description.</p>"
           }
         ]
       }
@@ -704,6 +796,63 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "./app/controllers/update profile.js",
     "groupTitle": "User"
+  },
+  {
+    "type": "Post",
+    "url": "api/post_comment",
+    "title": "Request to comment a post",
+    "name": "Comment_a_Post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "comment",
+            "description": "<p>Post comment.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully comment a post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/comment.js",
+    "groupTitle": "User_POST"
   },
   {
     "type": "Post",
@@ -803,7 +952,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response message.</p>"
+            "description": "<p>Response  Array of Objects.</p>"
           },
           {
             "group": "Success 200",
@@ -878,8 +1027,58 @@ define({ "api": [
   },
   {
     "type": "Post",
+    "url": "api/post_detail",
+    "title": "see detail user post",
+    "name": "Post_detail",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response JSON object.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/post_detail.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
     "url": "api/post_liker",
-    "title": "Request to Post liker",
+    "title": "See the id(s) who likes this post",
     "name": "Post_likers",
     "group": "User_POST",
     "parameter": {
@@ -902,6 +1101,63 @@ define({ "api": [
             "group": "Success 200",
             "type": "Boolean",
             "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Array of User.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/post_liker.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/share_post",
+    "title": "Request to Share post",
+    "name": "Share_a_friend_Post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
             "field": "stauts",
             "description": "<p>Response stauts.</p>"
           },
@@ -910,13 +1166,13 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response message.</p>"
+            "description": "<p>Response succussfully Share a post.</p>"
           }
         ]
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/post_liker.js",
+    "filename": "./app/controllers/share_post.js",
     "groupTitle": "User_POST"
   },
   {
@@ -954,12 +1210,155 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>Response total likes .</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response total likes .</p>"
           }
         ]
       }
     },
     "version": "0.0.0",
     "filename": "./app/controllers/total_likes.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/total_share",
+    "title": "Request total number share a user post",
+    "name": "Total_share_of_a_post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response total share.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/total_share.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/unlike_post",
+    "title": "Request to Unlike a user post",
+    "name": "Unlike_post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User Who like post.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/unlike_post.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/delete_post",
+    "title": "Request to delete post",
+    "name": "delete_Post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully Delete.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/delete_post.js",
     "groupTitle": "User_POST"
   },
   {
@@ -1003,7 +1402,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "result",
-            "description": "<p>(_id,Name,Lname)  Response result(_id,first Name,Last name).</p>"
+            "description": "<p>Response JSON object.</p>"
           }
         ]
       }

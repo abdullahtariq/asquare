@@ -1,9 +1,7 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows');
+  userCollection = mongoose.model('users');
 
 var user_id=0;
 var userid=0;
@@ -18,8 +16,8 @@ router.get('/login', function (req, res, next) {
 
 
 /**
- * @api {Post} api/see_follower Request to See followers
- * @apiName See follower
+ * @api {Post} api/see_following Request to See following
+ * @apiName See following
  * @apiGroup Follow
  *
  * @apiParam {ID} userid login user.
@@ -27,28 +25,39 @@ router.get('/login', function (req, res, next) {
  *
  * @apiSuccess {Boolean} status  Response status.
  * @apiSuccess {String} message  Response message.
- * @apiSuccess {String} result(follower_id)  Response result(follower_id).
+ * @apiSuccess {String} result(following)  Response result(following).
  */
 
 
 
-router.post("/see_follower",function(req,res){
+router.post("/see_following",function(req,res){
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false , "message" : "userid is not given."});
         return;
     }
     userid = req.body.userid;
-
-      userfollow.find({follower_id: userid }, {"following_id": true }, function(err, result) 
+    if(userid=="")
+    {
+      res.send({"status" : false , "message" : "userid is empty."});
+        return; 
+    }
+      userCollection.findOne({_id: userid}, function(err, result) 
       {
           if(err)
           {
-            res.send({"status" : false , "message" : "Error", "result" : err});
+            res.send({"status" : false , "message" : "Error", "result" : "not found"});
           }
-          else if(result.length>0)
+          else if(result)
           {
-            res.send({"status" : true , "message" : "succussfully found", "result" : result});
+            if(result.total_following<=0)
+            {
+              res.send({"status" : false , "message" : "No follower"}); 
+            }
+            else
+            {
+              res.send({"status" : true , "message" : "succussfully found", "result" : result.following});
+            }
           }
           else
           {

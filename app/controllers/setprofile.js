@@ -4,20 +4,21 @@ var express = require('express'),
   userCollection = mongoose.model('users');
 
 var multer  = require('multer');
-var upload = multer({ dest: 'uploads/' });
+var upload = multer({ dest: 'public/uploads/' });
  
  
 module.exports = function (app) {
   app.use('/api', router);
 };
 
+var i = (Math.random() * 1000000) >>> 0;
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    cb(null,file.originalname)
+    cb(null,i+"_"+file.originalname)
   }
 });
  
@@ -63,12 +64,11 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
         return;
     }
 
-    var name = file.originalname;
-    var path = file.path;
-        userCollection.findByIdAndUpdate(userid, { $set: { Pic_name: userid+"_"+name, Pic_path:path}}, function (err, tank) {
+    var path = file.originalname;
+      userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: i+"_"+path}}, function (err, tank) {
           if (err) 
-            {res.send({"status":false, "message" : "not successfully created"});}
+            {res.send({"status":false, "message" : "not successfully updated"});}
           else
-             res.send({"status" : true, "message" : "Successfully updated"});
+             res.send({"status" : true, "message" : "Successfully updated profile picture"});
         });
       });

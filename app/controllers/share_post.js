@@ -2,9 +2,8 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows')
-  postShare = mongoose.model('share');
+  userPosts = mongoose.model('posts');
+
 
 module.exports = function (app) {
   app.use('/api', router);
@@ -12,7 +11,7 @@ module.exports = function (app) {
 
 
 /**
- * @api {Post} api/share_post Request to Follow a friend 
+ * @api {Post} api/share_post Request to Share post 
  * @apiName Share a friend Post
  * @apiGroup User_POST
  *
@@ -21,7 +20,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
- * @apiSuccess {String} message  Response succussfully follow.
+ * @apiSuccess {String} message  Response succussfully Share a post.
  */
 
 
@@ -48,41 +47,31 @@ router.post("/share_post",function(req,res){
       res.send({"status" : false,"message" : "post_id is not given"});
       return;
     }
-    userCollection.findOne({_id: userid}, function(err, result) {
+    userCollection.findOne({_id: userid}, function(err, shareuser) {
           if(err)
           {
             console.log("Not found");
             return;
           }
-          if (Object(result).length<=0)
+          if (Object(shareuser).length<=0)
           {
             res.send({"status":false ,"message":"not user exits with this id"});
             return;
           }
-      });
-    var total_share=0;
-    postShare.findOne({post_id: post_id,user_id:userid},function(err, result) {
-    if(err)
-    {
-      res.send({"status":false, "message":err});
-    }
-    if (result)
-    {  
-        res.send({"status":false, "message":"already share this post"});
-    }
-    else
-    {
-        userPosts.findOne({_id: post_id},function(err, result) {
+          else
+          {
+              var total_share=0;
+    userPosts.findOne({_id: post_id},function(err, result) {
         if(err)
         {
           res.send({"status":false, "message":err});
         }
         if (result)
         {  
-            if(typeof result.share=='undefined')
+            if(result.total_share=="")
                 total_share=0;
             else
-                total_share=result.share;
+                total_share=result.total_share;
             total_share++;
             var comment = result.post;
             userPosts.findByIdAndUpdate(post_id, { $set: { share: total_share}}, function (err, tank) {
@@ -90,26 +79,50 @@ router.post("/share_post",function(req,res){
                 {res.send({"status":false, "message" : err});}
               else
                 {
-
+                  userCollection.findOne({_id:userid}, function(err,ress){
                     var milliseconds = (new Date).getTime();
-                     var user1 = new postShare(
-                      {post_id: post_id,
-                        user_id: userid,
-                        time: milliseconds
-                    });
                      var sharepost = new userPosts(
-                        { user_id:userid,
+                        { 
+                          user_id:userid,
                           post: comment,
-                          time:milliseconds
+                          time:milliseconds,
+                          user_first_name: shareuser.first_name,
+                          user_last_name:shareuser.last_name,
+                          user_profile_picture_url:shareuser.profile_picture_url,
+                          total_likes:"",
+                          total_share:"",
+                          original_postid:result._id,
+                          original_user_first_name: result.user_first_name,
+                          original_user_last_name:result.user_last_name,
+                          original_user_id:result.user_id,
+                          total_comment:""
                         });
-                     user1.save(function (err, result) {
-                        if (err) {
-                          console.log(err);
-                        } else {
-                            sharepost.save();
-                             res.send({"status" : true, "message":"sucessfully share"});
-                        }
-                      });
+
+                     userPosts.findByIdAndUpdate(post_id,{$push:
+                          {
+                            user_shares:
+                              {
+                                  share_post_id: tank._id,           //  post id of post that new shared
+                                         share_user_id: userid,
+                                         share_user_first_name: shareuser.first_name,
+                                         share_user_last_name: shareuser.last_name,
+                                         share_profile_picture_url: shareuser.profile_picture_url,
+                                         share_time:milliseconds
+                              }
+          },
+                   $set: { "total_share": total_share}},
+                                  function (err, tank) {
+                                  if(tank)
+                                  {
+                                      sharepost.save();
+                                      res.send({"status" : true, "message":"sucessfully share"});
+                                  }
+                                  else
+                                  {
+                                      res.send({"status":false, "message":"cannot share"}); 
+                                  }
+                               });
+                  });
                 }  
             });
         }
@@ -118,6 +131,6 @@ router.post("/share_post",function(req,res){
             res.send({"status":false, "message":"no post exits with this id"});   
         }   
         });
-    }
-    });
+          }
+      });
 });
