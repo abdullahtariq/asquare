@@ -2,7 +2,6 @@
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
   userfollow = mongoose.model('follows');
 
 var user_id=0;
@@ -22,7 +21,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} status  Response stauts.
- * @apiSuccess {String} message  Response succussfully follow.
+ * @apiSuccess {String} message  Response follow.
  */
 
 
@@ -47,19 +46,34 @@ router.post("/isfollow",function(req,res){
     {
       res.send({"status" : false , "message" : "friend_id is empty"});
     }
-    userfollow.findOne({follower_id:option, following_id:userid}, function(err, result) 
+
+
+    userCollection.findOne({_id:userid},function(err,ress){
+      if(err)
       {
-          if(err)
+        res.send({"status" : false , "message" : "Error", "result" : "user id or friend_id is wrong"});
+      }
+      else if(ress)
+      {
+        userfollow.findOne({follower_id:option, following_id:userid}, function(err, result) 
           {
-            res.send({"status" : false , "message" : "Error", "result" : err});
-          }
-          else if(result)
-          {
-            res.send({"status" : true , "message" : "you are follower of this friend"});
-          }
-          else
-          {
-            res.send({"status" : false , "message" : "You are not following this friend"});
-          }
-      });
+              if(err)
+              {
+                res.send({"status" : false , "message" : "Error", "result" : err});
+              }
+              else if(result)
+              {
+                res.send({"status" : true , "message" : "you are follower of this friend"});
+              }
+              else
+              {
+                res.send({"status" : false , "message" : "You are not following this friend"});
+              }
+          });
+      }
+      else
+      {
+        res.send({"status" : false , "message" : "Error", "result" : "user id or friend_id is wrong"}); 
+      }
+    });
 });

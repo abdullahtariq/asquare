@@ -1,9 +1,8 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows');
+  userCollection = mongoose.model('users');
+  
 
 var user_id=0;
 var userid=0;
@@ -32,7 +31,9 @@ router.post("/suggestions",function(req,res){
         return;
     }
     userid = req.body.userid;
-      userCollection.find({_id: {'$ne':userid }},{"Name": true, "_id": true},{"limit": 5}, function(err, result) {
+      userCollection.find({_id: {'$ne':userid }},{"email": true,"first_name": true,"last_name": true, "profile_picture_url": true, "_id": true},
+
+        {"limit": 5}, function(err, result) {
           if(err)
           {
             res.send({"status" : false , "message" : "No suggestions", "result" : err});

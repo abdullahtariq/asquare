@@ -1,10 +1,8 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows');
-
+  userCollection = mongoose.model('users');
+  
 var user_id=0;
 var userid=0;
 module.exports = function (app) {
@@ -19,8 +17,8 @@ router.get('/login', function (req, res, next) {
 
 
 /**
- * @api {Post} api/see_following Request to See Followings 
- * @apiName See following
+ * @api {Post} api/see_follower Request to See Follower 
+ * @apiName See follower
  * @apiGroup Follow
  *
  * @apiParam {ID} userid login user.
@@ -28,30 +26,42 @@ router.get('/login', function (req, res, next) {
  *
   * @apiSuccess {Boolean} status  Response status.
   * @apiSuccess {String} message  Response message.
-  * @apiSuccess {String} result(following_id)  Response result(following_id).
+  * @apiSuccess {String} result(follower)  Response result(follower).
  */
 
 
-router.post("/see_following",function(req,res){
+router.post("/see_follower",function(req,res){
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false , "message" : "userid is not given."});
         return;
     }
     userid = req.body.userid;
-      userfollow.find({following_id: userid },{"follower_id": true }, function(err, result) 
+    if(userid=="")
+    {
+      res.send({"status" : false , "message" : "userid is empty."});
+        return; 
+    }
+      userCollection.findOne({_id: userid}, function(err, result) 
       {
           if(err)
           {
-            res.send({"status" : false , "result" : err});
+            res.send({"status" : false , "message" : "Error", "result" : "not found"});
           }
-          else if(result.length>0)
+          else if(result)
           {
-            res.send({"status" : true , "message" : "succussfully found following", "result" : result});
+            if(result.total_follower<=0)
+            {
+              res.send({"status" : false , "message" : "No following"}); 
+            }
+            else
+            {
+              res.send({"status" : true , "message" : "succussfully found", "result" : result.follower});
+            }
           }
           else
           {
-            res.send({"status" : false , "message" : "No Following", "result" : "Not found"}); 
+            res.send({"status" : false , "message" : "No followers", "result" : "Not found"});
           }
       }); 
 });

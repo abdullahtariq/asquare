@@ -1,9 +1,7 @@
   var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  userCollection = mongoose.model('users'),
-  userPosts = mongoose.model('posts'),
-  userfollow = mongoose.model('follows');
+  userCollection = mongoose.model('users');
 
 var user_id=0;
 var userid=0;
@@ -23,7 +21,7 @@ router.get('/login', function (req, res, next) {
  * @apiName Login
  * @apiGroup User
  *
- * @apiParam {String} first_name User First Name.
+ * @apiParam {String} email User Email.
  * @apiParam {String} password User Password.
  *
  *
@@ -34,11 +32,11 @@ router.get('/login', function (req, res, next) {
 
 
 router.post("/login",function(req,res){
-    var user= req.body.first_name;
+    var user= req.body.email;
     var password= req.body.password;
-    if(typeof req.body.first_name=='undefined')
+    if(typeof req.body.email=='undefined')
     {
-      res.send({"status" : false , "message" : "Name is not given."});
+      res.send({"status" : false , "message" : "email is not given."});
         return;
     }
     else if(typeof req.body.password=='undefined')
@@ -49,7 +47,7 @@ router.post("/login",function(req,res){
 
     if(user=="")
     {
-        res.send({"status" : false , "message" : "Name field is empty."});
+        res.send({"status" : false , "message" : "email field is empty."});
         return;
     }
     else if(password == "")
@@ -59,25 +57,20 @@ router.post("/login",function(req,res){
     }
 
 
-    userCollection.findOne({Name: user,Password:password},function(err, result) {
+    userCollection.findOne({email: user,password:password},function(err, result) {
     if(err)
     {
-      console.log("Not found");
+      res.send({"status":false,
+      "message":"invalid email or password"});
     }
     if (result)
     {
-      
-      //user_id=result._id;
-      //res.redirect('profile/id='+result._id);
-      
-      //  send JSon
-      res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id});
-      
+      res.send({"status" : true, "message" : "Successfully Login" , "userid" : result._id}); 
     }
     else
     {
       res.send({"status":false,
-      "message":"invalid user name or password"});
+      "message":"invalid email or password"});
     }
   });
 });

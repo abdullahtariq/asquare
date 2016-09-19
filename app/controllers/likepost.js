@@ -1,4 +1,6 @@
-  var express = require('express'),
+
+
+    var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
@@ -49,7 +51,9 @@ router.post("/likepost", function(req,res){
         return;
     }
 
-     userCollection.findOne({_id: userid},{"_id":true,"Name": true, "Lname":true},function(err, result) {
+
+
+     userCollection.findOne({_id: userid}, function(err, result) {
           if(err)
           {
             console.log("Not found");
@@ -60,56 +64,98 @@ router.post("/likepost", function(req,res){
             res.send({"status":false ,"message":"not user exits with this id"});
             return;
           }
-      });
-     userlikes.findOne({post_id: post_id,user_id:userid},function(err, result) {
-    if(err)
-    {
-      res.send({"status":false, "message":err});
-    }
-    if (result)
-    {  
-        res.send({"status":false, "message":"already like want to dislike"});
-    }
-    else
-    {
-        userPosts.findOne({_id: post_id},function(err, result) {
-        if(err)
-        {
-          res.send({"status":false, "message":err});
-        }
-        if (result)
-        {  
-            if(typeof result.likes=='undefined')
-                total_likes=0;
-            else
-                total_likes=result.likes;
-            total_likes++;
-            userPosts.findByIdAndUpdate(post_id, { $set: { likes: total_likes}}, function (err, tank) {
-              if (err) 
-                {res.send({"status":false, "message" : err});}
-              else
-                {
-                    var milliseconds = (new Date).getTime();
-                     var user1 = new userlikes(
-                      {post_id: post_id,
-                        user_id: userid,
-                        time: milliseconds
-                    });
-                     user1.save(function (err, result) {
-                        if (err) {
-                          console.log(err);
-                        } else {
-                             res.send({"status" : true, "message":"sucessfully liked"});
+          else
+          {
+            userPosts.findOne({_id: post_id},function(err, post) {
+              if(err)
+              {
+                res.send({"status":false, "message":err});
+              }
+              if (post)
+              {  
+                  if(typeof post.total_likes=='undefined' || typeof post.total_likes=="")
+                      total_likes=0;
+                  else
+                      total_likes=post.total_likes;
+                  total_likes++;
+                      var milliseconds = (new Date).getTime(); 
+
+
+                  post.user_likes.push();
+                  
+
+
+                  userPosts.findOne({_id:post._id , "user_likes.like_user_id":userid},  function(err, userlike) {
+                    if(err)
+                    {
+                      res.send({"status":false, "message":err});
+                    }
+                    if (userlike)
+                    {  
+                        res.send({"status":false, "message":"already like want to dislike"});
+                    }
+                    else
+                    {
+
+                      userPosts.findByIdAndUpdate(post_id,
+                        {$push:
+                          {
+
+                            user_likes:
+                              {
+                                  like_user_id: result._id,
+                                  like_user_first_name: result.first_name,
+                                   like_user_last_name: result.last_name,
+                                   like_profile_picture_url: result.profile_picture_url,
+                                   like_time:milliseconds
+                              }
+          }, $set: { "total_likes": total_likes}},
+                        function(err,yes){
+                        if(err)
+                        {
+                            res.send({"status" : false,"message" : err});
+                            return;         
                         }
-                      });
-                }  
-            });
-        }
-        else
-        {
-            res.send({"status":false, "message":"no post exits with this id"});   
-        }   
-        });
-    }
-    }); 
+                        else{
+
+                          userCollection.findByIdAndUpdate(post.user_id,
+                        {$push:
+                          {
+                            notification:{
+                                  userid: userid,
+                                  post_id: post_id,
+                                  user_first_name: result.first_name,
+                                  user_last_name: result.last_name,
+                                  notification: "like",
+                                  notification_time:milliseconds,
+                                  notification_seen:false
+                              }
+          }}, function(err, notify){
+            if(notify)
+            {
+              var unseen = 0;
+              if(typeof notify.unseen==undefined || typeof notify.unseen=="")
+                unseen=0;
+              else
+                unseen= notify.unseen;
+              unseen++;
+              userCollection.findByIdAndUpdate(post.user_id,{$set: { "unseen": unseen}}, function(err,done){
+              if(done)
+                res.send({"status" : true,"message" : "sucessfully like"});
+              });
+            }
+          });
+                            return;          
+                        }
+                       });                                
+                    }
+                    });
+              }
+              else
+              {
+                  res.send({"status":false, "message":"no post exits with this id"});   
+              }   
+              });
+          }
+      }); 
 });

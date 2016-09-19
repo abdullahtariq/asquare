@@ -23,7 +23,7 @@ module.exports = function (app) {
  *
  *
  * @apiSuccess {Boolean} status  Response status.
- * @apiSuccess {String} message  Response message.
+ * @apiSuccess {String} message  Response  Array of Objects.
  * @apiSuccess {String} offset  Response offset.
  */
 
@@ -50,11 +50,34 @@ router.post("/newsfeed",function(req,res){
     }
     else if(userid=="")
     {
-      res.send({"status":false,"message":"user id is not given"}); 
+      res.send({"status":false,"message":"user id is empty"}); 
       return;   
     }
     offset=req.body.offset;
     bucket=req.body.bucket;
+    userCollection.findOne({_id:userid}, function(err, user_result)
+      {
+        if(err)
+        {
+            res.send({"status":false, "message":"user id not exits"}); 
+            return;     
+        }
+        else if(!user_result)
+        {
+            res.send({"status":false, "message":"user id not exits"}); 
+            return;
+        }
+      });
+    if(offset < 0)
+    {
+      res.send({"status":false, "message":"offset is -ve"}); 
+      return;
+    }
+    if(bucket <= 0)
+    {
+      res.send({"status":false, "message":"bucket is undefined"}); 
+      return;
+    }
     if(offset == "")
     {
       res.send({"status":false, "message":"offset is empty"}); 

@@ -2,11 +2,54 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var posts = new Schema({
-  user_id: String,
-  post: String,
-  time:String,
-  likes:String,
-  share:String
+        user_id: String,
+        post: String,
+        time:String,
+        user_first_name: String,
+        user_last_name:String,
+        user_profile_picture_url:String,
+        total_likes:String,
+
+
+        user_likes:[{
+           like_user_id: String,
+           like_user_first_name: String,
+           like_user_last_name: String,
+           like_profile_picture_url: String,
+           like_time:String
+        }],
+
+
+
+        total_share:String,
+        
+
+        user_shares:[{
+           share_post_id: String,           //  post id of post that new shared
+           share_user_id: String,
+           share_user_first_name: String,
+           share_user_last_name: String,
+           share_profile_picture_url: String,
+           share_time:String
+        }],        
+
+
+        original_postid:String,
+        original_user_first_name: String,
+        original_user_last_name:String,
+        original_user_id:String,
+
+
+        total_comment:String,
+        
+        user_comment:[{
+          comment_user_id: String,
+          comment_first_name: String,
+          comment_last_name: String,
+          comment_profile_pic_url: String,
+          comment: String,
+          comment_time:String
+        }],
 });
 
 posts.virtual('date')
