@@ -1,4 +1,6 @@
-  var express = require('express'),
+
+
+    var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
@@ -83,20 +85,22 @@ router.post("/likepost", function(req,res){
                   
 
 
-                  userPosts.findOne({"user_likes.like_user_id":userid},  function(err, userlike) {
+                  userPosts.findOne({_id:post._id , "user_likes.like_user_id":userid},  function(err, userlike) {
                     if(err)
                     {
                       res.send({"status":false, "message":err});
                     }
                     if (userlike)
                     {  
-                        res.send({"status":false, "message":"already like"});
+                        res.send({"status":false, "message":"already like want to dislike"});
                     }
                     else
                     {
+
                       userPosts.findByIdAndUpdate(post_id,
                         {$push:
                           {
+
                             user_likes:
                               {
                                   like_user_id: result._id,
@@ -113,7 +117,34 @@ router.post("/likepost", function(req,res){
                             return;         
                         }
                         else{
-                            res.send({"status" : true,"message" : "sucessfully like"});
+
+                          userCollection.findByIdAndUpdate(post.user_id,
+                        {$push:
+                          {
+                            notification:{
+                                  userid: userid,
+                                  post_id: post_id,
+                                  user_first_name: result.first_name,
+                                  user_last_name: result.last_name,
+                                  notification: "like",
+                                  notification_time:milliseconds,
+                                  notification_seen:false
+                              }
+          }}, function(err, notify){
+            if(notify)
+            {
+              var unseen = 0;
+              if(typeof notify.unseen==undefined || typeof notify.unseen=="")
+                unseen=0;
+              else
+                unseen= notify.unseen;
+              unseen++;
+              userCollection.findByIdAndUpdate(post.user_id,{$set: { "unseen": unseen}}, function(err,done){
+              if(done)
+                res.send({"status" : true,"message" : "sucessfully like"});
+              });
+            }
+          });
                             return;          
                         }
                        });                                

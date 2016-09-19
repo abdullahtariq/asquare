@@ -79,12 +79,19 @@ router.post("/post_comment",function(req,res){
                 res.send({"status":false, "message":err});
               }
               if (result)
-              {  
+              {
+                var arr=[];
+              for (var i = 0; i < Object(result.user_comment).length; i++) {
+                  if (arr.indexOf(result.user_comment[i].comment_user_id) > -1) {
+                      
+                  } else {
+                    arr.push(result.user_comment[i].comment_user_id);
+                  }
+                }  
                 var total_comment = result.total_comment;
                 if(total_comment=="")
                   total_comment=0;
                 total_comment++;
-                console.log(total_comment);
                           var milliseconds = (new Date).getTime();
                                result.user_comment.push(
                                 {
@@ -95,12 +102,40 @@ router.post("/post_comment",function(req,res){
                                   comment: comment,
                                   comment_time:milliseconds
                                 });
-                                userPosts.findByIdAndUpdate(post_id,{ $set: { "total_comment": total_comment}},
+                                userPosts.findByIdAndUpdate({_id:post_id},{ $set: { "total_comment": total_comment}},
                                   function (err, tank) {
                                   if(tank)
                                   {
+                                    var milliseconds = (new Date).getTime();
                                        result.save();
-                                      res.send({"status":true, "message":"sucessfully commented"});                 
+                                       for (var i = 0; i < arr.length; i++) {
+                                         userCollection.findOne({_id:arr[i]},function(err,found1){
+                                          if(found1)
+                                            {
+                                               var unseen = 0;
+                                              if(typeof found1.unseen==undefined || typeof found1.unseen=="")
+                                                unseen=0;
+                                              else
+                                                unseen= found1.unseen;
+                                              unseen++;
+                                              console.log(arr[i]);
+                                              userCollection.findByIdAndUpdate(found1._id,{$push:
+                                                      {
+                                                        notification:{
+                                                              userid: userid,
+                                                              post_id: post_id,
+                                                              user_first_name: commentuser.user_first_name,
+                                                              user_last_name: commentuser.user_last_name,
+                                                              notification: "comment",
+                                                              notification_time:milliseconds,
+                                                              notification_seen:false
+                                                          }
+                                      },$set: { "unseen": unseen}}, function(err,done){
+                                      });
+                                            }
+                                         });
+                                       }
+                                      res.send({"status":true, "message":"sucessfully commented", "arr": arr});                 
                                   }
                                   else
                                   {

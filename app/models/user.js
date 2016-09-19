@@ -38,6 +38,7 @@ var users = new Schema({
 
   total_posts: String,
 
+  unseen : String,
 
 
   notification:[{
