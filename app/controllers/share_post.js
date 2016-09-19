@@ -111,11 +111,37 @@ router.post("/share_post",function(req,res){
                               }
           },
                    $set: { "total_share": total_share}},
-                                  function (err, tank) {
-                                  if(tank)
+                                  function (err, tank1) {
+                                  if(tank1)
                                   {
                                       sharepost.save();
-                                      res.send({"status" : true, "message":"sucessfully share"});
+                                      userCollection.findByIdAndUpdate(tank.user_id,
+                        {$push:
+                          {
+                            notification:{
+                                  userid: userid,
+                                  post_id: post_id,
+                                  user_first_name: shareuser.first_name,
+                                  user_last_name: shareuser.last_name,
+                                  notification: "share",
+                                  notification_time:milliseconds,
+                                  notification_seen:false
+                              }
+          }}, function(err, notify){
+            if(notify)
+            {
+              var unseen = 0;
+              if(typeof notify.unseen==undefined || typeof notify.unseen=="")
+                unseen=0;
+              else
+                unseen= notify.unseen;
+              unseen++;
+              userCollection.findByIdAndUpdate(shareuser._id,{$set: { "unseen": unseen}}, function(err,done){
+              if(done)
+                res.send({"status" : true, "message":"sucessfully share"});
+              });
+            }
+          });
                                   }
                                   else
                                   {

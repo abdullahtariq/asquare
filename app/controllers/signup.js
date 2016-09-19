@@ -110,6 +110,7 @@ router.post("/register", function(req,res){
         total_follower: "",
         total_following:"",
         total_posts:"",
+        unseen : "",
     });
 
     if (password.length < 8) {
