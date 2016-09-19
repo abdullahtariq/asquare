@@ -91,6 +91,7 @@ router.post("/follow_friend",function(req,res){
                 }
                 else
                 {
+                  var milliseconds = (new Date).getTime();
                   var total_follower=friend.total_follower;
                   var total_following=result.total_following;
                   if (total_following=="")
@@ -101,6 +102,17 @@ router.post("/follow_friend",function(req,res){
                   total_following++;
                   friend.follower.push({following_id: result._id, following_first_name: result.first_name, following_last_name: result.last_name, following_profile_picture_url: result.profile_picture_url});
                   result.following.push({follower_id: friend._id, follower_first_name: friend.first_name, follower_last_name: friend.last_name, follower_profile_picture_url: friend.profile_picture_url});
+                  
+                  friend.notification.push({
+                                  userid: userid,
+                                  post_id: null,
+                                  user_first_name: result.first_name,
+                                  user_last_name: result.last_name,
+                                  notification: "following",
+                                  notification_time:milliseconds,
+                                  notification_seen:false
+                              });
+                  
                   result.save(function (err, tank) {
                     if(tank)
                     {
@@ -110,7 +122,14 @@ router.post("/follow_friend",function(req,res){
                        });
                         
 
-                       userCollection.findByIdAndUpdate(option, { $set: { "total_follower": total_follower}}, function(err,yes){
+                       var unseen = 0;
+              if(typeof friend.unseen==undefined || typeof friend.unseen=="")
+                unseen=0;
+              else
+                unseen= friend.unseen;
+              unseen++;
+
+                       userCollection.findByIdAndUpdate(option, { $set: { "total_follower": total_follower , "unseen" :unseen}}, function(err,yes){
                         if(err)
                         {
                             res.send({"status" : false,"message" : err});
@@ -126,6 +145,7 @@ router.post("/follow_friend",function(req,res){
                        });                        
                        user1.save();
                        friend.save();
+
                        res.send({"status":true, "message":"sucessfully follow"});                 
                     }
                   }); 
