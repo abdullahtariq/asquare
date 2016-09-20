@@ -100,8 +100,8 @@ router.post("/follow_friend",function(req,res){
                     total_follower=0;
                   total_follower++;
                   total_following++;
-                  friend.follower.push({following_id: result._id, following_first_name: result.first_name, following_last_name: result.last_name, following_profile_picture_url: result.profile_picture_url});
-                  result.following.push({follower_id: friend._id, follower_first_name: friend.first_name, follower_last_name: friend.last_name, follower_profile_picture_url: friend.profile_picture_url});
+                  friend.follower.push({following_id: result._id, following_first_name: result.first_name, following_last_name: result.last_name, profile_picture_url: result.profile_picture_url});
+                  result.following.push({follower_id: friend._id, follower_first_name: friend.first_name, follower_last_name: friend.last_name, profile_picture_url: friend.profile_picture_url});
                   
                   friend.notification.push({
                                   userid: userid,

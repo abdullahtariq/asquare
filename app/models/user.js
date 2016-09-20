@@ -23,7 +23,7 @@ var users = new Schema({
     following_id: String,
     following_first_name: String,
     following_last_name: String,
-    following_profile_picture_url: String,
+    profile_picture_url: String,
   }],
 
 
@@ -33,7 +33,7 @@ var users = new Schema({
     follower_id: String,
     follower_first_name: String,
     follower_last_name: String,
-    follower_profile_picture_url: String,
+    profile_picture_url: String,
   }],
 
   total_posts: String,
