@@ -1,6 +1,7 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
+   userPosts = mongoose.model('posts'),
   userCollection = mongoose.model('users');
 
 module.exports = function (app) {
@@ -16,16 +17,6 @@ router.get('/update_profile', function (req, res, next) {
     res.render('update_profile');
 });
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
-});
- 
-var upload = multer({ storage: storage });
 
 
 
@@ -47,7 +38,7 @@ var upload = multer({ storage: storage });
  * @apiSuccess {String} message  Response message.
  */
 
-router.post("/update_profile", upload.single('picture'), function(req,res){
+router.post("/update_profile", function(req,res){
     if(typeof req.body.first_name=='undefined')
     {
       res.send({"status" : false , "message" : "first_name is not given."});
@@ -145,7 +136,89 @@ router.post("/update_profile", upload.single('picture'), function(req,res){
                       if (err) 
                         {res.send({"status":false, "message" : "not successfully updated"});}
                       else
-                      res.send({"status":true, "message" : "successfully updated"});
+                      {
+                        userCollection.update( {"follower":{"$elemMatch":{following_id:id}} },{ $set : { "follower.$.following_first_name":first_name, "follower.$.following_last_name":last_name}}, function(err, rest)
+                        {
+                          if(err)
+                          {
+                            res.send({"status" : false, "message" : err});
+                          }
+                          else if(rest)
+                             {
+                                userCollection.update( {"following":{"$elemMatch":{followier_id:id}} },{ $set : { "following.$.follower_first_name":first_name, "following.$.follower_last_name":last_name}}, function(err, rest)
+                                    {
+                                      if(err)
+                                      {
+                                        res.send({"status" : false, "message" : err});
+                                      }
+                                      else if(rest)
+                                         {
+                                             userCollection.update( {"notification":{"$elemMatch":{userid:id}} },{ $set : { "notification.$.user_first_name":first_name, "notification.$.user_last_name":last_name}}, function(err, rest)
+                                                {
+                                                  if(err)
+                                                  {
+                                                    res.send({"status" : false, "message" : err});
+                                                  }
+                                                  else if(rest)
+                                                     {                                                
+                                                       userPosts.update( {"user_likes":{"$elemMatch":{like_user_id:id}} },{ $set : { "user_likes.$.like_user_first_name":first_name, "user_likes.$.like_user_last_name":last_name}}, function(err, rest)
+                                                        {
+                                                          if(err)
+                                                          {
+                                                            res.send({"status" : false, "message" : err});
+                                                          }
+                                                          else if(rest)
+                                                             {
+                                                                userPosts.update( {"user_comment":{"$elemMatch":{comment_user_id:id}} },{ $set : { "user_comment.$.comment_first_name":first_name, "user_comment.$.comment_last_name":last_name}}, function(err, rest)
+                                                                {
+                                                                  if(err)
+                                                                  {
+                                                                    res.send({"status" : false, "message" : err});
+                                                                  }
+                                                                  else if(rest)
+                                                                     {
+                                                                        userPosts.update( {" user_shares":{"$elemMatch":{share_user_id:id}} },{ $set : { "user_shares.$.share_user_first_name":first_name, "user_shares.$.share_user_last_name":last_name}}, function(err, rest)
+                                                                        {
+                                                                          if(err)
+                                                                          {
+                                                                            res.send({"status" : false, "message" : err});
+                                                                          }
+                                                                          else if(rest)
+                                                                             {
+                                                                                userPosts.update( {user_id:id},{ $set : { "user_first_name":first_name, "user_last_name":last_name}}, function(err, rest)
+                                                                                {
+                                                                                  if(err)
+                                                                                  {
+                                                                                    res.send({"status" : false, "message" : err});
+                                                                                  }
+                                                                                  else if(rest)
+                                                                                     {
+                                                                                        userPosts.update( {original_user_id:id},{ $set : { "original_user_first_name":first_name, "original_user_last_name":last_name}}, function(err, rest)
+                                                                                        {
+                                                                                          if(err)
+                                                                                          {
+                                                                                            res.send({"status" : false, "message" : err});
+                                                                                          }
+                                                                                          else if(rest)
+                                                                                             {
+                                                                                                res.send({"status":true, "message" : "successfully updated"});
+                                                                                             }
+                                                                                        });
+                                                                                     }
+                                                                                });
+                                                                             }
+                                                                        });
+                                                                     }
+                                                                });
+                                                             }
+                                                        });
+                                                     }
+                                                });
+                                         }
+                                    });
+                             }
+                        });          
+                      }
                     });  
             }
             else
