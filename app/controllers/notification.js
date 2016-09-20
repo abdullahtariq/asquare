@@ -13,13 +13,29 @@ module.exports = function (app) {
 /**
  * @api {Post} api/notification Request to see notification
  * @apiName See notification
- * @apiGroup User_POST
+ * @apiGroup USER_NOTIFICATIONS
  *
- * @apiParam {ID} userid User Who like post.
+ * @apiParam {ID} userid User id.
+ * @apiParam {Int} offset Offset.
+ * @apiParam {Int} bucket Bucket.
  *
  *
- * @apiSuccess {Boolean} status True/false.
- * @apiSuccess {String} message  Response message.
+ * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response  Array of Objects.
+ * @apiSuccess {String} offset  Response offset.
+ */
+
+
+/**
+ * @api {Socket} notification To see number of unreadable notification
+ * @apiName Number of unseen notification
+ * @apiGroup USER_NOTIFICATIONS
+ *
+ * @apiParam {ID} userid User Id.
+ *
+ *
+ * @apiSuccess {Boolean} status  Response status.
+ * @apiSuccess {String} message  Response  Number of notification.
  */
 
 
