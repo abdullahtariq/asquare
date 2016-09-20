@@ -1,6 +1,7 @@
 var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
+  userPosts = mongoose.model('posts'),
   userCollection = mongoose.model('users');
 
 var multer  = require('multer');
@@ -11,6 +12,7 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
+var nameFile ;
 var i = (Math.random() * 1000000) >>> 0;
 
 var storage = multer.diskStorage({
@@ -18,7 +20,8 @@ var storage = multer.diskStorage({
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    cb(null,i+"_"+file.originalname)
+    nameFile = i+"_"+file.originalname;
+    cb(null,nameFile)
   }
 });
  
@@ -65,10 +68,74 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
     }
 
     var path = file.originalname;
-      userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: i+"_"+path}}, function (err, tank) {
+      userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: nameFile}}, function (err, tank) {
           if (err) 
             {res.send({"status":false, "message" : "not successfully updated"});}
           else
-             res.send({"status" : true, "message" : "Successfully updated profile picture"});
+           {
+            
+              userCollection.update( {"following":{"$elemMatch":{follower_id:userid}} },{ $set : { "following.$.profile_picture_url": nameFile}}, function(err, rest)
+                {
+                  if(err)
+                  {
+                    res.send({"status" : false, "message" : err});
+                  }
+                  else if(rest)
+                     {
+                      userCollection.update( {"follower":{"$elemMatch":{following_id:userid}} },{ $set : { "follower.$.profile_picture_url": nameFile}}, function(err, rest)
+                        {
+                          if(err)
+                          {
+                            res.send({"status" : false, "message" : err});
+                          }
+                          else if(rest)
+                             {
+                                userPosts.update( {"user_comment":{"$elemMatch":{comment_user_id:userid}} },{ $set : { "user_comment.$.comment_profile_pic_url": nameFile}}, function(err, rest)
+                                  {
+                                    if(err)
+                                    {
+                                      res.send({"status" : false, "message" : err});
+                                    }
+                                    else if(rest)
+                                       {
+                                          userPosts.update( {"user_likes":{"$elemMatch":{like_user_id:userid}} },{ $set : { "user_likes.$.like_profile_pic_url": nameFile}}, function(err, rest)
+                                          {
+                                            if(err)
+                                            {
+                                              res.send({"status" : false, "message" : err});
+                                            }
+                                            else if(rest)
+                                               {
+                                                userPosts.update( {"user_shares":{"$elemMatch":{share_user_id:userid}} },{ $set : { "user_shares.$.share_profile_pic_url": nameFile}}, function(err, rest)
+                                                  {
+                                                    if(err)
+                                                    {
+                                                      res.send({"status" : false, "message" : err});
+                                                    }
+                                                    else if(rest)
+                                                       {
+                                                          userPosts.update( {user_id:userid },{ $set : { "user_profile_pic_url": nameFile}}, function(err, rest)
+                                                            {
+                                                              if(err)
+                                                              {
+                                                                res.send({"status" : false, "message" : err});
+                                                              }
+                                                              else if(rest)
+                                                                 {res.send({"status" : true, "message" : "Successfully updated profile picture"});}
+                                                            });
+                                                       }
+                                                  });
+                                               }
+                                          });
+                                       }
+                                  });
+                             }
+                        });          
+                     }
+                });
+
+
+
+           }
         });
       });
