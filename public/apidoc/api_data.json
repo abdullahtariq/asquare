@@ -429,6 +429,163 @@
   },
   {
     "type": "Post",
+    "url": "api/seen",
+    "title": "Request to notification Seen",
+    "name": "Notification_seen",
+    "group": "USER_NOTIFICATIONS",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User Who like post.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "notification_id",
+            "description": "<p>Offset.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response  Message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/seenNotification.js",
+    "groupTitle": "USER_NOTIFICATIONS"
+  },
+  {
+    "type": "Socket",
+    "url": "notification",
+    "title": "To see number of unreadable notification",
+    "name": "Number_of_unseen_notification",
+    "group": "USER_NOTIFICATIONS",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response  Number of notification.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/notification.js",
+    "groupTitle": "USER_NOTIFICATIONS"
+  },
+  {
+    "type": "Post",
+    "url": "api/notification",
+    "title": "Request to see notification",
+    "name": "See_notification",
+    "group": "USER_NOTIFICATIONS",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "offset",
+            "description": "<p>Offset.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "bucket",
+            "description": "<p>Bucket.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response  Array of Objects.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "offset",
+            "description": "<p>Response offset.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/notification.js",
+    "groupTitle": "USER_NOTIFICATIONS"
+  },
+  {
+    "type": "Post",
     "url": "api/register",
     "title": "Request to register User",
     "name": "Create",
@@ -1180,49 +1337,6 @@
     },
     "version": "0.0.0",
     "filename": "./app/controllers/post_liker.js",
-    "groupTitle": "User_POST"
-  },
-  {
-    "type": "Post",
-    "url": "api/notification",
-    "title": "Request to see notification",
-    "name": "See_notification",
-    "group": "User_POST",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "userid",
-            "description": "<p>User Who like post.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "status",
-            "description": "<p>True/false.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Response message.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./app/controllers/notification.js",
     "groupTitle": "User_POST"
   },
   {
