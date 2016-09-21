@@ -1036,10 +1036,10 @@
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "File",
             "optional": false,
             "field": "comment",
-            "description": "<p>Post comment.</p>"
+            "description": "<p>User post vedio comment.</p>"
           }
         ]
       }
@@ -1193,10 +1193,10 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "File",
             "optional": false,
             "field": "post",
-            "description": "<p>User Post.</p>"
+            "description": "<p>User post vedio.</p>"
           },
           {
             "group": "Parameter",

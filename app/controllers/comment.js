@@ -10,6 +10,27 @@ module.exports = function (app) {
 };
 
 
+var multer  = require('multer');
+var upload = multer({ dest: 'public/uploads/' });
+
+var nameFile ;
+var i = (Math.random() * 1000000) >>> 0;
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    nameFile = i+"_"+file.originalname;
+    cb(null,nameFile)
+  }
+});
+ 
+var upload = multer({ storage: storage });
+
+
+
+
 /**
  * @api {Post} api/post_comment Request to comment a post 
  * @apiName Comment a Post
@@ -17,7 +38,7 @@ module.exports = function (app) {
  *
  * @apiParam {ID} userid login User Id.
  * @apiParam {ID} post_id Post Id.
- * @apiParam {String} comment Post comment.
+ * @apiParam {File} comment User post vedio comment.
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
@@ -25,7 +46,7 @@ module.exports = function (app) {
  */
 
 
-router.post("/post_comment",function(req,res){
+router.post("/post_comment",upload.single('comment'), function(req,res){
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false,"message" : "userid is undefined"});
@@ -36,14 +57,17 @@ router.post("/post_comment",function(req,res){
       res.send({"status" : false,"message" : "post_id is undefined"});
       return;
     }
-    else if(typeof req.body.comment=='undefined')
+    else if(typeof req.file=='undefined')
     {
       res.send({"status" : false,"message" : "comment is undefined"});
       return;
     }
     var userid = req.body.userid;
     var post_id = req.body.post_id;
-    var comment = req.body.comment;
+    var file= req.file;
+    var name;
+    var path;
+
     if(userid=="")
     {
       res.send({"status" : false,"message" : "userid is not given"});
@@ -54,12 +78,13 @@ router.post("/post_comment",function(req,res){
       res.send({"status" : false,"message" : "post_id is not given"});
       return;
     }
-    else if(comment=="")
+    else if(req.file=="")
     {
-      res.send({"status" : false,"message" : "comment is not given"});
-      return;
+        res.send({"status" : false , "message" : " comment not given."});
+        return;
     }
     var first_name,last_name;
+    var path = file.originalname;
     userCollection.findOne({_id: userid}, function(err, commentuser) {
           if(err)
           {
@@ -99,7 +124,7 @@ router.post("/post_comment",function(req,res){
                                   comment_first_name: commentuser.first_name,
                                   comment_last_name: commentuser.last_name,
                                   comment_profile_pic_url: commentuser.profile_pic_url,
-                                  comment: comment,
+                                  comment: nameFile,
                                   comment_time:milliseconds
                                 });
                                 userPosts.findByIdAndUpdate({_id:post_id},{ $set: { "total_comment": total_comment}},
@@ -135,7 +160,7 @@ router.post("/post_comment",function(req,res){
                                             }
                                          });
                                        }
-                                      res.send({"status":true, "message":"sucessfully commented", "arr": arr});                 
+                                      res.send({"status":true, "message":"sucessfully commented"});                 
                                   }
                                   else
                                   {
