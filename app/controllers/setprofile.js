@@ -16,7 +16,7 @@ module.exports = function (app) {
 };
 
 var nameFile ;
-var i = (Math.random() * 1000000) >>> 0;
+var i = (Math.random() * 1000000000) >>> 0;
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -69,7 +69,10 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
         res.send({"status" : false , "message" : " profile pic not given."});
         return;
     }
-    userCollection.findOne(userid, function(err,foundUser){
+
+    nameFile = "uploads/"+nameFile;
+    
+     userCollection.findOne({_id:userid}, function(err,foundUser){
       if(err)
         {res.send({"status":false, "message" : "not successfully updated"});}
       else if(foundUser)
@@ -77,14 +80,14 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
         var oldPath = foundUser.profile_picture_url;
         if(oldPath!=defaultPath)
         {
-          fs.unlink(oldPath,function(err){
+          fs.unlink("public\\"+oldPath,function(err){
                 if(err) return console.log(err);
                 console.log('file deleted successfully');
            }); 
-          console.log("kkkk");
         }
       }
     });
+
 
     var path = file.originalname;
       userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: nameFile}}, function (err, tank) {
