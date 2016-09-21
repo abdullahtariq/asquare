@@ -4,6 +4,9 @@ var express = require('express'),
   userPosts = mongoose.model('posts'),
   userCollection = mongoose.model('users');
 
+var fs = require('fs');
+
+var defaultPath = "uploads/img-v3.jpg" ;
 var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
  
@@ -13,7 +16,7 @@ module.exports = function (app) {
 };
 
 var nameFile ;
-var i = (Math.random() * 1000000) >>> 0;
+var i = (Math.random() * 1000000000) >>> 0;
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -66,6 +69,25 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
         res.send({"status" : false , "message" : " profile pic not given."});
         return;
     }
+
+    nameFile = "uploads/"+nameFile;
+    
+     userCollection.findOne({_id:userid}, function(err,foundUser){
+      if(err)
+        {res.send({"status":false, "message" : "not successfully updated"});}
+      else if(foundUser)
+      {
+        var oldPath = foundUser.profile_picture_url;
+        if(oldPath!=defaultPath)
+        {
+          fs.unlink("public\\"+oldPath,function(err){
+                if(err) return console.log(err);
+                console.log('file deleted successfully');
+           }); 
+        }
+      }
+    });
+
 
     var path = file.originalname;
       userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: nameFile}}, function (err, tank) {

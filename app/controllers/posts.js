@@ -9,126 +9,31 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
-/*
-var i=0;
-var arr=[];
-module.exports.post = function(socket){
 
-    socket.on('post', function (data) {
-    
-    var obj = JSON.parse(data);
-    
-    var comment= obj.post;
-    var userid= obj.userid;
-    
-    if(comment == "")
-    {
-      socket.emit('post', {"status" : false, "message" : "empty post"});
-    }
-    else if(userid=="")
-    {
-      socket.emit('post', {"status" : false, "message" : "userid empty"});
-    }
-    else
-    { 
-      userCollection.findOne({_id:userid},function(err, result) {
-        if(err)
-        {
-          socket.emit('post', {"status" : false, "message" : "userid not exits"});
-        }
-        if (result)
-        {
-          var milliseconds = (new Date).getTime();
-          var user1 = new userPosts(
-            { user_id:userid,
-              post: comment,
-              time:milliseconds,
-              user_first_name: result.first_name,
-              user_last_name:result.last_name,
-              user_profile_picture_url:result.profile_picture_url,
-              total_likes:"",
-              total_share:"",
-              original_postid:null,
-              original_user_first_name: null,
-              original_user_last_name:null,
-              original_user_id:null,
-              total_comment:""
-            });
-          user1.save(function (err, post) {
-            if (err) {
-              socket.emit('post', {
-                      "status": false,
-                      message: err
-                    });
-              console.log("nai aya");
-            } else {
+var multer  = require('multer');
+var upload = multer({ dest: 'public/uploads/' });
 
-                userfollow.find({following_id: userid },{"follower_id": true }, function(err, follow) 
-                  {
-                      if(err)
-                      {
-                        res.send({"status" : false , "result" : err});
-                      }
-                      else if(follow)
-                      {
-                         for (; i < Object.keys(follow).length; i++) {
-                           arr[i]=follow[i].follower_id;
-                         }
-                      }
-                  userCollection.findByIdAndUpdate({_id: { $in : arr} },
-                                  {$push:
-                                    {
-                                      notification:{
-                                            userid: userid,
-                                            post_id: post._id,
-                                            user_first_name: result.first_name,
-                                            user_last_name: result.last_name,
-                                            notification: "post",
-                                            notification_time:milliseconds,
-                                            notification_seen:false
-                                        }
-                    }}, function(err, notify){
-                      if(notify)
-                      {
-                          console.log("aya");
-              socket.emit('new message', {
-                      "status": true,
-                      message: "sucessfully post"
-                    });
-                      }
-                      else
-                      {
-                          console.log("aya");
-                      socket.emit('new message', {
-                              "status": false,
-                              message: "err"
-                            }); 
-                      }
-                    });  
-            });
-            }
-          });
-        }
-        else
-        {
-          console.log("nai ");
-          socket.emit('post', {"status":false,
-          "message":"cannot post...."});
-        }
-      });   
-    }
+var nameFile ;
+var i = (Math.random() * 1000000) >>> 0;
 
-});
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    nameFile = i+"_"+file.originalname;
+    cb(null,nameFile)
   }
-*/
-
+});
+ 
+var upload = multer({ storage: storage });
 
 /**
  * @api {Post} api/post Request to Add Post 
  * @apiName Post
  * @apiGroup User_POST
  *
- * @apiParam {String} post User Post.
+ * @apiParam {File} post User post vedio.
  * @apiParam {ID} userid User Id .
  *
  *
@@ -141,29 +46,33 @@ module.exports.post = function(socket){
 
 //  USER POSTS
 
-router.post("/post",function(req,res){
+router.post("/post",upload.single('post'),function(req,res){
     if(typeof req.body.userid=='undefined')
     {
-      res.send({"status" : false , "message" : "userid is not given."});
+      res.send({"status" : false , "message" : "userid is undefined."});
         return;
     }
-    else if(typeof req.body.post=='undefined')
+    else if(typeof req.file=='undefined')
     {
-      res.send({"status" : false , "message" : "post is not given."});
+      res.send({"status" : false , "message" : "picture is undefined."});
         return;
     }
-    var comment= req.body.post;
+    var file= req.file;
+    var name;
+    var path;
     userid = req.body.userid;
-    if(comment == "")
-    {
-        res.send({"status" : false, "message" : "empty post"});
-    }
-    else if(userid=="")
+    if(userid=="")
     {
         res.send({"status" : false, "message" : "userid empty"});
     }
+    else if(req.file=="")
+    {
+        res.send({"status" : false , "message" : " post not given."});
+        return;
+    }
     else
     { 
+      var path = file.originalname;
       userCollection.findOne({_id:userid},function(err, result) {
         if(err)
         {
@@ -175,18 +84,19 @@ router.post("/post",function(req,res){
           var milliseconds = (new Date).getTime();
           var user1 = new userPosts(
             { user_id:userid,
-              post: comment,
+              post: nameFile,
               time:milliseconds,
               user_first_name: result.first_name,
               user_last_name:result.last_name,
               user_profile_picture_url:result.profile_picture_url,
               total_likes:"",
               total_share:"",
+              total_comment:"",
               original_postid:null,
               original_user_first_name: null,
               original_user_last_name:null,
               original_user_id:null,
-              total_comment:""
+              total_file:""
             });
           user1.save(function (err, result) {
             if (err) {
