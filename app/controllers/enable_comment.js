@@ -10,8 +10,8 @@ module.exports = function (app) {
 };
 
 /**
- * @api {Post} api/disable_comments Request to Disable comments 
- * @apiName Disabled Comment 
+ * @api {Post} api/enable_comments Request to enable comments 
+ * @apiName Enable Comment 
  * @apiGroup DASHBOARD
  *
  * @apiParam {ID} post_id  Post id.
@@ -23,7 +23,7 @@ module.exports = function (app) {
  * @apiSuccess {Boolean} status  Response status.
  * @apiSuccess {String} message  Response Message.
  */
-router.post("/disable_comments",function(req,res){
+router.post("/enable_comments",function(req,res){
     var comments= req.body.comments;
     var userid = req.body.userid;
     var post_id = req.body.post_id;
@@ -33,7 +33,7 @@ router.post("/disable_comments",function(req,res){
     	arr.push(obj[i].comment_id);
     }
     
-    userPosts.update({_id:post_id, user_id:userid, "user_comment": { "$elemMatch": {"_id": { $in : arr } } } }, { $set: { "user_comment.$.enable": "false"}}, function (err, tank) {
+    userPosts.update({_id:post_id, user_id:userid, "user_comment": { "$elemMatch": {"_id": { $in : arr } } } }, { $set: { "user_comment.$.enable": "true"}}, function (err, tank) {
     	if(err)
     	{
     		res.send({status:false , "message" : err});
