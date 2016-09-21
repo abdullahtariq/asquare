@@ -125,7 +125,8 @@ router.post("/post_comment",upload.single('comment'), function(req,res){
                                   comment_last_name: commentuser.last_name,
                                   comment_profile_pic_url: commentuser.profile_pic_url,
                                   comment: nameFile,
-                                  comment_time:milliseconds
+                                  comment_time:milliseconds,
+                                  enable : "true"
                                 });
                                 userPosts.findByIdAndUpdate({_id:post_id},{ $set: { "total_comment": total_comment}},
                                   function (err, tank) {
