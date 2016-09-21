@@ -48,7 +48,8 @@ var posts = new Schema({
           comment_last_name: String,
           comment_profile_pic_url: String,
           comment: String,
-          comment_time:String
+          comment_time:String,
+          enable : String
         }],
 });
 

@@ -29,6 +29,134 @@ define({ "api": [
   },
   {
     "type": "Post",
+    "url": "api/disable_comments",
+    "title": "Request to Disable comments",
+    "name": "Disabled_Comment",
+    "group": "DASHBOARD",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Login User id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "comments",
+            "description": "<p>comments { [comment_id:id , enable,Ture/flase], \t\t\t\t[comment_id:id , enable,Ture/flase]}.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response Message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/disable_comments.js",
+    "groupTitle": "DASHBOARD"
+  },
+  {
+    "type": "Post",
+    "url": "api/view_all_comments",
+    "title": "Request to View All Comments",
+    "name": "View_all_comments",
+    "group": "DASHBOARD",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>POst Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "offset",
+            "description": "<p>Offset.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "bucket",
+            "description": "<p>Bucket.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response All coments array Json.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "offset",
+            "description": "<p>Response offset.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/view_all_comments.js",
+    "groupTitle": "DASHBOARD"
+  },
+  {
+    "type": "Post",
     "url": "api/isfollow",
     "title": "Request to isfollow a friend",
     "name": "Check_follow_or_not",
@@ -1337,56 +1465,6 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./app/controllers/post_liker.js",
-    "groupTitle": "User_POST"
-  },
-  {
-    "type": "Post",
-    "url": "api/share_post",
-    "title": "Request to Share post",
-    "name": "Share_a_friend_Post",
-    "group": "User_POST",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "userid",
-            "description": "<p>login User Id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "post_id",
-            "description": "<p>Post Id.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "stauts",
-            "description": "<p>Response stauts.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Response succussfully Share a post.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./app/controllers/test.js",
     "groupTitle": "User_POST"
   },
   {
