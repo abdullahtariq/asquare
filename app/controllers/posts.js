@@ -61,6 +61,7 @@ router.post("/post",upload.single('post'),function(req,res){
     var name;
     var path;
     userid = req.body.userid;
+    nameFile = "uploads/"+nameFile;
     if(userid=="")
     {
         res.send({"status" : false, "message" : "userid empty"});

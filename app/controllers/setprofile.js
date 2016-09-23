@@ -16,14 +16,14 @@ module.exports = function (app) {
 };
 
 var nameFile ;
-var i = (Math.random() * 1000000000) >>> 0;
+var milliseconds = (new Date).getTime();
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    nameFile = i+"_"+file.originalname;
+    nameFile = milliseconds+"_"+file.originalname;
     cb(null,nameFile)
   }
 });
@@ -71,7 +71,7 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
     }
 
     nameFile = "uploads/"+nameFile;
-    
+    /*
      userCollection.findOne({_id:userid}, function(err,foundUser){
       if(err)
         {res.send({"status":false, "message" : "not successfully updated"});}
@@ -87,7 +87,7 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
         }
       }
     });
-
+*/
 
     var path = file.originalname;
       userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: nameFile}}, function (err, tank) {
