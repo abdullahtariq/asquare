@@ -16,8 +16,8 @@ module.exports = function (app) {
  *
  * @apiParam {ID} post_id  Post id.
  * @apiParam {ID} user_id  Login User id.
- * @apiParam {String} comments comments { [comment_id:id],
- 				[comment_id:id]}.
+ * @apiParam {String} comments comments { [comment_id:id , enable,True/flase],
+ 				[comment_id:id , enable,True/flase]}.
  *
  *
  * @apiSuccess {Boolean} status  Response status.
@@ -48,4 +48,20 @@ router.post("/disable_comments",function(req,res){
     	}
     });
   
+  /*console.log(arr);  
+  userPosts.find({_id:post_id, user_id:userid, "user_comment": { "$elemMatch": {"_id": { $in : arr } } } }, function (err, tank) {
+    	if(err)
+    	{
+    		res.send({status:false , "message" : "err23or"});
+    	}
+    	else if(tank)
+    	{
+    		res.send({status:true , "message" : tank});
+    	}
+    	else
+    	{	
+    		res.send({status:false , "message" : "not that way"});
+    	}
+    });
+  */// res.send(obj[0]);
 });

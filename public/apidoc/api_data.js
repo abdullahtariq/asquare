@@ -55,7 +55,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "comments",
-            "description": "<p>comments { [comment_id:id], \t\t\t\t[comment_id:id]}.</p>"
+            "description": "<p>comments { [comment_id:id , enable,Ture/flase], \t\t\t\t[comment_id:id , enable,Ture/flase]}.</p>"
           }
         ]
       }
@@ -82,63 +82,6 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./app/controllers/disable_comments.js",
-    "groupTitle": "DASHBOARD"
-  },
-  {
-    "type": "Post",
-    "url": "api/enable_comments",
-    "title": "Request to enable comments",
-    "name": "Enable_Comment",
-    "group": "DASHBOARD",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "post_id",
-            "description": "<p>Post id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "user_id",
-            "description": "<p>Login User id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "comments",
-            "description": "<p>comments { [comment_id:id], \t\t\t\t[comment_id:id]}.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Response status.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Response Message.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./app/controllers/enable_comment.js",
     "groupTitle": "DASHBOARD"
   },
   {
