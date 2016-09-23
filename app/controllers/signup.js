@@ -105,6 +105,7 @@ router.post("/register", function(req,res){
         date_of_birth: "",
         description:"",
         facebook:"",
+        isfollow:false,
         email_verified: false,
         signup_time:milliseconds,
         total_follower: "",

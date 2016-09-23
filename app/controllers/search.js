@@ -3,7 +3,6 @@ var express = require('express'),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
   userPosts = mongoose.model('posts'),
-  transaction = mongoose.model('transaction'),
   userfollow = mongoose.model('follows');
 
 var user_id=0;
@@ -43,54 +42,20 @@ router.post("/search",function(req,res){
     var userid = req.body.userid;
     var resultFound;
     var arr=[];
-    userCollection.find({first_name: new RegExp(data, "i"), _id: {'$ne':userid }},
-      {"_id":true,"first_name":true,"last_name":true, "follow":true} ,function(err, doc) {
+    userCollection.find({first_name: new RegExp(data, "i"), _id: {'$ne':userid }},function(err, doc) {
       if(doc)
         {
-
-
-          doc = JSON.parse(JSON.stringify(doc));
           for (var i = 0; i < Object(doc).length; i++) {
-              userfollow.findOne({follower_id:doc[i]._id, following_id:userid}, function(err, found)
+              for (var j = 0; j < Object(doc[i].follower).length; j++) {
+                console.log(doc[i].follower[j].following_id);
+                if(doc[i].follower[j].following_id==userid)
                 {
-                  i--;
-                  if(err)
-                  {
-                    console.log("ooo error");
-                  }
-                  if(found)
-                  {
-                    user1 = new transaction(
-                      {
-                        user_id: userid,
-                        user_first_name: doc[i].first_name,
-                        user_last_name:doc[i].last_name,
-                        isfollow:"true",
-                    });
-                  }
-                  else
-                  {
-                    user1= new transaction(
-                      {
-                        user_id: userid,
-                        user_first_name: doc[i].first_name,
-                        user_last_name:doc[i].last_name,
-                        isfollow:"false",
-                    });
-                  }
-                  user1.save();
-               //   arr.push(user1);
-                });
+                  doc[i].isfollow = true;
+                }
+              }
+              arr.push({"_id":doc[i]._id,"first_name":doc[i].first_name,"last_name":doc[i].last_name,"isfollow":doc[i].isfollow});
           }
-//          console.log(arr);
-
-              transaction.find(function(err,found){
-                  transaction.find(function(err,found){
-                        res.send({"status":true ,"message":"found", "result":found});
-                    });
-              }); 
-
-              transaction.remove(function(found){});  
+            res.send({"status":true ,"message":"found", "result":arr});
         }
       else
         res.send({"status":false ,"message":"no result found", "result":doc});
