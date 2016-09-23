@@ -54,13 +54,14 @@ router.post("/post",upload.single('post'),function(req,res){
     }
     else if(typeof req.file=='undefined')
     {
-      res.send({"status" : false , "message" : "picture is undefined."});
+      res.send({"status" : false , "message" : "post is undefined."});
         return;
     }
     var file= req.file;
     var name;
     var path;
     userid = req.body.userid;
+    post = req.body.post;
     nameFile = "uploads/"+nameFile;
     if(userid=="")
     {
@@ -92,6 +93,7 @@ router.post("/post",upload.single('post'),function(req,res){
               user_profile_picture_url:result.profile_picture_url,
               total_likes:"",
               total_share:"",
+              islike:false,
               total_comment:"",
               original_postid:null,
               original_user_first_name: null,
