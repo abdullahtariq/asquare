@@ -23,7 +23,7 @@ module.exports = function (app) {
  * @apiSuccess {String} message  Response succussfully Share a post.
  */
 
-
+var idForNotification;
 router.post("/share_post",function(req,res){
     if(typeof req.body.userid=='undefined')
     {
@@ -81,23 +81,46 @@ router.post("/share_post",function(req,res){
                 {
                   userCollection.findOne({_id:userid}, function(err,ress){
                     var milliseconds = (new Date).getTime();
-                     var sharepost = new userPosts(
-                        { 
-                          user_id:userid,
-                          post: comment,
-                          time:milliseconds,
-                          user_first_name: shareuser.first_name,
-                          user_last_name:shareuser.last_name,
-                          user_profile_picture_url:shareuser.profile_picture_url,
-                          total_likes:"",
-                          total_share:"",
-                          original_postid:result._id,
-                          original_user_first_name: result.user_first_name,
-                          original_user_last_name:result.user_last_name,
-                          original_user_id:result.user_id,
-                          total_comment:""
-                        });
-
+                     if(tank.original_postid=="" || tank.original_postid==null)
+                     {var sharepost = new userPosts(
+                                             { 
+                                               user_id:userid,
+                                               post: comment,
+                                               time:milliseconds,
+                                               user_first_name: shareuser.first_name,
+                                               user_last_name:shareuser.last_name,
+                                               user_profile_picture_url:shareuser.profile_picture_url,
+                                               total_likes:"",
+                                               total_share:"",
+                                               islike:false,
+                                               original_postid:result._id,
+                                               original_user_first_name: result.user_first_name,
+                                               original_user_last_name:result.user_last_name,
+                                               original_user_id:result.user_id,
+                                               total_comment:""
+                                             });
+                     }
+                     else
+                     {
+                        var sharepost = new userPosts(
+                                             { 
+                                               user_id:userid,
+                                               post: comment,
+                                               time:milliseconds,
+                                               user_first_name: shareuser.first_name,
+                                               user_last_name:shareuser.last_name,
+                                               user_profile_picture_url:shareuser.profile_picture_url,
+                                               total_likes:"",
+                                               total_share:"",
+                                               islike:false,
+                                               original_postid:tank.original_postid,
+                                               original_user_first_name: tank.original_user_first_name,
+                                               original_user_last_name:tank.original_user_last_name,
+                                               original_user_id:tank.original_user_id,
+                                               total_comment:""
+                                             });
+                     }
+                     idForNotification = result.user_id;
                      userPosts.findByIdAndUpdate(post_id,{$push:
                           {
                             user_shares:
@@ -115,7 +138,7 @@ router.post("/share_post",function(req,res){
                                   if(tank1)
                                   {
                                       sharepost.save();
-                                      userCollection.findByIdAndUpdate(tank.user_id,
+                                      userCollection.findByIdAndUpdate(idForNotification,
                         {$push:
                           {
                             notification:{
@@ -136,9 +159,11 @@ router.post("/share_post",function(req,res){
               else
                 unseen= notify.unseen;
               unseen++;
-              userCollection.findByIdAndUpdate(shareuser._id,{$set: { "unseen": unseen}}, function(err,done){
-              if(done)
+              userCollection.findByIdAndUpdate(idForNotification,{$set: { "unseen": unseen}}, function(err,done){
+              if(done) 
                 res.send({"status" : true, "message":"sucessfully share"});
+              else if (err)
+                res.send({"status" : true, "message":err});
               });
             }
           });
