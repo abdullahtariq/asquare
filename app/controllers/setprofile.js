@@ -23,7 +23,7 @@ var storage = multer.diskStorage({
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    nameFile = milliseconds+"_"+file.originalname;
+    nameFile = (new Date).getTime()+"_"+file.originalname;
     cb(null,nameFile)
   }
 });

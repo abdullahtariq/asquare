@@ -9,7 +9,7 @@ var posts = new Schema({
         user_last_name:String,
         user_profile_picture_url:String,
         total_likes:String,
-
+        islike:Boolean,
 
         user_likes:[{
            like_user_id: String,

@@ -16,7 +16,8 @@ var users = new Schema({
   email_verified: Boolean,
   signup_time:String,
 
-
+  isfollow: Boolean,
+  
   total_follower: String,
 
   follower:[{
