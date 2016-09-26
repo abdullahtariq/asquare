@@ -16,9 +16,8 @@ module.exports.notification = function(socket){
 
     socket.on('notification', function (data) {
     
-    var obj = JSON.parse(data);
     
-    var userid= obj.userid;
+    var userid= data.userid;
     
  	if(userid=="")
     {
