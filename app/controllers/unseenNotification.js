@@ -12,13 +12,23 @@ module.exports = function (app) {
 
 
 
-module.exports.notification = function(socket){
+
+module.exports.notification = function(socket, connection){
 
     socket.on('notification', function (data) {
     
-    var obj = JSON.parse(data);
+    for (var i = 0; i < connection.length; i++) {
+      if(connection[i].userid==data.userid)
+      {
+        break;
+      }
+    }
+    if(i==0 || i==connection.length){
+      connection.push({socketId:socket.id,userid:data.userid});
+    }
     
-    var userid= obj.userid;
+    console.log(connection);
+    var userid= data.userid;
     
  	if(userid=="")
     {
@@ -44,4 +54,4 @@ module.exports.notification = function(socket){
     }
 
 });
-  }
+  } 

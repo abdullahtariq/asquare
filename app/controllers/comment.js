@@ -46,6 +46,77 @@ var upload = multer({ storage: storage });
  */
 
 
+
+
+
+/**
+ * @api {Socket} comment Request to comment a post 
+ * @apiName Comment a Post
+ * @apiGroup User_POST
+ *
+ * @apiParam {ID} userid login User Id.
+ * @apiParam {ID} post_id Post Id.
+ *
+ *
+ * @apiSuccess {Boolean} stauts  Response stauts.
+ * @apiSuccess {String} message  Response succussfully comment a post.
+ */
+
+module.exports.comment = function(socket,io,connection){
+  socket.on('comment', function (data) {
+    
+    var obj = JSON.parse(data);
+    var userid= obj.userid;
+    var post_id= obj.post_id;
+    userPosts.findOne({_id:post_id},function(err, result) {
+        if(err)
+        {
+          //socket.emit('notification', {"status" : false, "message" : "userid not exits"});
+        }
+        if (result)
+        {
+          comment_userid = result.user_id;
+          userCollection.findOne({_id:comment_userid}, function(err,found)
+            {
+              if(err)
+                console.log(err);
+              else if(found)
+               {
+                socket.emit('comment', {"status" : true, "message" : "succussfully commented"});
+                
+                var socketid;
+                for (var j = 0; j < connection.length; j++) {
+                         if(connection[j].userid==comment_userid)
+                         {
+                           socketid=connection[j].socketId;
+                           break;
+                         }
+                       }
+                if(j!=connection.length || i!=0)
+                   {
+                     socket.broadcast.to(socketid).emit('notification', {"status" : true, "message" : found.unseen});
+                   }
+                   else
+                   {
+                    console.log("socket not found");
+                   }
+              }
+              else
+              {
+                console.log("not found");
+              }
+            });
+        }
+        else
+        {
+          
+        }
+      });   
+    
+  });
+}
+
+
 router.post("/post_comment",upload.single('comment'), function(req,res){
     if(typeof req.body.userid=='undefined')
     {
