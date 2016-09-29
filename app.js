@@ -19,8 +19,14 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var notificationListener = require('./app/controllers/unseenNotification');
-//var postController = require('./app/controllers/posts');
-//var sharepostController = require('./app/controllers/share_post');
+
+connection = [];
+var likeListener = require('./app/controllers/likepost');
+var shareListener = require('./app/controllers/share_post');
+var followListener = require('./app/controllers/follow_friend');
+
+var postListener = require('./app/controllers/posts');
+var commentListener = require('./app/controllers/comment');
 
 //module.exports.sio = io;
 
@@ -35,8 +41,12 @@ io.on('connection', function (socket) {
 //  sharepostController.sharepost(socket);
   //postController.post(socket);
   
-  notificationListener.notification(socket);
-
+  notificationListener.notification(socket,connection);
+  likeListener.notification(socket,io,connection);
+  shareListener.sharepost(socket,io,connection);
+  followListener.follow(socket,io,connection);
+  postListener.post(socket,io,connection);
+  commentListener.comment(socket,io,connection);
   // when the client emits 'new message', this listens and executes
   /*socket.on('new message', function (data) {
     // we tell the client to execute 'new message'

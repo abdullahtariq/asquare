@@ -23,7 +23,7 @@ var storage = multer.diskStorage({
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    nameFile = req.body.userid+"_"+file.originalname;
+    nameFile = (new Date).getTime()+"_"+file.originalname;
     cb(null,nameFile)
   }
 });
@@ -71,7 +71,7 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
     }
 
     nameFile = "uploads/"+nameFile;
-    /*
+    
      userCollection.findOne({_id:userid}, function(err,foundUser){
       if(err)
         {res.send({"status":false, "message" : "not successfully updated"});}
@@ -87,7 +87,7 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
         }
       }
     });
-*/
+
 
     var path = file.originalname;
       userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: nameFile}}, function (err, tank) {
