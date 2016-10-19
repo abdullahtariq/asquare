@@ -10,7 +10,7 @@ var posts = new Schema({
         user_profile_picture_url:String,
         total_likes:String,
         islike:Boolean,
-
+        message:String,
         user_likes:[{
            like_user_id: String,
            like_user_first_name: String,
@@ -20,9 +20,16 @@ var posts = new Schema({
         }],
 
 
+        tags:[{
+          tag:String,
+        }],
+
+        total_seen:String,
 
         total_share:String,
         
+        code:String,
+        verify:Boolean,
 
         user_shares:[{
            share_post_id: String,           //  post id of post that new shared

@@ -557,6 +557,63 @@
   },
   {
     "type": "Post",
+    "url": "api/report",
+    "title": "Request to report a user",
+    "name": "report_post",
+    "group": "Report",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>User Post id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>post id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>User report message.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/report.js",
+    "groupTitle": "Report"
+  },
+  {
+    "type": "Post",
     "url": "api/seen",
     "title": "Request to notification Seen",
     "name": "Notification_seen",
@@ -899,6 +956,63 @@
   },
   {
     "type": "Post",
+    "url": "api/search",
+    "title": "Request to seacrh friends",
+    "name": "Search_friend",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "search",
+            "description": "<p>User Name of friend.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>Login user id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status of result.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>(_id,Name,Lname)  Response result(_id,first Name,Last name).</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/showme.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "Post",
     "url": "api/cover_picture",
     "title": "Request to Set Profile Cover",
     "name": "Set_cover_picture",
@@ -1083,6 +1197,56 @@
     "groupTitle": "User"
   },
   {
+    "type": "Socket",
+    "url": "comment",
+    "title": "Request to comment a post",
+    "name": "Comment_a_Post",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully comment a post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/comment.js",
+    "groupTitle": "User_POST"
+  },
+  {
     "type": "Post",
     "url": "api/post_comment",
     "title": "Request to comment a post",
@@ -1140,27 +1304,34 @@
     "groupTitle": "User_POST"
   },
   {
-    "type": "Socket",
-    "url": "comment",
-    "title": "Request to comment a post",
-    "name": "Comment_a_Post",
+    "type": "Post",
+    "url": "api/get_hashtag",
+    "title": "Request to Get Post on Tags",
+    "name": "Get_Post_On_HashTag",
     "group": "User_POST",
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "ID",
+            "type": "String",
             "optional": false,
-            "field": "userid",
-            "description": "<p>login User Id.</p>"
+            "field": "tag",
+            "description": "<p>HashTag name.</p>"
           },
           {
             "group": "Parameter",
-            "type": "ID",
+            "type": "Int",
             "optional": false,
-            "field": "post_id",
-            "description": "<p>Post Id.</p>"
+            "field": "offset",
+            "description": "<p>Offset.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "bucket",
+            "description": "<p>Bucket.</p>"
           }
         ]
       }
@@ -1172,21 +1343,21 @@
             "group": "Success 200",
             "type": "Boolean",
             "optional": false,
-            "field": "stauts",
-            "description": "<p>Response stauts.</p>"
+            "field": "status",
+            "description": "<p>Response status.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>Response succussfully comment a post.</p>"
+            "description": "<p>Response posts.</p>"
           }
         ]
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/comment.js",
+    "filename": "./app/controllers/getHashtag.js",
     "groupTitle": "User_POST"
   },
   {
@@ -1325,6 +1496,20 @@
             "optional": false,
             "field": "userid",
             "description": "<p>User Id .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "JSON",
+            "optional": false,
+            "field": "hashtags",
+            "description": "<p>User Hashtags.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>User message .</p>"
           }
         ]
       }
@@ -1504,6 +1689,49 @@
     "groupTitle": "User_POST"
   },
   {
+    "type": "Post",
+    "url": "api/seen",
+    "title": "Request to see post",
+    "name": "See_Posts",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully comment a post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/seen.js",
+    "groupTitle": "User_POST"
+  },
+  {
     "type": "Socket",
     "url": "sharepost",
     "title": "Request to Share post",
@@ -1551,6 +1779,63 @@
     },
     "version": "0.0.0",
     "filename": "./app/controllers/share_post.js",
+    "groupTitle": "User_POST"
+  },
+  {
+    "type": "Post",
+    "url": "api/time_line",
+    "title": "Request to Show time line posts",
+    "name": "Timeline_Posts",
+    "group": "User_POST",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "offset",
+            "description": "<p>Offset.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Int",
+            "optional": false,
+            "field": "bucket",
+            "description": "<p>Bucket.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully comment a post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/timeline.js",
     "groupTitle": "User_POST"
   },
   {

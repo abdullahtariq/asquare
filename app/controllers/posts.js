@@ -3,17 +3,17 @@ var express = require('express'),
   mongoose = require('mongoose'),
   userCollection = mongoose.model('users'),
   userPosts= mongoose.model('posts'),
+  userhashtags= mongoose.model('hashtag'),
   userfollow = mongoose.model('follows');
 
 module.exports = function (app) {
   app.use('/api', router);
 };
 
-
+var nameFile ;
 var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
 
-var nameFile ;
 var i = (Math.random() * 1000000) >>> 0;
 
 var storage = multer.diskStorage({
@@ -27,6 +27,20 @@ var storage = multer.diskStorage({
 });
  
 var upload = multer({ storage: storage });
+var fs = require('fs');
+    var AWS = require('aws-sdk');
+  // Declaring id's which we have created during amazon account creation
+    var accessKeyId =  'AKIAIOH43MOTPZH7W6KA';
+    var secretAccessKey = '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';
+    
+  // updating the config file
+    AWS.config.update({
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+    region : 'ap-south-1'
+    });
+
+    var s3 = new AWS.S3();
 
 /**
  * @api {Post} api/post Request to Add Post 
@@ -35,6 +49,8 @@ var upload = multer({ storage: storage });
  *
  * @apiParam {File} post User post vedio.
  * @apiParam {ID} userid User Id .
+ * @apiParam {JSON} hashtags User Hashtags.
+ * @apiParam {String} message User message .
  *
  *
  * @apiSuccess {Boolean} status True/false.
@@ -75,7 +91,7 @@ module.exports.post = function(socket,io,connection){
         {
           for (var i = 0; i < Object(result.follower).length; i++) {
             var socketid;
-            console.log(result.follower[i].following_id);
+            // console.log(result.follower[i].following_id);
             for (var j = 0; j < connection.length; j++) {
                      if(connection[j].userid==result.follower[i].following_id)
                      {
@@ -94,7 +110,7 @@ module.exports.post = function(socket,io,connection){
                     }
                     else if(err)
                     {
-                        console.log(err);
+                        // console.log(err);
                     }
                 });
                } 
@@ -118,24 +134,34 @@ module.exports.post = function(socket,io,connection){
 //  USER POSTS
 
 router.post("/post",upload.single('post'),function(req,res){
-//router.post("/post",function(req,res){
+// router.post("/post",function(req,res){
+    var text_message = "";
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false , "message" : "userid is undefined."});
         return;
     }
     else if(typeof req.file=='undefined')
-    //else if(typeof req.body.post=='undefined')
+    // else if(typeof req.body.post=='undefined')
     {
       res.send({"status" : false , "message" : "post is undefined."});
         return;
+    }
+    if(typeof req.body.message=='undefined')
+    {
+      text_message="";
+    }
+    else
+    {
+      text_message = req.body.message;
     }
     var file= req.file;
     var name;
     var path;
     userid = req.body.userid;
     post = req.body.post;
-    nameFile = "uploads/"+nameFile;
+    nameFile = "facingvideos/"+nameFile;
+    
     if(userid=="")
     {
         res.send({"status" : false, "message" : "userid empty"});
@@ -147,8 +173,7 @@ router.post("/post",upload.single('post'),function(req,res){
     }
     else
     { 
-      var path = file.originalname;
-      userCollection.findOne({_id:userid},function(err, result) {
+        userCollection.findOne({_id:userid},function(err, result) {
         if(err)
         {
             res.send({"status" : false, "message" : "userid not exits"});
@@ -156,11 +181,14 @@ router.post("/post",upload.single('post'),function(req,res){
         }
         if (result)
         {
+          var arr = new Array();
+          arr = req.body.hashtags;
           var milliseconds = (new Date).getTime();
           var user1 = new userPosts(
             { user_id:userid,
               post: nameFile,
-              //post: post,
+              // post: post,
+              message:text_message,
               time:milliseconds,
               user_first_name: result.first_name,
               user_last_name:result.last_name,
@@ -168,6 +196,7 @@ router.post("/post",upload.single('post'),function(req,res){
               total_likes:"",
               total_share:"",
               islike:false,
+              total_seen:"",
               total_comment:"",
               original_postid:null,
               original_user_first_name: null,
@@ -177,10 +206,10 @@ router.post("/post",upload.single('post'),function(req,res){
             });
           user1.save(function (err, posted) {
             if (err) {
-              console.log(err);
+              // console.log(err);
             } else {
               for (var i = 0; i < Object(result.follower).length; i++) {
-                console.log(Object(result.follower).length);
+                // console.log(Object(result.follower).length);
                  userCollection.update({_id:result.follower[i].following_id},{$push:
                           {
                             notification:{
@@ -195,18 +224,106 @@ router.post("/post",upload.single('post'),function(req,res){
           }}, function(err, notify){
             if(notify)
             {
-              console.log(notify);
+              // console.log(notify);
             }
             else
             {
             }
-            console.log(i);
+            // console.log(i);
           });
               }
-              res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
-            
+    
+
+
+              var file = req.files;
+    var filePath = file.files.path;
+    var fileExtension = path.extname(filePath);
+    
+  
+           // creating random number for unique file name
+      var randomNo = (Math.random() * 1000000) >>> 0;
+      var stream = fs.createReadStream(filePath);
+      // creating object to insert in bucket
+            var filename ='file_'+randomNo+ fileExtension;
+      var params = {
+                Bucket: 'facingvideos',
+                Key: nameFile,
+        ACL: 'public-read',
+                Body: stream
+            };
+
+    // putting object in bucket
+        s3.putObject(params, function (perr, pres) {             
+    
+
+
+              var hashtags = "";
+              if(typeof req.body.hashtags == 'undefined')
+              {
+                res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
+              }
+              else
+              {
+                hashtags = JSON.parse(req.body.hashtags);
+                Alltags = hashtags;
+                for (var i = 0; i < Object(Alltags).length; i++) {
+                    posted.tags.push(
+                                {
+                                  tag: Alltags[i],
+                                });
+                    posted.save();
+                }
+                 var tagsArray=new Array();
+                 var Alltags=new Array();
+                userhashtags.find(function(err, yes){
+                    if(yes==[] || Object(yes).length==0)
+                    {
+                     for (var i = 0; i < Object(hashtags).length; i++) {
+                            var newTag = new userhashtags({
+                                tag : hashtags[i],
+                                posts:{post_id: posted._id},
+                              });   
+                              newTag.save();
+                    }
+                    }
+                    else
+                    {
+                      for (var i = 0; i < Object(hashtags).length; i++) {
+                      userhashtags.update({tag: hashtags[i]},
+                            {$push:
+                              {
+                                posts:
+                                  {
+                                      post_id: posted._id,
+                                  }
+                        }},function(err, taginsert){
+                          if(err)
+                          {
+                            console.log("yeh masla tha");
+                          }
+                          else if(taginsert)
+                          {
+                             
+                          }
+                          else
+                          {
+                            var newTag = new userhashtags({
+                                tag : hashtags[i],
+                                posts:{post_id: posted._id},
+                              });   
+                              newTag.save();
+                          }
+                        });
+                    }
+                    }
+                });
+              }
+        });    
+            // console.log("Nai hoa...");
             }
           });
+        res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
+
         }
         else
         {

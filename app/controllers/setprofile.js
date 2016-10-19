@@ -92,58 +92,71 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
     var path = file.originalname;
       userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: nameFile}}, function (err, tank) {
           if (err) 
-            {res.send({"status":false, "message" : "not successfully updated"});}
+            {
+              res.send({"status":false, "message" : "not successfully updated"});
+              return;
+            }
           else
            {
-            
               userCollection.update( {"following":{"$elemMatch":{follower_id:userid}} },{ $set : { "following.$.profile_picture_url": nameFile}}, function(err, rest)
                 {
                   if(err)
                   {
                     res.send({"status" : false, "message" : err});
+                    return;
                   }
-                  else if(rest)
+                  else
                      {
                       userCollection.update( {"follower":{"$elemMatch":{following_id:userid}} },{ $set : { "follower.$.profile_picture_url": nameFile}}, function(err, rest)
                         {
                           if(err)
                           {
                             res.send({"status" : false, "message" : err});
+                            return;
                           }
-                          else if(rest)
+                          else
                              {
                                 userPosts.update( {"user_comment":{"$elemMatch":{comment_user_id:userid}} },{ $set : { "user_comment.$.comment_profile_pic_url": nameFile}}, function(err, rest)
                                   {
                                     if(err)
                                     {
                                       res.send({"status" : false, "message" : err});
+                                      return;
                                     }
-                                    else if(rest)
+                                    else
                                        {
-                                          userPosts.update( {"user_likes":{"$elemMatch":{like_user_id:userid}} },{ $set : { "user_likes.$.like_profile_pic_url": nameFile}}, function(err, rest)
+                                          userPosts.update( {"user_likes":{"$elemMatch":{like_user_id:userid}} },{ $set : { "user_likes.$.like_profile_picture_url": nameFile}}, function(err, rest)
                                           {
                                             if(err)
                                             {
                                               res.send({"status" : false, "message" : err});
+                                              return;
                                             }
-                                            else if(rest)
+                                            else
                                                {
-                                                userPosts.update( {"user_shares":{"$elemMatch":{share_user_id:userid}} },{ $set : { "user_shares.$.share_profile_pic_url": nameFile}}, function(err, rest)
+                                                userPosts.update( {"user_shares":{"$elemMatch":{share_user_id:userid}} },{ $set : { "user_shares.$.share_profile_picture_url": nameFile}}, function(err, rest)
                                                   {
                                                     if(err)
                                                     {
                                                       res.send({"status" : false, "message" : err});
+                                                      return;
                                                     }
-                                                    else if(rest)
+                                                    else
                                                        {
-                                                          userPosts.update( {user_id:userid },{ $set : { "user_profile_pic_url": nameFile}}, function(err, rest)
+                                                          userPosts.update( {user_id:userid },{ $set : { "user_profile_picture_url": nameFile}}, function(err, rest)
                                                             {
                                                               if(err)
                                                               {
                                                                 res.send({"status" : false, "message" : err});
+                                                                return;
                                                               }
                                                               else if(rest)
-                                                                 {res.send({"status" : true, "message" : "Successfully updated profile picture"});}
+                                                                 {
+                                                                  res.send({"status" : true, "message" : "Successfully updated profile picture"});
+                                                                }
+                                                                else
+                                                                {
+                                                                }
                                                             });
                                                        }
                                                   });
@@ -155,9 +168,6 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
                         });          
                      }
                 });
-
-
-
            }
         });
       });

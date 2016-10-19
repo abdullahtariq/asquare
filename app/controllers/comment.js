@@ -21,7 +21,7 @@ var storage = multer.diskStorage({
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    nameFile = i+"_"+file.originalname;
+   nameFile = (new Date).getTime()+"_"+file.originalname;
     cb(null,nameFile)
   }
 });
@@ -68,6 +68,7 @@ module.exports.comment = function(socket,io,connection){
     var obj = JSON.parse(data);
     var userid= obj.userid;
     var post_id= obj.post_id;
+
     userPosts.findOne({_id:post_id},function(err, result) {
         if(err)
         {
@@ -156,6 +157,7 @@ router.post("/post_comment",upload.single('comment'), function(req,res){
     }
     var first_name,last_name;
     var path = file.originalname;
+    nameFile = "uploads/"+nameFile;
     userCollection.findOne({_id: userid}, function(err, commentuser) {
           if(err)
           {

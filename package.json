@@ -19,7 +19,10 @@
     "multer": "^1.2.0",
     "node.extend": "^1.1.5",
     "serve-favicon": "^2.3.0",
-    "socket.io": "^1.4.8"
+    "socket.io": "^1.4.8",
+    "debug": "~2.2.0",
+    "kerberos": "~0.0.17",
+    "aws-sdk" : "2.x"
   },
   "devDependencies": {
     "gapidoc": "^0.1.1",
