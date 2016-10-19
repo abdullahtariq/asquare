@@ -10,7 +10,8 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
-var nameFile ;
+var nameFile;
+var Original;
 var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
 
@@ -25,13 +26,14 @@ var storage = multer.diskStorage({
     cb(null,nameFile)
   }
 });
- 
-var upload = multer({ storage: storage });
-var fs = require('fs');
+
+
+var path = require('path');
+    var fs = require('fs');
     var AWS = require('aws-sdk');
   // Declaring id's which we have created during amazon account creation
-    var accessKeyId =  'AKIAIOH43MOTPZH7W6KA';
-    var secretAccessKey = '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';
+    var accessKeyId =  'AKIAJ3V7YLXZFPMYA7RQ';
+    var secretAccessKey = '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';
     
   // updating the config file
     AWS.config.update({
@@ -40,6 +42,7 @@ var fs = require('fs');
     region : 'ap-south-1'
     });
 
+var upload = multer({ storage: storage });
     var s3 = new AWS.S3();
 
 /**
@@ -141,12 +144,6 @@ router.post("/post",upload.single('post'),function(req,res){
       res.send({"status" : false , "message" : "userid is undefined."});
         return;
     }
-    else if(typeof req.file=='undefined')
-    // else if(typeof req.body.post=='undefined')
-    {
-      res.send({"status" : false , "message" : "post is undefined."});
-        return;
-    }
     if(typeof req.body.message=='undefined')
     {
       text_message="";
@@ -155,12 +152,13 @@ router.post("/post",upload.single('post'),function(req,res){
     {
       text_message = req.body.message;
     }
-    var file= req.file;
+    
     var name;
     var path;
     userid = req.body.userid;
     post = req.body.post;
-    nameFile = "facingvideos/"+nameFile;
+    Original = nameFile;
+    nameFile = "https://s3.ap-south-1.amazonaws.com/facingvideos/"+nameFile;
     
     if(userid=="")
     {
@@ -172,7 +170,24 @@ router.post("/post",upload.single('post'),function(req,res){
         return;
     }
     else
-    { 
+    {
+      // res.send(req.file);
+    var file = req.file;
+    var filePath = req.file.path;
+    // var fileExtension = path.extname(filePath);
+    
+  
+           // creating random number for unique file name
+      // var randomNo = (Math.random() * 1000000) >>> 0;
+      var stream = fs.createReadStream(filePath)
+      // creating object to insert in bucket
+            console.log(req.file.path);
+            var params = {
+                Bucket: 'facingvideos',
+                Key: Original,
+                ACL: 'public-read',
+                Body: stream
+            }; 
         userCollection.findOne({_id:userid},function(err, result) {
         if(err)
         {
@@ -235,32 +250,14 @@ router.post("/post",upload.single('post'),function(req,res){
     
 
 
-              var file = req.files;
-    var filePath = file.files.path;
-    var fileExtension = path.extname(filePath);
-    
-  
-           // creating random number for unique file name
-      var randomNo = (Math.random() * 1000000) >>> 0;
-      var stream = fs.createReadStream(filePath);
-      // creating object to insert in bucket
-            var filename ='file_'+randomNo+ fileExtension;
-      var params = {
-                Bucket: 'facingvideos',
-                Key: nameFile,
-        ACL: 'public-read',
-                Body: stream
-            };
-
+           
     // putting object in bucket
         s3.putObject(params, function (perr, pres) {             
-    
-
-
               var hashtags = "";
               if(typeof req.body.hashtags == 'undefined')
               {
                 res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
+                return;
               }
               else
               {
@@ -318,11 +315,11 @@ router.post("/post",upload.single('post'),function(req,res){
                     }
                 });
               }
+        res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
         });    
-            // console.log("Nai hoa...");
+        //     // console.log("Nai hoa...");
             }
           });
-        res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
 
         }
         else
