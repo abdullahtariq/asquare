@@ -10,40 +10,40 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
-var nameFile;
-var Original;
-var multer  = require('multer');
-var upload = multer({ dest: 'public/uploads/' });
+// var nameFile;
+// var Original;
+// var multer  = require('multer');
+// var upload = multer({ dest: 'public/uploads/' });
 
-var i = (Math.random() * 1000000) >>> 0;
+// var i = (Math.random() * 1000000) >>> 0;
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads/')
-  },
-  filename: function (req, file, cb) {
-    nameFile = (new Date).getTime()+"_"+file.originalname;
-    cb(null,nameFile)
-  }
-});
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'public/uploads/')
+//   },
+//   filename: function (req, file, cb) {
+//     nameFile = (new Date).getTime()+"_"+file.originalname;
+//     cb(null,nameFile)
+//   }
+// });
 
 
-var path = require('path');
-    var fs = require('fs');
-    var AWS = require('aws-sdk');
-  // Declaring id's which we have created during amazon account creation
-    var accessKeyId =  'AKIAJ3V7YLXZFPMYA7RQ';
-    var secretAccessKey = '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';
+// var path = require('path');
+//     var fs = require('fs');
+//     var AWS = require('aws-sdk');
+//   // Declaring id's which we have created during amazon account creation
+//     var accessKeyId =  'AKIAJ3V7YLXZFPMYA7RQ';
+//     var secretAccessKey = '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';
     
-  // updating the config file
-    AWS.config.update({
-        accessKeyId: accessKeyId,
-        secretAccessKey: secretAccessKey,
-    region : 'ap-south-1'
-    });
+//   // updating the config file
+//     AWS.config.update({
+//         accessKeyId: accessKeyId,
+//         secretAccessKey: secretAccessKey,
+//     region : 'ap-south-1'
+//     });
 
-var upload = multer({ storage: storage });
-    var s3 = new AWS.S3();
+// var upload = multer({ storage: storage });
+//     var s3 = new AWS.S3();
 
 /**
  * @api {Post} api/post Request to Add Post 
@@ -136,8 +136,8 @@ module.exports.post = function(socket,io,connection){
 
 //  USER POSTS
 
-router.post("/post",upload.single('post'),function(req,res){
-// router.post("/post",function(req,res){
+// router.post("/post",upload.single('post'),function(req,res){
+router.post("/post",function(req,res){
     var text_message = "";
     if(typeof req.body.userid=='undefined')
     {
@@ -157,8 +157,9 @@ router.post("/post",upload.single('post'),function(req,res){
     var path;
     userid = req.body.userid;
     post = req.body.post;
-    Original = nameFile;
-    nameFile = "https://s3.ap-south-1.amazonaws.com/facingvideos/"+nameFile;
+    
+    // Original = nameFile;
+    // nameFile = "https://s3.ap-south-1.amazonaws.com/facingvideos/"+nameFile;
     
     if(userid=="")
     {
@@ -172,22 +173,24 @@ router.post("/post",upload.single('post'),function(req,res){
     else
     {
       // res.send(req.file);
-    var file = req.file;
-    var filePath = req.file.path;
+
+    // var file = req.file;
+    // var filePath = req.file.path;
+
     // var fileExtension = path.extname(filePath);
     
   
            // creating random number for unique file name
       // var randomNo = (Math.random() * 1000000) >>> 0;
-      var stream = fs.createReadStream(filePath)
-      // creating object to insert in bucket
-            console.log(req.file.path);
-            var params = {
-                Bucket: 'facingvideos',
-                Key: Original,
-                ACL: 'public-read',
-                Body: stream
-            }; 
+      // var stream = fs.createReadStream(filePath)
+      // // creating object to insert in bucket
+      //       console.log(req.file.path);
+      //       var params = {
+      //           Bucket: 'facingvideos',
+      //           Key: Original,
+      //           ACL: 'public-read',
+      //           Body: stream
+      //       }; 
         userCollection.findOne({_id:userid},function(err, result) {
         if(err)
         {
@@ -201,8 +204,8 @@ router.post("/post",upload.single('post'),function(req,res){
           var milliseconds = (new Date).getTime();
           var user1 = new userPosts(
             { user_id:userid,
-              post: nameFile,
-              // post: post,
+              // post: nameFile,
+              post: post,
               message:text_message,
               time:milliseconds,
               user_first_name: result.first_name,
@@ -252,7 +255,7 @@ router.post("/post",upload.single('post'),function(req,res){
 
            
     // putting object in bucket
-        s3.putObject(params, function (perr, pres) {             
+        // s3.putObject(params, function (perr, pres) {             
               var hashtags = "";
               if(typeof req.body.hashtags == 'undefined')
               {
@@ -316,7 +319,7 @@ router.post("/post",upload.single('post'),function(req,res){
                 });
               }
         res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
-        });    
+        // });    
         //     // console.log("Nai hoa...");
             }
           });
