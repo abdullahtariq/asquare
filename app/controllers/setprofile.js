@@ -36,7 +36,7 @@ module.exports = function (app) {
  * @apiGroup User
  *
  * @apiParam {ID} userid User login id.
- * @apiParam {String} picture_link User Profile picture.
+ * @apiParam {String} picture User Profile picture.
  *
  *
  * @apiSuccess {Boolean} status True/false.
@@ -59,13 +59,8 @@ module.exports = function (app) {
         res.send({"status" : false , "message" : "userid is not given."});
         return;
     }
-    else if(req.file=="")
-    {
-        res.send({"status" : false , "message" : " profile pic not given."});
-        return;
-    }
-
-    var nameFile = req.picture_link;
+ 
+    var nameFile = req.picture;
     
     //  userCollection.findOne({_id:userid}, function(err,foundUser){
     //   if(err)
