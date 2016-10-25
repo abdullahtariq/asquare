@@ -163,11 +163,6 @@ router.post("/post",function(req,res){
     {
         res.send({"status" : false, "message" : "userid empty"});
     }
-    else if(req.file=="")
-    {
-        res.send({"status" : false , "message" : " post not given."});
-        return;
-    }
     else
     {
         userCollection.findOne({_id:userid},function(err, result) {
