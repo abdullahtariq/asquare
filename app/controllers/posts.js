@@ -28,22 +28,6 @@ module.exports = function (app) {
 // });
 
 
-// var path = require('path');
-//     var fs = require('fs');
-//     var AWS = require('aws-sdk');
-//   // Declaring id's which we have created during amazon account creation
-//     var accessKeyId =  'AKIAJ3V7YLXZFPMYA7RQ';
-//     var secretAccessKey = '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';
-    
-//   // updating the config file
-//     AWS.config.update({
-//         accessKeyId: accessKeyId,
-//         secretAccessKey: secretAccessKey,
-//     region : 'ap-south-1'
-//     });
-
-// var upload = multer({ storage: storage });
-//     var s3 = new AWS.S3();
 
 /**
  * @api {Post} api/post Request to Add Post 
@@ -136,7 +120,6 @@ module.exports.post = function(socket,io,connection){
 
 //  USER POSTS
 
-// router.post("/post",upload.single('post'),function(req,res){
 router.post("/post",function(req,res){
     var text_message = "";
     if(typeof req.body.userid=='undefined')
@@ -228,8 +211,6 @@ router.post("/post",function(req,res){
 
 
            
-    // putting object in bucket
-        // s3.putObject(params, function (perr, pres) {             
               var hashtags = "";
               if(typeof req.body.hashtags == 'undefined')
               {
@@ -293,8 +274,6 @@ router.post("/post",function(req,res){
                 });
               }
         res.send({"status" : true, "message" : "Successfully Posted" , "userid" : userid});
-        // });    
-        //     // console.log("Nai hoa...");
             }
           });
 
