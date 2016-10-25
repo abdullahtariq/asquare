@@ -158,8 +158,6 @@ router.post("/post",function(req,res){
     userid = req.body.userid;
     post = req.body.post;
     
-    // Original = nameFile;
-    // nameFile = "https://s3.ap-south-1.amazonaws.com/facingvideos/"+nameFile;
     
     if(userid=="")
     {
@@ -172,25 +170,6 @@ router.post("/post",function(req,res){
     }
     else
     {
-      // res.send(req.file);
-
-    // var file = req.file;
-    // var filePath = req.file.path;
-
-    // var fileExtension = path.extname(filePath);
-    
-  
-           // creating random number for unique file name
-      // var randomNo = (Math.random() * 1000000) >>> 0;
-      // var stream = fs.createReadStream(filePath)
-      // // creating object to insert in bucket
-      //       console.log(req.file.path);
-      //       var params = {
-      //           Bucket: 'facingvideos',
-      //           Key: Original,
-      //           ACL: 'public-read',
-      //           Body: stream
-      //       }; 
         userCollection.findOne({_id:userid},function(err, result) {
         if(err)
         {
