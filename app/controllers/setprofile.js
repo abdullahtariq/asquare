@@ -15,20 +15,20 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
-var nameFile ;
-var milliseconds = (new Date).getTime();
+// var nameFile ;
+// var milliseconds = (new Date).getTime();
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads/')
-  },
-  filename: function (req, file, cb) {
-    nameFile = (new Date).getTime()+"_"+file.originalname;
-    cb(null,nameFile)
-  }
-});
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'public/uploads/')
+//   },
+//   filename: function (req, file, cb) {
+//     nameFile = (new Date).getTime()+"_"+file.originalname;
+//     cb(null,nameFile)
+//   }
+// });
  
-var upload = multer({ storage: storage });
+// var upload = multer({ storage: storage });
 
 /**
  * @api {Post} api/set_profilepicture Request to Set User Profile
@@ -36,7 +36,7 @@ var upload = multer({ storage: storage });
  * @apiGroup User
  *
  * @apiParam {ID} userid User login id.
- * @apiParam {File} picture User Profile picture.
+ * @apiParam {String} picture_link User Profile picture.
  *
  *
  * @apiSuccess {Boolean} status True/false.
@@ -44,21 +44,16 @@ var upload = multer({ storage: storage });
  */
 
 
-router.post("/set_profilepicture",upload.single('picture'), function(req,res){
+// router.post("/set_profilepicture",upload.single('picture'), function(req,res){
+  router.post("/set_profilepicture", function(req,res){
     if(typeof req.body.userid=='undefined')
     {
       res.send({"status" : false , "message" : "userid is undefined."});
         return;
     }
-    else if(typeof req.file=='undefined')
-    {
-      res.send({"status" : false , "message" : "picture is undefined."});
-        return;
-    }
+
     var userid= req.body.userid;
-    var file= req.file;
-    var name;
-    var path;
+    
     if(userid=="")
     {
         res.send({"status" : false , "message" : "userid is not given."});
@@ -70,26 +65,25 @@ router.post("/set_profilepicture",upload.single('picture'), function(req,res){
         return;
     }
 
-    nameFile = "uploads/"+nameFile;
+    var nameFile = req.picture_link;
     
-     userCollection.findOne({_id:userid}, function(err,foundUser){
-      if(err)
-        {res.send({"status":false, "message" : "not successfully updated"});}
-      else if(foundUser)
-      {
-        var oldPath = foundUser.profile_picture_url;
-        if(oldPath!=defaultPath)
-        {
-          fs.unlink("public\\"+oldPath,function(err){
-                if(err) return console.log(err);
-                console.log('file deleted successfully');
-           }); 
-        }
-      }
-    });
+    //  userCollection.findOne({_id:userid}, function(err,foundUser){
+    //   if(err)
+    //     {res.send({"status":false, "message" : "not successfully updated"});}
+    //   else if(foundUser)
+    //   {
+    //     var oldPath = foundUser.profile_picture_url;
+    //     if(oldPath!=defaultPath)
+    //     {
+    //       fs.unlink("public\\"+oldPath,function(err){
+    //             if(err) return console.log(err);
+    //             console.log('file deleted successfully');
+    //        }); 
+    //     }
+    //   }
+    // });
 
 
-    var path = file.originalname;
       userCollection.findByIdAndUpdate(userid, { $set: { profile_picture_url: nameFile}}, function (err, tank) {
           if (err) 
             {
