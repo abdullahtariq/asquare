@@ -1079,7 +1079,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "File",
+            "type": "String",
             "optional": false,
             "field": "picture",
             "description": "<p>User Profile picture.</p>"
