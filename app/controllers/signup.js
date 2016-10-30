@@ -156,15 +156,15 @@ router.post("/register", function(req,res){
 //   console.log(response.body)
 //   console.log(response.headers)
 // })
-                  //   user1.save(function (err, result) {
-                  //   if (err) {
-                  //   console.log(err);
-                  //   } else {
+                    user1.save(function (err, result) {
+                    if (err) {
+                    console.log(err);
+                    } else {
 
-//                    console.log("hpe you good");
+                   console.log("hpe you good");
                          res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
-                  //   }
-    //               // });
+                    }
+                  });
     //     }
     //     else
     //     {
