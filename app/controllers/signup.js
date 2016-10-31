@@ -80,19 +80,19 @@ router.post("/register", function(req,res){
         res.send({"status" : false , "message" : "Password field is empty."});
         return;
     }
-    userCollection.findOne({email:email},function(err, result) {
-    if(err)
-    {
-      console.log("Not found");
-    }
-    if (result)
-    {
-      res.send({"status" : false , "message" : "User Already exits"});
-        return;
-    }
-    else
-    {
-        var milliseconds = (new Date).getTime();
+    // userCollection.findOne({email:email},function(err, result) {
+    // if(err)
+    // {
+    //   console.log("Not found");
+    // }
+    // if (result)
+    // {
+    //   res.send({"status" : false , "message" : "User Already exits"});
+    //     return;
+    // }
+    // else
+    // {
+    //     var milliseconds = (new Date).getTime();
       var user1 = new userCollection(
       {
         first_name: user,
@@ -172,8 +172,8 @@ router.post("/register", function(req,res){
     //         return;
     //     }
     // // }
-    }
+    // }
   });
-});
+// });
 
 
