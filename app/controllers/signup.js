@@ -171,7 +171,7 @@ sg.API(request, function(error, response) {
             res.send({"status" : false , "message" : "email is not valid"});
             return;
         }
-    // }
+    }
     }
   });
 });
