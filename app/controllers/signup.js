@@ -80,19 +80,19 @@ router.post("/register", function(req,res){
         res.send({"status" : false , "message" : "Password field is empty."});
         return;
     }
-    // userCollection.findOne({email:email},function(err, result) {
-    // if(err)
-    // {
-    //   console.log("Not found");
-    // }
-    // if (result)
-    // {
-    //   res.send({"status" : false , "message" : "User Already exits"});
-    //     return;
-    // }
-    // else
-    // {
-    //     var milliseconds = (new Date).getTime();
+    userCollection.findOne({email:email},function(err, result) {
+    if(err)
+    {
+      console.log("Not found");
+    }
+    if (result)
+    {
+      res.send({"status" : false , "message" : "User Already exits"});
+        return;
+    }
+    else
+    {
+        var milliseconds = (new Date).getTime();
       var user1 = new userCollection(
       {
         first_name: user,
@@ -114,10 +114,10 @@ router.post("/register", function(req,res){
         unseen : "",
     });
 
-    // if (password.length < 8) {
-    //     res.send({"status" : false , "message" : "password should contain 8 characters"});
-    //     return;
-    // }
+    if (password.length < 8) {
+        res.send({"status" : false , "message" : "password should contain 8 characters"});
+        return;
+    }
     // else if (password.search(/[A-Z]/) < 0) {
     //     res.send({"status" : false , "message" : "password should contain upper case letter"});
     //     return;
@@ -130,32 +130,32 @@ router.post("/register", function(req,res){
     //     res.send({"status" : false , "message" : "password should contain atleast a number"});
     //     return;
     // }
-    // else
-    // {
-        // var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        // var isValidEmail = re.test(email);
-        // if(isValidEmail)
-        // {
-        //    var helper = require('sendgrid').mail
+    else
+    {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var isValidEmail = re.test(email);
+        if(isValidEmail)
+        {
+           var helper = require('sendgrid').mail
   
-// from_email = new helper.Email("zulqarnainnazir1@gmail.com")
-// to_email = new helper.Email("zulqarnainnazir4@gmail.com")
-// subject = "Sending with SendGrid is Fun"
-// content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js")
-// mail = new helper.Mail(from_email, subject, to_email, content)
+from_email = new helper.Email("zulqarnainnazir1@gmail.com")
+to_email = new helper.Email("zulqarnainnazir4@gmail.com")
+subject = "Sending with SendGrid is Fun"
+content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js")
+mail = new helper.Mail(from_email, subject, to_email, content)
 
-// var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-// var request = sg.emptyRequest({
-//   method: 'POST',
-//   path: '/v3/mail/send',
-//   body: mail.toJSON()
-// });
+var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+var request = sg.emptyRequest({
+  method: 'POST',
+  path: '/v3/mail/send',
+  body: mail.toJSON()
+});
 
-// sg.API(request, function(error, response) {
-//   console.log(response.statusCode)
-//   console.log(response.body)
-//   console.log(response.headers)
-// })
+sg.API(request, function(error, response) {
+  console.log(response.statusCode)
+  console.log(response.body)
+  console.log(response.headers)
+})
                     user1.save(function (err, result) {
                     if (err) {
                     console.log(err);
@@ -165,15 +165,15 @@ router.post("/register", function(req,res){
                          res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
                     }
                   });
-    //     }
-    //     else
-    //     {
-    //         res.send({"status" : false , "message" : "email is not valid"});
-    //         return;
-    //     }
-    // // }
-    // }
+        }
+        else
+        {
+            res.send({"status" : false , "message" : "email is not valid"});
+            return;
+        }
+    }
+    }
   });
-// });
+});
 
 
