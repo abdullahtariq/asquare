@@ -136,32 +136,31 @@ router.post("/register", function(req,res){
         var isValidEmail = re.test(email);
         if(isValidEmail)
         {
-           var helper = require('sendgrid').mail
+//            var helper = require('sendgrid').mail
   
-from_email = new helper.Email("zulqarnainnazir1@gmail.com")
-to_email = new helper.Email("zulqarnainnazir4@gmail.com")
-subject = "Sending with SendGrid is Fun"
-content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js")
-mail = new helper.Mail(from_email, subject, to_email, content)
+// from_email = new helper.Email("zulqarnainnazir1@gmail.com")
+// to_email = new helper.Email("zulqarnainnazir4@gmail.com")
+// subject = "Sending with SendGrid is Fun"
+// content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js")
+// mail = new helper.Mail(from_email, subject, to_email, content)
 
-var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-var request = sg.emptyRequest({
-  method: 'POST',
-  path: '/v3/mail/send',
-  body: mail.toJSON()
-});
+// var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+// var request = sg.emptyRequest({
+//   method: 'POST',
+//   path: '/v3/mail/send',
+//   body: mail.toJSON()
+// });
 
-sg.API(request, function(error, response) {
-  console.log(response.statusCode)
-  console.log(response.body)
-  console.log(response.headers)
-})
+// sg.API(request, function(error, response) {
+//   console.log(response.statusCode)
+//   console.log(response.body)
+//   console.log(response.headers)
+// })
                     user1.save(function (err, result) {
                     if (err) {
                     console.log(err);
                     } else {
 
-                   console.log("hpe you good");
                          res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
                     }
                   });
