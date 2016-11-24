@@ -1510,6 +1510,13 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>User message .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "thumbnail",
+            "description": "<p>User thumbnail .</p>"
           }
         ]
       }
