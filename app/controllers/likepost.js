@@ -10,31 +10,43 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
+/**
+ * @api {Post} api/likepost Request to like a user post
+ * @apiName Like post
+ * @apiGroup User_POST
+ *
+ * @apiParam {ID} post_id User Post id.
+ * @apiParam {ID} userid User Who like post.
+ *
+ *
+ * @apiSuccess {Boolean} status True/false.
+ * @apiSuccess {String} message  Response message.
+ */
 
 
-module.exports.likepost = function(socket){
-
-    socket.on('new message', function (data) {
-    
-    var obj = JSON.parse(data);
-    
-    var post_id= obj.post_id;
-    var userid= obj.userid;
+router.post("/likepost", function(req,res){
+    if(typeof req.body.post_id=='undefined')
+    {
+        res.send({"status" : false , "message" : "post id is not given"});
+        return;
+    }
+    else if(typeof req.body.userid=='undefined')
+    {
+        res.send({"status" : false , "message" : "userid is not given"});
+        return;
+    }
+    var post_id= req.body.post_id;
+    var userid= req.body.userid;
     var total_likes=0;
     if(post_id=="")
     {
-        socket.emit('new message', {
-                                  "status": false,
-                                  "message": "post_id is not given"
-                                });
+        res.send({"status" : false , "message" : "post id is not given"});
         return;
     }
     else if( userid == "")
     {
-        socket.emit('new message', {
-                                  "status": false,
-                                  "message": "userid is not given"
-                                });
+        res.send({"status" : false , "message" : "User id is not given "});
+        return;
     }
 
 
@@ -42,14 +54,12 @@ module.exports.likepost = function(socket){
      userCollection.findOne({_id: userid}, function(err, result) {
           if(err)
           {
+            console.log("Not found");
             return;
           }
           if (!result)
           {
-            socket.emit('new message', {
-                                  "status": false,
-                                  "message": "not user exits with this id"
-                                });
+            res.send({"status":false ,"message":"not user exits with this id"});
             return;
           }
           else
@@ -57,10 +67,7 @@ module.exports.likepost = function(socket){
             userPosts.findOne({_id: post_id},function(err, post) {
               if(err)
               {
-                  socket.emit('new message', {
-                                  "status": false,
-                                  "message": err
-                                });
+                res.send({"status":false, "message":err});
               }
               if (post)
               {  
@@ -76,21 +83,14 @@ module.exports.likepost = function(socket){
                   
 
 
-                  userPosts.findOne({_id:post_id, "user_likes.like_user_id":userid},  function(err, userlike) {
+                  userPosts.findOne({"user_likes.like_user_id":userid},  function(err, userlike) {
                     if(err)
                     {
-                      socket.emit('new message', {
-                                  "status": false,
-                                  "message": err
-                                });
+                      res.send({"status":false, "message":err});
                     }
                     if (userlike)
                     {  
-                        socket.emit('new message', {
-                                  "status": false,
-                                  "message": "you have already like this post"
-                                });
-                        console.log("already");
+                        res.send({"status":false, "message":"already like"});
                     }
                     else
                     {
@@ -109,35 +109,12 @@ module.exports.likepost = function(socket){
                         function(err,yes){
                         if(err)
                         {
-                            socket.emit('new message', {
-                                  "status": false,
-                                  "message": err
-                                });
+                            res.send({"status" : false,"message" : err});
                             return;         
                         }
                         else{
-                          userCollection.findByIdAndUpdate(post.user_id,
-                        {$push:
-                          {
-                            notification:{
-                                  userid: userid,
-                                  post_id: post_id,
-                                  user_first_name: result.first_name,
-                                  user_last_name: result.last_name,
-                                  notification: "like",
-                                  notification_time:milliseconds,
-                                  notification_seen:false
-                              }
-          }}, function(err, notify){
-            if(notify)
-            {
-                socket.emit('new message', {
-                      "status": true,
-                      message: "user like sucessfully"
-                    });
-                console.log("aya");
-            }
-          });
+                            res.send({"status" : true,"message" : "sucessfully like"});
+                            return;          
                         }
                        });                                
                     }
@@ -145,13 +122,9 @@ module.exports.likepost = function(socket){
               }
               else
               {
-                socket.emit('new message', {
-                                  "status": false,
-                                  "message": "no post exits with this id"
-                                });
+                  res.send({"status":false, "message":"no post exits with this id"});   
               }   
               });
           }
-      });
+      }); 
 });
-  }
