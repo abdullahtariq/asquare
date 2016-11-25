@@ -27,6 +27,7 @@ var posts = new Schema({
         total_seen:String,
 
         total_share:String,
+        thumbnail:String,
         
         code:String,
         verify:Boolean,
