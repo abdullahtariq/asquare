@@ -38,6 +38,7 @@ module.exports = function (app) {
  * @apiParam {ID} userid User Id .
  * @apiParam {JSON} hashtags User Hashtags.
  * @apiParam {String} message User message .
+ * @apiParam {String} thumbnail User thumbnail .
  *
  *
  * @apiSuccess {Boolean} status True/false.
@@ -156,6 +157,7 @@ router.post("/post",function(req,res){
         }
         if (result)
         {
+          var thumbnail = req.body.thumbnail;
           var arr = new Array();
           arr = req.body.hashtags;
           var milliseconds = (new Date).getTime();
@@ -171,6 +173,7 @@ router.post("/post",function(req,res){
               total_likes:"",
               total_share:"",
               islike:false,
+              thumbnail:thumbnail,
               total_seen:"",
               total_comment:"",
               original_postid:null,
