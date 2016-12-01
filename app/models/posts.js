@@ -11,6 +11,9 @@ var posts = new Schema({
         total_likes:String,
         islike:Boolean,
         message:String,
+        user_message:String,
+        original_post_time:String,
+        original_pic_url:String,
         user_likes:[{
            like_user_id: String,
            like_user_first_name: String,

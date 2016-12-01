@@ -52,7 +52,7 @@ module.exports = function (app) {
  /**
  * @api {Socket} post Request to Add Post 
  * @apiName Post
- * @apiGroup User_POST
+ * @apiGroup SOCKET
  *
  * @apiParam {ID} userid User Id .
  *
