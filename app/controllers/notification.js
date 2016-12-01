@@ -29,7 +29,7 @@ module.exports = function (app) {
 /**
  * @api {Socket} notification To see number of unreadable notification
  * @apiName Number of unseen notification
- * @apiGroup USER_NOTIFICATIONS
+ * @apiGroup SOCKET
  *
  * @apiParam {ID} userid User Id.
  *
@@ -79,7 +79,8 @@ router.post("/notification", function(req,res){
 
 
 
-    userCollection.findOne({_id:userid},{notification:{$slice: [parseInt(offset), parseInt(bucket)]}},{sort: {notification_time: -1 }},function(err,found){
+    // userCollection.findOne({_id:userid},{notification:{$slice: [parseInt(offset), parseInt(bucket)]}},{sort: {"notification.$.notification_time": -1 }},function(err,found){
+    userCollection.findOne({_id:userid},{},{},function(err,found){
       if(err)
           {
             res.send({"status":false,"message":"Error",  "result":err});
@@ -87,9 +88,38 @@ router.post("/notification", function(req,res){
           if (found)
           {
             offset = parseInt(offset)+parseInt(bucket)+1;
-             res.send({"status" : true, "message" : found.notification, "offset":offset});
+            found =found.notification;
+            var noty = [];
+            console.log(found.length);
+            console.log(offset);
+            if(parseInt(offset)<parseInt(found.length))
+            {
+              var i = found.length - offset - 1;
+              var j = 0;
+              while(1)
+              {
+                if(j==bucket)
+                {
+                  break;
+                }
+                else
+                {
+                  noty.push(found[i]);
+                }
+                i--;
+                j++;
+              }
+              //  found.sort(function(a, b) {
+              //     var x = a[notification_time]; var y = b[notification_time];
+              //     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+              // });
+               res.send({"status" : true, "message" : noty, "offset":offset});
+            }
+            else
+            {
+               res.send({"status" : true, "message" : "no more notification", "offset":offset});
+            }
           }
-          console.log(found);
     });
      
 });

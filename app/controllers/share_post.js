@@ -11,12 +11,13 @@ module.exports = function (app) {
 
 
 /**
- * @api {Socket} sharepost Request to Share post 
+ * @api {Post} sharepost Request to Share post 
  * @apiName Share a friend Post
  * @apiGroup User_POST
  *
  * @apiParam {ID} userid login User Id.
  * @apiParam {ID} post_id Post Id.
+ * @apiParam {String} message Post message.
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
@@ -24,6 +25,19 @@ module.exports = function (app) {
  */
 
 
+/**
+ * @api {Socket} sharepost Request to Share post 
+ * @apiName Share a friend Post
+ * @apiGroup SOCKET
+ *
+ * @apiParam {ID} userid login User Id.
+ * @apiParam {ID} post_id Post Id.
+ * @apiParam {String} message Post message.
+ *
+ *
+ * @apiSuccess {Boolean} stauts  Response stauts.
+ * @apiSuccess {String} message  Response succussfully Share a post.
+ */
 
 
 
@@ -35,6 +49,7 @@ module.exports.sharepost = function(socket,io,connection){
     var obj = JSON.parse(data);
     var post_id= obj.post_id;
     var userid= obj.userid;
+    var message= obj.message;
 
     console.log(post_id);
     if(userid=="")
@@ -92,10 +107,15 @@ module.exports.sharepost = function(socket,io,connection){
                                                user_first_name: shareuser.first_name,
                                                user_last_name:shareuser.last_name,
                                                user_profile_picture_url:shareuser.profile_picture_url,
+                                               thumbnail:result.thumbnail,
+                                               user_message:result.message,
+                                               message:message,
+                                               original_post_time:result.time,
                                                total_likes:"",
                                                total_share:"",
                                                islike:false,
                                                original_postid:result._id,
+                                               original_pic_url:result.user_profile_picture_url,
                                                original_user_first_name: result.user_first_name,
                                                original_user_last_name:result.user_last_name,
                                                original_user_id:result.user_id,
@@ -112,10 +132,15 @@ module.exports.sharepost = function(socket,io,connection){
                                                user_first_name: shareuser.first_name,
                                                user_last_name:shareuser.last_name,
                                                user_profile_picture_url:shareuser.profile_picture_url,
+                                               thumbnail:tank.thumbnail,
+                                               user_message:tank.message,
+                                               message:message,
+                                               original_post_time:tank.time,
                                                total_likes:"",
                                                total_share:"",
                                                islike:false,
                                                original_postid:tank.original_postid,
+                                               original_pic_url:tank.user_profile_picture_url,
                                                original_user_first_name: tank.original_user_first_name,
                                                original_user_last_name:tank.original_user_last_name,
                                                original_user_id:tank.original_user_id,
@@ -291,10 +316,15 @@ router.post("/share_post",function(req,res){
                                                user_first_name: shareuser.first_name,
                                                user_last_name:shareuser.last_name,
                                                user_profile_picture_url:shareuser.profile_picture_url,
+                                               thumbnail:result.thumbnail,
+                                               user_message:result.message,
+                                               original_post_time:result.time,
+                                               message:message,
                                                total_likes:"",
                                                total_share:"",
                                                islike:false,
                                                original_postid:result._id,
+                                               original_pic_url: result.user_profile_picture_url,
                                                original_user_first_name: result.user_first_name,
                                                original_user_last_name:result.user_last_name,
                                                original_user_id:result.user_id,
@@ -311,10 +341,15 @@ router.post("/share_post",function(req,res){
                                                user_first_name: shareuser.first_name,
                                                user_last_name:shareuser.last_name,
                                                user_profile_picture_url:shareuser.profile_picture_url,
+                                               thumbnail:tank.thumbnail,
+                                               user_message:tank.message,
+                                               original_post_time:tank.time,
+                                               message:message,
                                                total_likes:"",
                                                total_share:"",
                                                islike:false,
                                                original_postid:tank.original_postid,
+                                               original_pic_url: result.user_profile_picture_url,
                                                original_user_first_name: tank.original_user_first_name,
                                                original_user_last_name:tank.original_user_last_name,
                                                original_user_id:tank.original_user_id,

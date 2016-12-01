@@ -9,7 +9,7 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
-
+ 
 
 
 /**
@@ -33,7 +33,7 @@ module.exports = function (app) {
 /**
  * @api {Socket} comment Request to comment a post 
  * @apiName Comment a Post
- * @apiGroup User_POST
+ * @apiGroup SOCKET
  *
  * @apiParam {ID} userid login User Id.
  * @apiParam {ID} post_id Post Id.
@@ -192,8 +192,8 @@ module.exports.comment = function(socket,io,connection){
                                                         notification:{
                                                               userid: userid,
                                                               post_id: post_id,
-                                                              user_first_name: commentuser.user_first_name,
-                                                              user_last_name: commentuser.user_last_name,
+                                                              user_first_name: commentuser.first_name,
+                                                              user_last_name: commentuser.last_name,
                                                               notification: "comment",
                                                               notification_time:milliseconds,
                                                               notification_seen:false

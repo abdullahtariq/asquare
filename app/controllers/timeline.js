@@ -16,13 +16,15 @@ module.exports = function (app) {
  * @apiName Timeline Posts
  * @apiGroup User_POST
  *
- * @apiParam {ID} user_id User Id.
+ * @apiParam {ID} user_id User Id of loginuser.
+ * @apiParam {ID} myuser_id User Id of timeline user.
  * @apiParam {Int} offset Offset.
  * @apiParam {Int} bucket Bucket.
  *
  *
  * @apiSuccess {Boolean} stauts  Response stauts.
  * @apiSuccess {String} message  Response succussfully comment a post.
+ * @apiSuccess {Boolean} isfollow  Response follow or not.
  */
 
  
@@ -36,6 +38,11 @@ router.post("/time_line", function(req,res){
     else if(typeof req.body.offset == 'undefined')
     {
       res.send({"status":false, "message":"offset is not given"}); 
+      return;
+    }
+    else if(typeof req.body.myuser_id == 'undefined')
+    {
+      res.send({"status":false, "message":"myuser_id is not given"}); 
       return;
     }
     else if(typeof req.body.bucket == 'undefined')
@@ -67,19 +74,33 @@ router.post("/time_line", function(req,res){
     }
 
     var user_id = req.body.user_id;
+    var myuser_id = req.body.myuser_id;
 
     if(user_id=="")
     {
       res.send({"status" : false,"message" : "user_id is not given"});
       return;
     }
-    userCollection.findOne({_id:user_id}, function(err,userFound){
+    else if(myuser_id=="")
+    {
+      res.send({"status" : false,"message" : "myuser_id is not given"});
+      return;
+    }
+    userCollection.findOne({_id:myuser_id}, function(err,userFound){
       if(err)
       {
         res.send({"status" : false,"message" : "No user exits with this id"});
       }
       else if(userFound)
       {
+        var isfollow = false;
+        for (var j = 0; j < Object(userFound.follower).length; j++) {
+                if(userFound.follower[j].following_id==user_id)
+                {
+                  isfollow = true;
+                  break;
+                }
+              }
         userPosts.find({user_id:user_id},{},{skip:parseInt(offset), limit:parseInt(bucket), sort: {time: -1 }}, function(err,postes){
           if(err)
           {   
@@ -92,7 +113,7 @@ router.post("/time_line", function(req,res){
           else
           {
             offset = parseInt(offset)+parseInt(bucket)+1;
-            res.send({"status" : true, "message" : postes, "offset":offset});
+            res.send({"status" : true, "message" : postes, "offset":offset, "isfollow" : isfollow});
           }
         });
       }
