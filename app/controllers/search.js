@@ -53,7 +53,7 @@ router.post("/search",function(req,res){
                   doc[i].isfollow = true;
                 }
               }
-              arr.push({"_id":doc[i]._id,"first_name":doc[i].first_name,"last_name":doc[i].last_name,"isfollow":doc[i].isfollow});
+              arr.push({"_id":doc[i]._id,"first_name":doc[i].first_name,"last_name":doc[i].last_name,"profile_picture_url":doc[i].profile_picture_url,"isfollow":doc[i].isfollow});
           }
             res.send({"status":true ,"message":"found", "result":arr});
         }

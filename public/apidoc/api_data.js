@@ -613,6 +613,249 @@ define({ "api": [
     "groupTitle": "Report"
   },
   {
+    "type": "Socket",
+    "url": "comment",
+    "title": "Request to comment a post",
+    "name": "Comment_a_Post",
+    "group": "SOCKET",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully comment a post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/comment.js",
+    "groupTitle": "SOCKET"
+  },
+  {
+    "type": "Post",
+    "url": "follow",
+    "title": "Request to Follow a friend",
+    "name": "Follow_a_friend",
+    "group": "SOCKET",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "friend_id",
+            "description": "<p>friend User Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully follow.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/follow_friend.js",
+    "groupTitle": "SOCKET"
+  },
+  {
+    "type": "Socket",
+    "url": "notification",
+    "title": "To see number of unreadable notification",
+    "name": "Number_of_unseen_notification",
+    "group": "SOCKET",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User Id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Response status.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response  Number of notification.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/notification.js",
+    "groupTitle": "SOCKET"
+  },
+  {
+    "type": "Socket",
+    "url": "post",
+    "title": "Request to Add Post",
+    "name": "Post",
+    "group": "SOCKET",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>User Id .</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "status",
+            "description": "<p>True/false.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/posts.js",
+    "groupTitle": "SOCKET"
+  },
+  {
+    "type": "Socket",
+    "url": "sharepost",
+    "title": "Request to Share post",
+    "name": "Share_a_friend_Post",
+    "group": "SOCKET",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "userid",
+            "description": "<p>login User Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Post message.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "stauts",
+            "description": "<p>Response stauts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response succussfully Share a post.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./app/controllers/share_post.js",
+    "groupTitle": "SOCKET"
+  },
+  {
     "type": "Post",
     "url": "api/seen",
     "title": "Request to notification Seen",
@@ -660,49 +903,6 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./app/controllers/seenNotification.js",
-    "groupTitle": "USER_NOTIFICATIONS"
-  },
-  {
-    "type": "Socket",
-    "url": "notification",
-    "title": "To see number of unreadable notification",
-    "name": "Number_of_unseen_notification",
-    "group": "USER_NOTIFICATIONS",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "userid",
-            "description": "<p>User Id.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Response status.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Response  Number of notification.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./app/controllers/notification.js",
     "groupTitle": "USER_NOTIFICATIONS"
   },
   {
@@ -951,7 +1151,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/search.js",
+    "filename": "./app/controllers/showme.js",
     "groupTitle": "User"
   },
   {
@@ -1008,7 +1208,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./app/controllers/showme.js",
+    "filename": "./app/controllers/search.js",
     "groupTitle": "User"
   },
   {
@@ -1195,56 +1395,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "./app/controllers/update profile.js",
     "groupTitle": "User"
-  },
-  {
-    "type": "Socket",
-    "url": "comment",
-    "title": "Request to comment a post",
-    "name": "Comment_a_Post",
-    "group": "User_POST",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "userid",
-            "description": "<p>login User Id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "post_id",
-            "description": "<p>Post Id.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "stauts",
-            "description": "<p>Response stauts.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Response succussfully comment a post.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./app/controllers/comment.js",
-    "groupTitle": "User_POST"
   },
   {
     "type": "Post",
@@ -1553,49 +1703,6 @@ define({ "api": [
     "groupTitle": "User_POST"
   },
   {
-    "type": "Socket",
-    "url": "post",
-    "title": "Request to Add Post",
-    "name": "Post",
-    "group": "User_POST",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "ID",
-            "optional": false,
-            "field": "userid",
-            "description": "<p>User Id .</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "status",
-            "description": "<p>True/false.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Response message.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "./app/controllers/posts.js",
-    "groupTitle": "User_POST"
-  },
-  {
     "type": "Post",
     "url": "api/post_detail",
     "title": "see detail user post",
@@ -1739,7 +1846,7 @@ define({ "api": [
     "groupTitle": "User_POST"
   },
   {
-    "type": "Socket",
+    "type": "Post",
     "url": "sharepost",
     "title": "Request to Share post",
     "name": "Share_a_friend_Post",
@@ -1760,6 +1867,13 @@ define({ "api": [
             "optional": false,
             "field": "post_id",
             "description": "<p>Post Id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Post message.</p>"
           }
         ]
       }
@@ -1802,7 +1916,14 @@ define({ "api": [
             "type": "ID",
             "optional": false,
             "field": "user_id",
-            "description": "<p>User Id.</p>"
+            "description": "<p>User Id of loginuser.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ID",
+            "optional": false,
+            "field": "myuser_id",
+            "description": "<p>User Id of timeline user.</p>"
           },
           {
             "group": "Parameter",
@@ -1837,6 +1958,13 @@ define({ "api": [
             "optional": false,
             "field": "message",
             "description": "<p>Response succussfully comment a post.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "isfollow",
+            "description": "<p>Response follow or not.</p>"
           }
         ]
       }

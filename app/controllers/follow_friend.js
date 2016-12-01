@@ -25,6 +25,23 @@ module.exports = function (app) {
  */
 
 
+
+/**
+ * @api {Post} follow Request to Follow a friend 
+ * @apiName Follow a friend
+ * @apiGroup SOCKET
+ *
+ * @apiParam {ID} userid login User Id.
+ * @apiParam {ID} friend_id friend User Id.
+ *
+ *
+ * @apiSuccess {Boolean} stauts  Response stauts.
+ * @apiSuccess {String} message  Response succussfully follow.
+ */
+
+
+
+
 module.exports.follow = function(socket,io,connection){
 
     socket.on('follow', function (data) {
