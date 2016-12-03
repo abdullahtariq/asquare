@@ -194,6 +194,7 @@ module.exports.comment = function(socket,io,connection){
                                                               post_id: post_id,
                                                               user_first_name: commentuser.first_name,
                                                               user_last_name: commentuser.last_name,
+                                                              user_profile_picture_url: commentuser.profile_picture_url,
                                                               notification: "comment",
                                                               notification_time:milliseconds,
                                                               notification_seen:false

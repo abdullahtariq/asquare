@@ -49,6 +49,7 @@ var users = new Schema({
     user_last_name: String,
     notification: String,
     notification_time:String,
+    user_profile_picture_url:String,
     notification_seen:Boolean
   }],
 
