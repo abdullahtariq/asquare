@@ -124,6 +124,7 @@ module.exports.follow = function(socket,io,connection){
                                   post_id: null,
                                   user_first_name: result.first_name,
                                   user_last_name: result.last_name,
+                                  user_profile_picture_url: result.profile_picture_url,
                                   notification: "following",
                                   notification_time:milliseconds,
                                   notification_seen:false
@@ -285,6 +286,7 @@ router.post("/follow_friend",function(req,res){
                                   post_id: null,
                                   user_first_name: result.first_name,
                                   user_last_name: result.last_name,
+                                  user_profile_picture_url: result.profile_picture_url,
                                   notification: "following",
                                   notification_time:milliseconds,
                                   notification_seen:false

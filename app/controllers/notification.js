@@ -87,33 +87,60 @@ router.post("/notification", function(req,res){
           }
           if (found)
           {
-            offset = parseInt(offset)+parseInt(bucket)+1;
             found =found.notification;
             var noty = [];
             console.log(found.length);
             console.log(offset);
             if(parseInt(offset)<parseInt(found.length))
             {
-              var i = found.length - offset - 1;
-              var j = 0;
-              while(1)
-              {
-                if(j==bucket)
+              if(parseInt(bucket)<parseInt(found.length))
+              {                
+                var i = found.length - parseInt(offset) - 1;
+                var j = 0;
+                while(i>=0)
                 {
-                  break;
+                  if(j==parseInt(bucket))
+                  {
+                    break;
+                  }
+                  else
+                  {
+                    noty.push(found[i]);
+                  }
+                  i--;
+                  j++;
                 }
-                else
-                {
-                  noty.push(found[i]);
-                }
-                i--;
-                j++;
+                //  found.sort(function(a, b) {
+                //     var x = a[notification_time]; var y = b[notification_time];
+                //     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                // });
+                 offset = parseInt(offset)+parseInt(bucket)+1;
+                 res.send({"status" : true, "message" : noty, "offset":offset});
               }
-              //  found.sort(function(a, b) {
-              //     var x = a[notification_time]; var y = b[notification_time];
-              //     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-              // });
-               res.send({"status" : true, "message" : noty, "offset":offset});
+              else
+              {
+                  var i = found.length - parseInt(offset) - 1;
+                  var j = 0;
+                  while(i>=0)
+                  {
+                    if(j==found.length)
+                    {
+                      break;
+                    }
+                    else
+                    {
+                      noty.push(found[i]);
+                    }
+                    i--;
+                    j++;
+                  }
+                  //  found.sort(function(a, b) {
+                  //     var x = a[notification_time]; var y = b[notification_time];
+                  //     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                  // });
+                   offset = parseInt(offset)+parseInt(bucket)+1;
+                   res.send({"status" : true, "message" : noty, "offset":offset}); 
+              }
             }
             else
             {

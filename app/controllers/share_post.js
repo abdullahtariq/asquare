@@ -173,6 +173,7 @@ module.exports.sharepost = function(socket,io,connection){
                                   post_id: post_id,
                                   user_first_name: shareuser.first_name,
                                   user_last_name: shareuser.last_name,
+                                  user_profile_picture_url: shareuser.profile_picture_url,
                                   notification: "share",
                                   notification_time:milliseconds,
                                   notification_seen:false
@@ -382,6 +383,7 @@ router.post("/share_post",function(req,res){
                                   post_id: post_id,
                                   user_first_name: shareuser.first_name,
                                   user_last_name: shareuser.last_name,
+                                  user_profile_picture_url: shareuser.profile_picture_url,
                                   notification: "share",
                                   notification_time:milliseconds,
                                   notification_seen:false

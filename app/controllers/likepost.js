@@ -121,6 +121,7 @@ module.exports.notification = function(socket,io,connection){
                                   post_id: post_id,
                                   user_first_name: result.first_name,
                                   user_last_name: result.last_name,
+                                  user_profile_picture_url: commentuser.profile_picture_url,
                                   notification: "like",
                                   notification_time:milliseconds,
                                   notification_seen:false
@@ -286,6 +287,7 @@ router.post("/likepost", function(req,res){
                                   post_id: post_id,
                                   user_first_name: result.first_name,
                                   user_last_name: result.last_name,
+                                  user_profile_picture_url: commentuser.profile_picture_url,
                                   notification: "like",
                                   notification_time:milliseconds,
                                   notification_seen:false
