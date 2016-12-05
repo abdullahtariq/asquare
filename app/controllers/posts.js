@@ -93,7 +93,7 @@ module.exports.post = function(socket,io,connection){
                 {
                   if(found)
                     {
-                      socket.emit('post', {"status" : true, "message" : "found.unseen"});
+                      socket.emit('post', {"status" : true, "message" : found.unseen});
                       socket.broadcast.to(socketid).emit('notification', {"status" : true, "message" : "post"});
                     }
                     else if(err)
