@@ -38,10 +38,18 @@ router.post("/search",function(req,res){
       res.send({"status" : false , "message" : "search name is not given."});
         return;
     }
+
     var data = req.body.search;
     var userid = req.body.userid;
     var resultFound;
     var arr=[];
+    
+    if(seacrh=="")
+    {
+      res.send({"status" : false , "message" : "field empty"});
+        return;
+    }
+
     userCollection.find({first_name: new RegExp(data, "i"), _id: {'$ne':userid }},function(err, doc) {
       if(doc)
         {

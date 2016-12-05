@@ -93,7 +93,7 @@ module.exports.post = function(socket,io,connection){
                 {
                   if(found)
                     {
-                      socket.emit('post', {"status" : true, "message" : "found.unseen"});
+                      socket.emit('post', {"status" : true, "message" : found.unseen});
                       socket.broadcast.to(socketid).emit('notification', {"status" : true, "message" : "post"});
                     }
                     else if(err)
@@ -195,6 +195,7 @@ router.post("/post",function(req,res){
                                   post_id: posted._id,
                                   user_first_name: result.first_name,
                                   user_last_name: result.last_name,
+                                  user_profile_picture_url: result.profile_picture_url,
                                   notification: "post",
                                   notification_time:milliseconds,
                                   notification_seen:false
