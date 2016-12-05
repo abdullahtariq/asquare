@@ -187,6 +187,8 @@ module.exports.comment = function(socket,io,connection){
                                                 unseen= found1.unseen;
                                               unseen++;
                                               console.log(arr[i]);
+                                          if(userid != result.user_id)
+                                            {
                                               userCollection.findByIdAndUpdate(found1._id,{$push:
                                                       {
                                                         notification:{
@@ -199,8 +201,9 @@ module.exports.comment = function(socket,io,connection){
                                                               notification_time:milliseconds,
                                                               notification_seen:false
                                                           }
-                                      },$set: { "unseen": unseen}}, function(err,done){
-                                      });
+                                                    },$set: { "unseen": unseen}}, function(err,done){
+                                                    });
+                                            }
                                             }
                                          });
                                        }
