@@ -44,12 +44,6 @@ router.post("/search",function(req,res){
     var resultFound;
     var arr=[];
     
-    if(seacrh=="")
-    {
-      res.send({"status" : false , "message" : "field empty"});
-        return;
-    }
-
     userCollection.find({first_name: new RegExp(data, "i"), _id: {'$ne':userid }},function(err, doc) {
       if(doc)
         {
