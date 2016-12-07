@@ -279,11 +279,6 @@ module.exports.sharepost = function(socket,io,connection){
             socket.emit('sharepost', {"status" : false , "message" : "Invalid user id"});
             return;
           }
-          if (Object(shareuser).length<=0)
-          {
-            socket.emit('sharepost', {"status":false ,"message":"not user exits with this id"});
-            return;
-          }
           else
           {
               var total_share=0;
