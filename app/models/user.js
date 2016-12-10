@@ -16,14 +16,15 @@ var users = new Schema({
   email_verified: Boolean,
   signup_time:String,
 
-
+  isfollow: Boolean,
+  
   total_follower: String,
 
   follower:[{
     following_id: String,
     following_first_name: String,
     following_last_name: String,
-    following_profile_picture_url: String,
+    profile_picture_url: String,
   }],
 
 
@@ -33,11 +34,12 @@ var users = new Schema({
     follower_id: String,
     follower_first_name: String,
     follower_last_name: String,
-    follower_profile_picture_url: String,
+    profile_picture_url: String,
   }],
 
   total_posts: String,
 
+  unseen : String,
 
 
   notification:[{
@@ -47,6 +49,7 @@ var users = new Schema({
     user_last_name: String,
     notification: String,
     notification_time:String,
+    user_profile_picture_url:String,
     notification_seen:Boolean
   }],
 

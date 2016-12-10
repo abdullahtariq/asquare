@@ -9,8 +9,11 @@ var posts = new Schema({
         user_last_name:String,
         user_profile_picture_url:String,
         total_likes:String,
-
-
+        islike:Boolean,
+        message:String,
+        user_message:String,
+        original_post_time:String,
+        original_pic_url:String,
         user_likes:[{
            like_user_id: String,
            like_user_first_name: String,
@@ -20,9 +23,17 @@ var posts = new Schema({
         }],
 
 
+        tags:[{
+          tag:String,
+        }],
+
+        total_seen:String,
 
         total_share:String,
+        thumbnail:String,
         
+        code:String,
+        verify:Boolean,
 
         user_shares:[{
            share_post_id: String,           //  post id of post that new shared
@@ -48,7 +59,8 @@ var posts = new Schema({
           comment_last_name: String,
           comment_profile_pic_url: String,
           comment: String,
-          comment_time:String
+          comment_time:String,
+          enable : String
         }],
 });
 

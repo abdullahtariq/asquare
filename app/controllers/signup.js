@@ -105,39 +105,62 @@ router.post("/register", function(req,res){
         date_of_birth: "",
         description:"",
         facebook:"",
+        isfollow:false,
         email_verified: false,
         signup_time:milliseconds,
         total_follower: "",
         total_following:"",
         total_posts:"",
+        unseen : "",
     });
 
     if (password.length < 8) {
         res.send({"status" : false , "message" : "password should contain 8 characters"});
         return;
     }
-    else if (password.search(/[A-Z]/) < 0) {
-        res.send({"status" : false , "message" : "password should contain upper case letter"});
-        return;
-    }
-    else if (password.search(/[a-z]/) < 0) {
-        res.send({"status" : false , "message" : "password should contain atleast one lower case letter"});
-        return;
-    }
-    else if (password.search(/[0-9]/) < 0) {
-        res.send({"status" : false , "message" : "password should contain atleast a number"});
-        return;
-    }
+    // else if (password.search(/[A-Z]/) < 0) {
+    //     res.send({"status" : false , "message" : "password should contain upper case letter"});
+    //     return;
+    // }
+    // else if (password.search(/[a-z]/) < 0) {
+    //     res.send({"status" : false , "message" : "password should contain atleast one lower case letter"});
+    //     return;
+    // }
+    // else if (password.search(/[0-9]/) < 0) {
+    //     res.send({"status" : false , "message" : "password should contain atleast a number"});
+    //     return;
+    // }
     else
     {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         var isValidEmail = re.test(email);
         if(isValidEmail)
         {
+//            var helper = require('sendgrid').mail
+  
+// from_email = new helper.Email("zulqarnainnazir1@gmail.com")
+// to_email = new helper.Email("zulqarnainnazir4@gmail.com")
+// subject = "Sending with SendGrid is Fun"
+// content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js")
+// mail = new helper.Mail(from_email, subject, to_email, content)
+
+// var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+// var request = sg.emptyRequest({
+//   method: 'POST',
+//   path: '/v3/mail/send',
+//   body: mail.toJSON()
+// });
+
+// sg.API(request, function(error, response) {
+//   console.log(response.statusCode)
+//   console.log(response.body)
+//   console.log(response.headers)
+// })
                     user1.save(function (err, result) {
                     if (err) {
                     console.log(err);
                     } else {
+
                          res.send({"status" : true, "message" : "Successfully created" , "userid" : result._id});
                     }
                   });

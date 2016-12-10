@@ -15,28 +15,47 @@ models.forEach(function (model) {
 });
 
 var app = express();
-var http = require('http').createServer(app);
+var http = require('http').Server(app);
 var io = require('socket.io')(http);
-http.listen(4200);
+
+var notificationListener = require('./app/controllers/unseenNotification');
+
+connection = [];
+var likeListener = require('./app/controllers/likepost');
+var shareListener = require('./app/controllers/share_post');
+var followListener = require('./app/controllers/follow_friend');
+
+var postListener = require('./app/controllers/posts');
+var commentListener = require('./app/controllers/comment');
+
 //module.exports.sio = io;
 
 //console.log('socket.io is : ',io);
-console.log('socket.io http : ',http);
 
 var numUsers = 0;
 
 io.on('connection', function (socket) {
   var addedUser = false;
 
+ // likepostController.likepost(socket);
+//  sharepostController.sharepost(socket);
+  //postController.post(socket);
+  
+  notificationListener.notification(socket,connection);
+  likeListener.notification(socket,io,connection);
+  shareListener.sharepost(socket,io,connection);
+  followListener.follow(socket,io,connection);
+  postListener.post(socket,io,connection);
+  commentListener.comment(socket,io,connection);
   // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
+  /*socket.on('new message', function (data) {
     // we tell the client to execute 'new message'
     socket.broadcast.emit('new message', {
       username: socket.username,
       message: data
     });
   });
-
+*/
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
     if (addedUser) return;
@@ -86,6 +105,10 @@ io.on('connection', function (socket) {
 
 require('./config/express')(app, config);
 
-app.listen(config.port, function () {
+http.listen(config.port, function () {
   console.log('Express server listening on port ' + config.port);
 });
+/*
+app.listen(config.port, function () {
+  console.log('Express server listening on port ' + config.port);
+});*/

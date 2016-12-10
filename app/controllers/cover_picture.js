@@ -11,14 +11,16 @@ module.exports = function (app) {
   app.use('/api', router);
 };
 
-var i = (Math.random() * 1000000) >>> 0;
+var nameFile ;
+var i = (Math.random() * 1000000000) >>> 0;
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    cb(null,i+"_"+file.originalname)
+    nameFile = i+"_"+file.originalname;
+    cb(null,nameFile)
   }
 });
  
@@ -64,8 +66,26 @@ router.post("/cover_picture",upload.single('picture'), function(req,res){
         return;
     }
 
+    nameFile = "uploads/"+nameFile;
+    
+     userCollection.findOne({_id:userid}, function(err,foundUser){
+      if(err)
+        {res.send({"status":false, "message" : "not successfully updated"});}
+      else if(foundUser)
+      {
+        var oldPath = foundUser.profile_picture_url;
+        if(oldPath!=defaultPath)
+        {
+          fs.unlink("public\\"+oldPath,function(err){
+                if(err) return console.log(err);
+                console.log('file deleted successfully');
+           }); 
+        }
+      }
+    });
+
     var path = file.path;
-        userCollection.findByIdAndUpdate(userid, { $set: { cover_picture_url: i+"_"+path}}, function (err, tank) {
+        userCollection.findByIdAndUpdate(userid, { $set: { cover_picture_url: nameFile}}, function (err, tank) {
           if (err) 
             {res.send({"status":false, "message" : "not successfully updated"});}
           else

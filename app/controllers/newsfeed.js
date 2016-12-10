@@ -112,6 +112,14 @@ router.post("/newsfeed",function(req,res){
           if (result)
           {
             offset = parseInt(offset)+parseInt(bucket)+1;
+            for (var i = 0; i < Object(result).length; i++) {
+                  for (var j = 0; j < Object(result[i].user_likes).length; j++) {
+                      if (result[i].user_likes[j].like_user_id==userid)
+                      {
+                        result[i].islike=true;
+                      } 
+                  }
+            }
              res.send({"status" : true, "message" : result, "offset":offset});
           }
         });  
