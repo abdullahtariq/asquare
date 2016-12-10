@@ -258,9 +258,9 @@ module.exports.sharepost = function(socket,io,connection){
     socket.on('sharepost', function (data) {
     
     var obj = JSON.parse(data);
-    var post_id= obj.post_id;
-    var userid= obj.userid;
-    var message= obj.message;
+    var userid = obj.userid;
+    var post_id = obj.post_id;
+    var message = obj.message;
 
     console.log(post_id);
     if(userid=="")
