@@ -22,6 +22,8 @@ var posts = new Schema({
            like_time:String
         }],
 
+        shareid: Object,
+
 
         tags:[{
           tag:String,
